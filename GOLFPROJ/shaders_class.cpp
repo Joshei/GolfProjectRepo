@@ -1,9 +1,9 @@
 #include <C:/openglusage/glad/include/glad/glad.h>
 #include <C:/openglusage/GLFW/glfw3.h>
-#include <C:/openglusage/headershader/common.h>
-#include <C:/openglusage/headershader/loader.h>
+//#include <C:/openglusage/headershader/common.h>
+//#include <C:/openglusage/headershader/loader.h>
 #include <vector>
-#include <learnopengl/shader_s.h>
+#include <C:/Users/Joshua Eirman/Source/repos/GOLFPROJ/GOLFPROJ/shader_s.h>
 #include <C:/openglusage/glm/glm.hpp>
 #include <iostream>
 
