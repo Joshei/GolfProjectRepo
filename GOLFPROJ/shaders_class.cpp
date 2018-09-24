@@ -1,5 +1,11 @@
 #include <C:/openglusage/glad/include/glad/glad.h>
 #include <C:/openglusage/GLFW/glfw3.h>
+
+#include <C:/openglusage/glm/glm.hpp>
+#include <C:/openglusage/glm/gtc/matrix_transform.hpp>
+#include <C:/openglusage/glm/gtc/type_ptr.hpp>
+
+
 //#include <C:/openglusage/headershader/common.h>
 //#include <C:/openglusage/headershader/loader.h>
 #include <vector>
@@ -7,7 +13,8 @@
 #include <C:/openglusage/glm/glm.hpp>
 #include <iostream>
 
-//test---another test--and one more
+
+//test---another test--and one more--
 
 //#include <GL/glew.h>
 //#include <GL/GL.h>
@@ -98,7 +105,13 @@ int main()
 	// build and compile our shader program
 	// ------------------------------------
 	//Shader ourShader("3.3.shader.vs", "3.3.shader.fs"); // you can name your shader files however you like
-	Shader ourShader("c:/shaders/shade.vs", "c:/shaders/3.3.shader.fs"); // you can name your shader files however you like
+	Shader ourShader("C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.vs",
+		"C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.fs"); // you can name your shader files however you like
+
+
+
+
+
 
 
 	//// set up vertex data (and buffer(s)) and configure vertex attributes
@@ -169,8 +182,8 @@ int main()
 
 	//testimagegiven.obj
 	//cubeimag.obj
-
-	file = fopen("C:/images for opengl/marble.obj", "r");
+	//file = fopen("C:/images for opengl/marble.obj", "r");
+	file = fopen("C:/images for opengl/anobj.obj", "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
 		return false;
@@ -250,9 +263,9 @@ int main()
 			vertexIndices.push_back(vertexIndex[0]);
 			vertexIndices.push_back(vertexIndex[1]);
 			vertexIndices.push_back(vertexIndex[2]);
-			uvIndices.push_back(uvIndex[0]);
-			uvIndices.push_back(uvIndex[1]);
-			uvIndices.push_back(uvIndex[2]);
+			//uvIndices.push_back(uvIndex[0]);
+			//uvIndices.push_back(uvIndex[1]);
+			//uvIndices.push_back(uvIndex[2]);
 			//normalIndices.push_back(normalIndex[0]);
 			//normalIndices.push_back(normalIndex[1]);
 			//i added this:
@@ -265,14 +278,19 @@ int main()
 
 	// //PROCESSING DATA
 	// // For each vertex of each triangle
+	
+	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+
 	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
-
+		//has verices loaded in 
 		unsigned int g = vertexIndices[i];
+
+		
 
 		//unsigned int g;
 		//check this should be fine
-		glm::vec3 vertex = temp_vertices[g - 1];
+		glm::vec3 vertex = temp_vertices[g-1 ];
 
 
 		//chech this as out?
@@ -284,6 +302,7 @@ int main()
 	//int xx = vertices.size();
 
 	///////////////////
+
 
 
 
@@ -320,6 +339,8 @@ int main()
 	//static const GLfloat g_color_buffer_data[] = {
 	//	0.583f,  0.771f,  0.014f
 	//};
+
+
 
 	static const GLfloat g_color_buffer_data[] = {
 		0.583f,  0.771f,  0.014f,
@@ -363,7 +384,18 @@ int main()
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
+		
+		
 		0.583f,  0.771f,  0.014f
+		//0.583f,  0.771f,  0.014f
+		
+		
+
+
+		
+
+
+	
 	};
 
 
@@ -405,9 +437,9 @@ int main()
 	0.820f,  0.883f,  0.371f,
 	0.982f,  0.099f,  0.879f
 };
+
+
 */
-
-
 
 
 	GLuint colorbuffer;
@@ -432,10 +464,10 @@ int main()
 
 
 
-	// color attribute
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(1);
+//	 color attribute
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+//	glEnableVertexAttribArray(1);
 
 
 	//endofcodesection
@@ -505,6 +537,10 @@ int main()
 	/////////////////////////////
 
 
+
+
+	//glm::mat4 transform = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -512,19 +548,158 @@ int main()
 		// input
 		// -----
 		processInput(window);
-
+		//
 		// render
 		// ------
+
+		// Enable depth test
+		//glEnable(GL_DEPTH_TEST);
+		// Accept fragment if it closer to the camera than the former one
+		//glDepthFunc(GL_LESS);
+
+
 		//glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
+
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// render the triangle
 		ourShader.use();
+
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
+
+		//glEnable(GL_CULL_FACE);
+
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT);
+		// render the triangle-
+		
+		/////////////////////
+		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+
+
+
+
+	//	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	//	glm::mat4 trans;
+	//	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+	//	vec = trans * vec;
+
+
+		//model = glm::scale(glm::vec4(1,0.0f, 0.0f, 1.0f));
+		//glm::mat4 transform = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		
+		
+		
+		
+
+		
+
+		
+		
+				
+		//yplane third arg    2nd arg y axis
+		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+
+		//1:
+		//2: around the y axis
+		//3: aroond the z axis
+
+		view = glm::rotate(model, (float)glfwGetTime(), glm::vec3(.0f, .0f, 1.0f));
+
+
+		//smaller the decimal, smaller the image (square)
+		//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+
+
+		
+
+
+		//view = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+
+		//x, y,
+		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
+
+	//	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+
+		
+
+		//ourShader.use();
+
+
+		//transform = glm::translate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
+		//transform = glm::scale(transform, glm::vec3(.2, .2, .2));
+
+		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
+		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
+
+		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
+		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(model));
+
+		///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
+		///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
+
+
+
+
+
+		//glm::vec3 scale = glm::vec3(10, 10, 10);
+
+
+		//glm::mat4 modelMatrix = glm::mat4();
+		//modelMatrix = glm::scale(modelMatrix, scale);
+		//
+		//GLuint location = glGetUniformLocation(ourShader.ID, "model");
+		//glUniformMatrix4fv(location , 1, false, glm::value_ptr(modelMatrix));
+
+
+		////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
+		//
+		//////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
+
+		////model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//
+		//
+		//model = glm::translate(model, glm::vec3(10.0f, 0.0f, -3.0f));
+		////
+		////
+		//projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		////// retrieve the matrix uniform locations
+		//
+		//
+		unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+		unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+		//////// pass them to the shaders (3 different ways)
+		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
+		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+		//
+		////ourShader.setMat4("model", model);
+
+//		ourShader.setMat4("projection", projection);
+
+
+
+
+		//////////////////////
+
+
+
+
+
+
 		//glBindVertexArray(VAO);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		//could try moving this if there is a failure during testing!
 		glBindVertexArray(VAO1);
+
+		//glDisable(GL_CULL_FACE);
+
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
