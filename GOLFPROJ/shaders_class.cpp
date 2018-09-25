@@ -56,6 +56,17 @@ const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
+	std::vector<unsigned int> indices;
+
+
+	//GLuint elementbuffer;
+	glGenBuffers(1, &elementbuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+
+
+
+
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
@@ -183,13 +194,13 @@ int main()
 	//testimagegiven.obj
 	//cubeimag.obj
 	//file = fopen("C:/images for opengl/marble.obj", "r");
-	file = fopen("C:/images for opengl/anobj.obj", "r");
+	file = fopen("C:/images for opengl/.obj", "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
-		return false;
+		return;
 	}
 
-
+	//////////
 	//////////////////////////////
 
 	//builds the array for rendering and uses the old code there to set
@@ -401,45 +412,7 @@ int main()
 
 
 
-	/*0.609f,  0.115f,  0.436f,
-	0.327f,  0.483f,  0.844f,
-	0.822f,  0.569f,  0.201f,
-	0.435f,  0.602f,  0.223f,
-	0.310f,  0.747f,  0.185f,
-	0.597f,  0.770f,  0.761f,
-	0.559f,  0.436f,  0.730f,
-	0.359f,  0.583f,  0.152f,
-	0.483f,  0.596f,  0.789f,
-	0.559f,  0.861f,  0.639f,
-	0.195f,  0.548f,  0.859f,
-	0.014f,  0.184f,  0.576f,
-	0.771f,  0.328f,  0.970f,
-	0.406f,  0.615f,  0.116f,
-	0.676f,  0.977f,  0.133f,
-	0.971f,  0.572f,  0.833f,
-	0.140f,  0.616f,  0.489f,
-	0.997f,  0.513f,  0.064f,
-	0.945f,  0.719f,  0.592f,
-	0.543f,  0.021f,  0.978f,
-	0.279f,  0.317f,  0.505f,
-	0.167f,  0.620f,  0.077f,
-	0.347f,  0.857f,  0.137f,
-	0.055f,  0.953f,  0.042f,
-	0.714f,  0.505f,  0.345f,
-	0.783f,  0.290f,  0.734f,
-	0.722f,  0.645f,  0.174f,
-	0.302f,  0.455f,  0.848f,
-	0.225f,  0.587f,  0.040f,
-	0.517f,  0.713f,  0.338f,
-	0.053f,  0.959f,  0.120f,
-	0.393f,  0.621f,  0.362f,
-	0.673f,  0.211f,  0.457f,
-	0.820f,  0.883f,  0.371f,
-	0.982f,  0.099f,  0.879f
-};
-
-
-*/
+	
 
 
 	GLuint colorbuffer;
@@ -552,6 +525,9 @@ int main()
 		// render
 		// ------
 
+		ourShader.use();
+
+
 		// Enable depth test
 		//glEnable(GL_DEPTH_TEST);
 		// Accept fragment if it closer to the camera than the former one
@@ -560,11 +536,11 @@ int main()
 
 		//glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
 
-		glClear(GL_COLOR_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT);
 
-		ourShader.use();
+	
 
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
 		//glEnable(GL_CULL_FACE);
@@ -574,22 +550,19 @@ int main()
 		// render the triangle-
 		
 		/////////////////////
+		
+
+		
+
+
 		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
 
-
-
-	//	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	//	glm::mat4 trans;
-	//	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
-	//	vec = trans * vec;
-
-
-		//model = glm::scale(glm::vec4(1,0.0f, 0.0f, 1.0f));
-		//glm::mat4 transform = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		
+
+	
 		
 		
 		
@@ -602,25 +575,28 @@ int main()
 		//yplane third arg    2nd arg y axis
 		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		//https://stackoverflow.com/questions/36635824/how-to-scale-a-model-in-opengl
+
+		glm::vec3 scale =  glm::vec3(.1, .1, .1);
+		model = glm::scale(model, scale);
+
+		
+		view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+
 
 		//1:
 		//2: around the y axis
 		//3: aroond the z axis
 
-		view = glm::rotate(model, (float)glfwGetTime(), glm::vec3(.0f, .0f, 1.0f));
-
-
-		//smaller the decimal, smaller the image (square)
-		//model = glm::scale(model, glm::vec3(0.1f, 0.1f, 0.1f));
+		
 
 
 		
 
 
-		//view = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
-
-		//x, y,
+		
 		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	//	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -635,10 +611,10 @@ int main()
 		//transform = glm::scale(transform, glm::vec3(.2, .2, .2));
 
 		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
-		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
 		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
-		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
 
 		///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
 		///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
@@ -671,8 +647,12 @@ int main()
 		////// retrieve the matrix uniform locations
 		//
 		//
-		unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-		unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+		//unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+		
+		
+		
+		
 		//////// pass them to the shaders (3 different ways)
 		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
@@ -700,6 +680,8 @@ int main()
 
 		//glDisable(GL_CULL_FACE);
 
+
+		//glDrawElements(GL_TRIANGLES, 36,GL_UNSIGNED_INT, &vertexIndices);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
