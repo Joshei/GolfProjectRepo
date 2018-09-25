@@ -20,7 +20,7 @@
 //#include <GL/GL.h>
 //used with initial single page
 unsigned int VAO1, VBO1;
-
+GLuint elementbuffer;
 std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 //test
 
@@ -50,21 +50,16 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
-//std::vector< glm::vec3 >vertices2;
+
 
 
 
 int main()
 {
-	std::vector<unsigned int> indices;
+	
 
 
-	//GLuint elementbuffer;
-	glGenBuffers(1, &elementbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-
+	
 
 
 	// glfw: initialize and configure
@@ -121,7 +116,7 @@ int main()
 
 
 
-
+	ourShader.use();
 
 
 
@@ -134,53 +129,14 @@ int main()
 	//     0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
 	//};
 
-	//18 indexes
+	
 
-	//int checktthis = sizeof(vertices2);
+	GLuint VertexArrayID;
 
-	//unsigned int VBO, VAO;
-	//glGenVertexArrays(1, &VAO);
-	//glGenBuffers(1, &VBO);
-	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	//glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VertexArrayID);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	glBindVertexArray(VertexArrayID);
 
-	//// position attribute
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	//glEnableVertexAttribArray(0);
-	//// color attribute
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	//glEnableVertexAttribArray(1);
-
-	//// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	//// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	//// glBindVertexArray(0);
-
-	//////////////////////////////added by Josh
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//second set to display
-
-//	float vertices2[] = {
-//		// positions         // colors
-//		0.2f, -0.2f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-//		-0.2f, -0.2f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-//		0.0f,  0.2f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-//	};
 
 
 
@@ -188,43 +144,15 @@ int main()
 	//////////////////////////////
 
 
-	//loads the image file (.obj)
-	//int a = functionLoadA();
-
-	//testimagegiven.obj
-	//cubeimag.obj
+	
 	//file = fopen("C:/images for opengl/marble.obj", "r");
-	file = fopen("C:/images for opengl/.obj", "r");
+	file = fopen("C:/images for opengl/cube100.obj", "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
-		return;
+		return(1);
 	}
 
-	//////////
-	//////////////////////////////
-
-	//builds the array for rendering and uses the old code there to set
-	//up the bufferdata
-	//int b = loadobjmodelandrender();
-
-
-	//this will be a class taken from : loading.cpp to : //endofcodesection
-
-
-	////externed in common.h
-	//glGenVertexArrays(1, &VAO1);
-	//glGenBuffers(1, &VBO1);
-	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	//glBindVertexArray(VAO1);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-
-
-	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-
+	
 
 
 	while (1) {
@@ -281,75 +209,81 @@ int main()
 			//normalIndices.push_back(normalIndex[1]);
 			//i added this:
 			//normalIndices.push_back(normalIndex[2]);
-		}//this was missing from source code
+		}
 
 
 
-	}//uncertain
+	}
 
-	// //PROCESSING DATA
-	// // For each vertex of each triangle
+	// //PROCESSING DATA, do I ever use this
 	
-	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
 	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
-		//has verices loaded in 
+		//this holds the indicies
 		unsigned int g = vertexIndices[i];
 
 		
 
-		//unsigned int g;
+		
 		//check this should be fine
 		glm::vec3 vertex = temp_vertices[g-1 ];
 
-
-		//chech this as out?
+		
+		//these are the vericies
+		//https://gamedev.stackexchange.com/questions/68838/what-is-the-purpose-of-indices-in-3d-rendering
 		vertices.push_back(vertex);
 
 
 	}
 
-	//int xx = vertices.size();
+	//just loaded...
 
-	///////////////////
+	
 
-
-
-
-	//signed int VBO1;// , VAO1;
-	glGenVertexArrays(1, &VAO1);
-	glGenBuffers(1, &VBO1);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-
-
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
+	
+	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+	
+//	
+//  http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
+	//////////////////
 
 
 
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+
+
+	//std::vector<unsigned short> indices;
+
+	
+	
+	//load into vbo
+	GLuint vertexbuffer;
+
+	glGenBuffers(1, &vertexbuffer);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
-	////just moved here
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glEnableVertexAttribArray(0);
 
 
 
+	// Generate a buffer for the indices as well
+
+	GLuint elementbuffer;
+
+	glGenBuffers(1, &elementbuffer);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexIndices.size() * sizeof(unsigned short), &vertexIndices[0], GL_STATIC_DRAW);
 
 
+	
+	
+	
 
 
-	//static const GLfloat g_color_buffer_data[] = {
-	//	0.583f,  0.771f,  0.014f
-	//};
 
 
 
@@ -399,13 +333,6 @@ int main()
 		
 		0.583f,  0.771f,  0.014f
 		//0.583f,  0.771f,  0.014f
-		
-		
-
-
-		
-
-
 	
 	};
 
@@ -437,82 +364,10 @@ int main()
 
 
 
-//	 color attribute
-//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-//	glEnableVertexAttribArray(1);
-
-
-	//endofcodesection
 
 
 
-	//possibly put render code in here!  If so, no need for common.h externs!
-
-	//could try moving this if there is a failure during testing!
-	//glBindVertexArray(VAO1);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	///////////////////
-
-
-
-
-
-
-
-
-
-
-
-	//////////////////////////////
-
-
-
-
-
-
-
-	//all this, now in function:  loadobjmodelandrender();
-
-
-	//unsigned int VBO1, VAO1;
-	//glGenVertexArrays(1, &VAO1);
-	//glGenBuffers(1, &VBO1);
-	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	//glBindVertexArray(VAO1);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	//
-	//
-	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-
-
-
-
-
-	//out of the function completes this and renders
-
-
-
-	// position attribute
-//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-//	glEnableVertexAttribArray(0);
-//	// color attribute
-//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-//	glEnableVertexAttribArray(1);
-
-
-
-	/////////////////////////////
-
-
-
-
-	//glm::mat4 transform = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+	
 
 	// render loop
 	// -----------
@@ -525,7 +380,7 @@ int main()
 		// render
 		// ------
 
-		ourShader.use();
+		
 
 
 		// Enable depth test
@@ -534,155 +389,113 @@ int main()
 		//glDepthFunc(GL_LESS);
 
 
-		//glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
+		glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
+
+
+		glEnable(GL_CULL_FACE);
+
+
 
 		//glClear(GL_COLOR_BUFFER_BIT);
 
 	
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glClear(GL_COLOR_BUFFER_BIT);
-
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 		//glEnable(GL_CULL_FACE);
 
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_FRONT);
-		// render the triangle-
 		
 		/////////////////////
 		
 
 		
 
-
+		glm::mat4 model2 = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
 
 		
-
-	
-		
-		
-		
-
-		
-
-		
-		
-				
-		//yplane third arg    2nd arg y axis
-		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		//https://stackoverflow.com/questions/36635824/how-to-scale-a-model-in-opengl
-
-		glm::vec3 scale =  glm::vec3(.1, .1, .1);
+		glm::vec3 scale = glm::vec3(.1, .1, .1);
 		model = glm::scale(model, scale);
-
+//		//yplane third arg    2nd arg y axis
+		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+//
+//		//https://stackoverflow.com/questions/36635824/how-to-scale-a-model-in-opengl
+//
 		
-		view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
-
-
-
-
-		//1:
-		//2: around the y axis
-		//3: aroond the z axis
-
-		
-
-
-		
-
-
-		
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
-
-	//	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-
-		
-
-		//ourShader.use();
-
-
-		//transform = glm::translate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-		//transform = glm::scale(transform, glm::vec3(.2, .2, .2));
-
+//
+//		
+//		view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+//
+//
+//
+//
+//		//1:
+//		//2: around the y axis
+//		//3: aroond the z axis
+//
 		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
-		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
-
-		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
-		//glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
-
-		///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
-		///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
-
-
-
-
-
-		//glm::vec3 scale = glm::vec3(10, 10, 10);
-
-
-		//glm::mat4 modelMatrix = glm::mat4();
-		//modelMatrix = glm::scale(modelMatrix, scale);
-		//
-		//GLuint location = glGetUniformLocation(ourShader.ID, "model");
-		//glUniformMatrix4fv(location , 1, false, glm::value_ptr(modelMatrix));
-
-
-		////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
-		//
-		//////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
-
-		////model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//
-		//
-		//model = glm::translate(model, glm::vec3(10.0f, 0.0f, -3.0f));
-		////
-		////
-		//projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		////// retrieve the matrix uniform locations
-		//
-		//
-		//unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-		
-		
-		
-		
-		//////// pass them to the shaders (3 different ways)
 		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
-		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		//
-		////ourShader.setMat4("model", model);
-
-//		ourShader.setMat4("projection", projection);
-
-
+//
+//		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
+//		//glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
+//
+//		
+//
+//
+//
+//
+//		
+//		
+//		
+//		
+//		//////// pass them to the shaders (3 different ways)
+		//glUniformMatrix4fv(model1, 1, GL_FALSE, glm::value_ptr(model));
+//		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
+//		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+//		
+//
+////		ourShader.setMat4("projection", projection);
+//
+//
 
 
 		//////////////////////
 
+		
+
+		/////////
+
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
 
 
 
 
-		//glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 
-		//could try moving this if there is a failure during testing!
-		glBindVertexArray(VAO1);
+		// Draw the triangles !
+		glDrawElements(
+			GL_TRIANGLES,      // mode
+			vertexIndices.size(),    // count
+			GL_UNSIGNED_INT,   // type
+			(void*)0           // element array buffer offset
+		);
 
-		//glDisable(GL_CULL_FACE);
+
+		/////////////
+
+
 
 
 		//glDrawElements(GL_TRIANGLES, 36,GL_UNSIGNED_INT, &vertexIndices);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
