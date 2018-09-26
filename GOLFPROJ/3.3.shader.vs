@@ -7,8 +7,9 @@ layout (location = 1) in vec3 aColor;
 out vec3 ourColor;
 
 //out vec2 TexCoord;
-  
+
 uniform mat4 model;
+//uniform mat4 model2;
 uniform mat4 view;
 uniform mat4 projection;
 
