@@ -28,7 +28,7 @@ std::vector< glm::vec2 > uvs;
 std::vector< glm::vec3 > normals; // Won't be used at the moment.
 std::vector< glm::vec3 >vertices;
 
-std::vector < glm::vec3 >  temp_vertices;
+std::vector < glm::vec3 >  temp_vertices, temp_vertices1;
 std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
@@ -290,7 +290,12 @@ int main()
 	// //PROCESSING DATA
 	// // For each vertex of each triangle
 
-	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+	
+
+	GLfloat g_vertex_buffer_data[36 * 3];
+	int j = 0;
+
+
 
 	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
@@ -306,13 +311,51 @@ int main()
 
 		//chech this as out?
 		vertices.push_back(vertex);
+		
 
-
+		//fills this temporary array for experimentation in a linear fashion
+		g_vertex_buffer_data[j] = vertex.x;
+		j++;
+		g_vertex_buffer_data[j] = vertex.y;
+		j++;
+		g_vertex_buffer_data[j] = vertex.z;
+		j++;
 	}
 
-	//int xx = vertices.size();
 
-	///////////////////
+	//GLfloat g_vertex_buffer_data[36*3];
+
+	////three times the amount for x y and z in linear fasion
+	////to check the .obj file as a structure because it was malformed 
+	////with loading code
+	//for (int i = 0; i < 36 * 3;)
+	//{
+	//	glm::vec3 tempvector = temp_vertices1.pop_back();
+
+	//	int x = tempvector.x;
+
+	//	g_vertex_buffer_data[i] = x;
+	//	i++;
+
+	//	int y = tempvector.y;
+	//	g_vertex_buffer_data[i] = y;
+	//	i++;
+
+	//	int z = tempvector.z;
+	//	g_vertex_buffer_data[i] = z;
+	//	i++;
+	//}
+		
+
+	
+	//right here put into a structure : 
+	
+	//// An array of 3 vectors which represents 3 vertices
+	//static const GLfloat g_vertex_buffer_data[] = {
+	//   -1.0f, -1.0f, 0.0f,
+	//   1.0f, -1.0f, 0.0f,
+	//   0.0f,  1.0f, 0.0f,
+	//};
 
 
 
@@ -330,13 +373,13 @@ int main()
 	
 	
 	
-	
+	//this did work now lets try the loaded data in this structure, below.
 	// An array of 3 vectors which represents 3 vertices
-	static const GLfloat g_vertex_buffer_data[] = {
-	   -1.0f, -1.0f, 0.0f,
-	   1.0f, -1.0f, 0.0f,
-	   0.0f,  1.0f, 0.0f,
-	};
+//	static const GLfloat g_vertex_buffer_data[] = {
+//	   -1.0f, -1.0f, 0.0f,
+//	   1.0f, -1.0f, 0.0f,
+//	   0.0f,  1.0f, 0.0f,
+//	};
 
 
 
