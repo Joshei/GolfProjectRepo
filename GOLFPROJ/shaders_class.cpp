@@ -316,42 +316,59 @@ int main()
 
 
 
+	//SETTING UP A VERTEX ARRAY OBJECT
 
 	//signed int VBO1;// , VAO1;
 	glGenVertexArrays(1, &VAO1);
-	glGenBuffers(1, &VBO1);
+	//glGenBuffers(1, &VBO1);
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO1);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+
+	
+	
+	
+	
+	
+	// An array of 3 vectors which represents 3 vertices
+	static const GLfloat g_vertex_buffer_data[] = {
+	   -1.0f, -1.0f, 0.0f,
+	   1.0f, -1.0f, 0.0f,
+	   0.0f,  1.0f, 0.0f,
+	};
 
 
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
+
+	//CREATING FOR OPENGL - CREATING A BUFFER
+
+	// This will identify our vertex buffer
+	GLuint vertexbufferint;
+	// Generate 1 buffer, put the resulting identifier in vertexbuffer
+	glGenBuffers(1, &vertexbufferint);
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+	// Give our vertices to OpenGL.   heh, heh, heh
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 
 
+
+	
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+	
 	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
-	////just moved here
+	
+	
+	
+	
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	////////////////////////////
 
-	glEnableVertexAttribArray(0);
-
-
-
-
-
-
-
-	//static const GLfloat g_color_buffer_data[] = {
-	//	0.583f,  0.771f,  0.014f
-	//};
-
-
+	
 
 	static const GLfloat g_color_buffer_data[] = {
 		0.583f,  0.771f,  0.014f,
@@ -669,20 +686,30 @@ int main()
 
 
 
-
-
-
-		//glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-
+		
 		//could try moving this if there is a failure during testing!
-		glBindVertexArray(VAO1);
+		//glBindVertexArray(VAO1);
 
 		//glDisable(GL_CULL_FACE);
 
 
-		//glDrawElements(GL_TRIANGLES, 36,GL_UNSIGNED_INT, &vertexIndices);
+		// 1st attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+		glVertexAttribPointer(
+			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+
+
+		
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glDisableVertexAttribArray(0);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
