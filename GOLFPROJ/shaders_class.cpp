@@ -59,10 +59,10 @@ int main()
 	std::vector<unsigned int> indices;
 
 
-	//GLuint elementbuffer;
-	glGenBuffers(1, &elementbuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+//	//GLuint elementbuffer;
+//	glGenBuffers(1, &elementbuffer);
+//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 
 
@@ -194,10 +194,10 @@ int main()
 	//testimagegiven.obj
 	//cubeimag.obj
 	//file = fopen("C:/images for opengl/marble.obj", "r");
-	file = fopen("C:/images for opengl/.obj", "r");
+	file = fopen("C:/images for opengl/cube100.obj", "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
-		return;
+		return(1);
 	}
 
 	//////////
