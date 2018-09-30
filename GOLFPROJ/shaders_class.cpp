@@ -14,6 +14,12 @@
 #include <iostream>
 
 
+#include <string.h>
+#include <iostream>
+#include <windows.h>
+
+unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
+
 //test---another test--and one more--
 
 //#include <GL/glew.h>
@@ -33,8 +39,14 @@ std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
 
+#define BITMAP_ID 0x4D42		      // the universal bitmap ID
 
+#define MAP_X	32				         // size of map along x-axis
+#define MAP_Z	32				         // size of map along z-axis
+#define MAP_SCALE	20.0f		         // the scale of the terrain map
 
+////// Texture Information
+BITMAPINFOHEADER	bitmapInfoHeader;	// temp bitmap info header
 
 
 FILE * file;
@@ -51,6 +63,14 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 //std::vector< glm::vec3 >vertices2;
+
+
+
+
+unsigned char*	      imageData;		   // the map image data
+
+////// Terrain Data
+float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
 
 
@@ -199,6 +219,14 @@ int main()
 		printf("Impossible to open the file !\n");
 		return(1);
 	}
+
+
+	char  filename[] = "terrain2.bmp";
+
+	imageData = LoadBitmapFile(filename, &bitmapInfoHeader);
+
+
+
 
 	//////////
 	//////////////////////////////
@@ -576,6 +604,9 @@ int main()
 
 		// render loop
 		// -----------
+
+	InitializeTerrain();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
@@ -851,3 +882,91 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 //v 0.5f -0.5f 0.0f 
 //v 0.5f -0.5f 0.0f  
 //v 0.0f  0.5f 0.0f
+
+
+
+//
+// LoadBitmapFile
+// desc: Returns a pointer to the bitmap image of the bitmap specified
+//       by filename. Also returns the bitmap header information.
+//		   No support for 8-bit bitmaps.
+unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader)
+{
+	FILE *filePtr;							      // the file pointer
+	BITMAPFILEHEADER	bitmapFileHeader;		// bitmap file header
+	unsigned char		*bitmapImage;			// bitmap image data
+	int					imageIdx = 0;		   // image index counter
+	unsigned char		tempRGB;				   // swap variable
+
+	// open filename in "read binary" mode
+	filePtr = fopen(filename, "rb");
+	if (filePtr == NULL)
+		return NULL;
+
+	// read the bitmap file header
+	fread(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, filePtr);
+
+	// verify that this is a bitmap by checking for the universal bitmap id
+	if (bitmapFileHeader.bfType != BITMAP_ID)
+	{
+		fclose(filePtr);
+		return NULL;
+	}
+
+	// read the bitmap information header
+	fread(bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, filePtr);
+
+	// move file pointer to beginning of bitmap data
+	fseek(filePtr, bitmapFileHeader.bfOffBits, SEEK_SET);
+
+	// allocate enough memory for the bitmap image data
+	bitmapImage = (unsigned char*)malloc(bitmapInfoHeader->biSizeImage);
+
+	// verify memory allocation
+	if (!bitmapImage)
+	{
+		free(bitmapImage);
+		fclose(filePtr);
+		return NULL;
+	}
+
+	// read in the bitmap image data
+	fread(bitmapImage, 1, bitmapInfoHeader->biSizeImage, filePtr);
+
+	// make sure bitmap image data was read
+	if (bitmapImage == NULL)
+	{
+		fclose(filePtr);
+		return NULL;
+	}
+
+	// swap the R and B values to get RGB since the bitmap color format is in BGR
+	for (imageIdx = 0; imageIdx < bitmapInfoHeader->biSizeImage; imageIdx += 3)
+	{
+		tempRGB = bitmapImage[imageIdx];
+		bitmapImage[imageIdx] = bitmapImage[imageIdx + 2];
+		bitmapImage[imageIdx + 2] = tempRGB;
+	}
+
+	// close the file and return the bitmap image data
+	fclose(filePtr);
+	return bitmapImage;
+}
+
+// InitializeTerrain()
+// desc: initializes the heightfield terrain data
+void InitializeTerrain()
+{
+	// loop through all of the heightfield points, calculating
+	// the coordinates for each point
+	for (int z = 0; z < MAP_Z; z++)
+	{
+		for (int x = 0; x < MAP_X; x++)
+		{
+			terrain[x][z][0] = float(x)*MAP_SCALE;
+			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
+			terrain[x][z][2] = -float(z)*MAP_SCALE;
+		}
+	}
+}
+
