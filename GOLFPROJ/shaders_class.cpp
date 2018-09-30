@@ -705,35 +705,13 @@ int main()
 
 
 
-		//model = glm::translate(model, glm::vec3(0.0, 0.0, 0.0));
-
-
-//		glm::vec3 scale = glm::vec3(.1, .1, .1);
 		
-//		model = glm::scale(model, scale);
-
-//		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		
-
-		
-
-		//view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
-		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
-
-
 		
 
 
-		//glm::mat4 translate = glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f));
-		//glm::vec4 vector(1.f, 1.f, 1.f, 1.f);
-		//glm::vec4 transformedVector = translate * vector;
-
-		//x y z
-
+		
 		//model  = glm::translate(model, glm::vec3(-0.5, -0.5, 0.0f));
-		//model  = Gltranslate(0,0,5);
-
-
+		
 		//1:
 		//2: around the y axis
 		//3: aroond the z axis
@@ -745,19 +723,7 @@ int main()
 
 
 
-		//view = glm::translate(view, glm::vec3(0.0f, 0.0f, 0.0f));
-
-	//	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-
-
-
-		//ourShader.use();
-
-
-		//transform = glm::translate(transform, glm::radians(90.0f), glm::vec3(0.0, 0.0, 1.0));
-		//transform = glm::scale(transform, glm::vec3(.2, .2, .2));
-
+		
 //		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -771,30 +737,8 @@ int main()
 
 
 
-		//glm::vec3 scale = glm::vec3(10, 10, 10);
-
-
-		//glm::mat4 modelMatrix = glm::mat4();
-		//modelMatrix = glm::scale(modelMatrix, scale);
-		//
-		//GLuint location = glGetUniformLocation(ourShader.ID, "model");
-		//glUniformMatrix4fv(location , 1, false, glm::value_ptr(modelMatrix));
-
-
-		////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
-		//
-		//////Model = glm::translate(Model, glm::vec3(0.1f, 0.2f, 0.5f));
-
-		////model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//
-		//
-		//model = glm::translate(model, glm::vec3(10.0f, 0.0f, -3.0f));
-		////
-		////
-		//projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		////// retrieve the matrix uniform locations
-		//
-		//
+		
+		
 		//unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
 		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
 
@@ -805,23 +749,9 @@ int main()
 //		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 //		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
 		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		//
-		////ourShader.setMat4("model", model);
-
+		
 //		ourShader.setMat4("projection", projection);
 
-
-
-
-		//////////////////////
-
-
-
-		
-		//could try moving this if there is a failure during testing!
-		//glBindVertexArray(VAO1);
-
-		//glDisable(GL_CULL_FACE);
 
 
 		// 1st attribute buffer : vertices
@@ -877,11 +807,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
-
-
-//v 0.5f -0.5f 0.0f 
-//v 0.5f -0.5f 0.0f  
-//v 0.0f  0.5f 0.0f
 
 
 
