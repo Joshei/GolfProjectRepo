@@ -19,6 +19,8 @@
 #include <windows.h>
 
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
+void InitializeTerrain();
+
 
 //test---another test--and one more--
 
@@ -142,6 +144,10 @@ int main()
 
 
 
+
+	//this is original load from.obj and use face and vertices to draw a model
+	//the new code is send through:
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
 
 
 
@@ -395,22 +401,7 @@ int main()
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO1);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-
 	
-	
-	
-	
-	//this did work now lets try the loaded data in this structure, below.
-	// An array of 3 vectors which represents 3 vertices
-//	static const GLfloat g_vertex_buffer_data[] = {
-//	   -1.0f, -1.0f, 0.0f,
-//	   1.0f, -1.0f, 0.0f,
-//	   0.0f,  1.0f, 0.0f,
-//	};
-
-
-
 	//CREATING FOR OPENGL - CREATING A BUFFER
 
 	// This will identify our vertex buffer
@@ -429,8 +420,7 @@ int main()
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-	
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 	
 	
@@ -522,87 +512,16 @@ int main()
 
 
 
-
-
-
-	//	 color attribute
-	//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//	glEnableVertexAttribArray(1);
-
-
-		//endofcodesection
-
-
-
-		//possibly put render code in here!  If so, no need for common.h externs!
-
-		//could try moving this if there is a failure during testing!
-		//glBindVertexArray(VAO1);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		///////////////////
-
-
-
-
-
-
-
-
-
-
-
-		//////////////////////////////
-
-
-
-
-
-
-
-		//all this, now in function:  loadobjmodelandrender();
-
-
-		//unsigned int VBO1, VAO1;
-		//glGenVertexArrays(1, &VAO1);
-		//glGenBuffers(1, &VBO1);
-		//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-		//glBindVertexArray(VAO1);
-
-		//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-		//
-		//
-		////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
 
 
 
+		////////////////////////////
 
-
-		//out of the function completes this and renders
-
-
-
-		// position attribute
-	//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	//	glEnableVertexAttribArray(0);
-	//	// color attribute
-	//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	//	glEnableVertexAttribArray(1);
-
-
-
-		/////////////////////////////
-
-
-
-
-		//glm::mat4 transform = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
-
-		// render loop
+		// RENDER LOOP
 		// -----------
 
 	InitializeTerrain();
@@ -636,12 +555,9 @@ int main()
 
 		//glEnable(GL_CULL_FACE);
 
-		//glEnable(GL_CULL_FACE);
+		
 		//glCullFace(GL_FRONT);
-		// render the triangle-
-
-		/////////////////////
-
+		
 
 
 
@@ -730,8 +646,8 @@ int main()
 //		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
 		//glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
 
-		///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
-		///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
+		//?///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
+		//?///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
 
 
 
