@@ -10,8 +10,8 @@ out vec3 ourColor;
 
 
 
-uniform mat4 MVP;
-//uniform mat4 model;
+//uniform mat4 MVP;
+uniform mat4 model;
 //uniform mat4 model2;
 //uniform mat4 view;
 //uniform mat4 projection;
@@ -21,7 +21,10 @@ void main()
 
 	ourColor = aColor;
 
-    gl_Position =  MVP   *( vec4(aPos, 1.0f))    ;
+	//gl_Position =  MVP   *( vec4(aPos, 1.0f))    ;
+    gl_Position =  model * ( vec4(aPos, 1.0f))    ;
+
+
   //  TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 	
 

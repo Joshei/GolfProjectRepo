@@ -18,9 +18,21 @@
 #include <iostream>
 #include <windows.h>
 
+#include <gl/gl.h>
+#include <gl/glu.h>
+
+#include "glaux.h"
+//#include "vkgllib.h"
+//#include <iostream>
+#include <fstream>
+#include <math.h>
+#include <stdlib.h>
+
+
+bool LoadtheTextures(void);
+
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
 void InitializeTerrain();
-
 
 //test---another test--and one more--
 
@@ -45,12 +57,13 @@ std::vector < glm::vec3 >  temp_normals;
 
 #define MAP_X	32				         // size of map along x-axis
 #define MAP_Z	32				         // size of map along z-axis
-#define MAP_SCALE	20.0f		         // the scale of the terrain map
+#define MAP_SCALE	1.0f		         // the scale of the terrain map
 
 ////// Texture Information
 BITMAPINFOHEADER	bitmapInfoHeader;	// temp bitmap info header
+BITMAPINFOHEADER	landInfo;
 
-
+unsigned char * landTexture;
 FILE * file;
 
 
@@ -68,29 +81,30 @@ const unsigned int SCR_HEIGHT = 600;
 
 
 
+unsigned int		   land;			      // the land texture object
 
 unsigned char*	      imageData;		   // the map image data
 
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
-
+GLfloat g_vertex_buffer_data_land[(32 * 32 * 3)];
 
 int main()
 {
 	std::vector<unsigned int> indices;
 
 
-//	//GLuint elementbuffer;
-//	glGenBuffers(1, &elementbuffer);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
-//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+	//	//GLuint elementbuffer;
+	//	glGenBuffers(1, &elementbuffer);
+	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+	//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 
 
 
-	// glfw: initialize and configure
-	// ------------------------------
+		// glfw: initialize and configure
+		// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -230,7 +244,10 @@ int main()
 	char  filename[] = "terrain2.bmp";
 
 	imageData = LoadBitmapFile(filename, &bitmapInfoHeader);
-
+	if (imageData == NULL) {
+		printf("Impossible to open the second file !\n");
+		return(1);
+	}
 
 
 
@@ -324,9 +341,10 @@ int main()
 	// //PROCESSING DATA
 	// // For each vertex of each triangle
 
-	
+
 
 	GLfloat g_vertex_buffer_data[36 * 3];
+
 	int j = 0;
 
 
@@ -345,7 +363,7 @@ int main()
 
 		//chech this as out?
 		vertices.push_back(vertex);
-		
+
 
 		//fills this temporary array for experimentation in a linear fashion
 		g_vertex_buffer_data[j] = vertex.x;
@@ -379,11 +397,11 @@ int main()
 	//	g_vertex_buffer_data[i] = z;
 	//	i++;
 	//}
-		
 
-	
+
+
 	//right here put into a structure : 
-	
+
 	//// An array of 3 vectors which represents 3 vertices
 	//static const GLfloat g_vertex_buffer_data[] = {
 	//   -1.0f, -1.0f, 0.0f,
@@ -401,35 +419,65 @@ int main()
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO1);
 
-	
-	//CREATING FOR OPENGL - CREATING A BUFFER
+
+
+	//////////////////////////////////////////
+
+	//CREATING FOR OPENGL - CREATING A BUFFER - for cube that is loaded from .obj
+	//and parsed to data
 
 	// This will identify our vertex buffer
-	GLuint vertexbufferint;
+	//GLuint vertexbufferint;
+	//// Generate 1 buffer, put the resulting identifier in vertexbuffer
+	//glGenBuffers(1, &vertexbufferint);
+	//// The following commands will talk about our 'vertexbuffer' buffer
+	//glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+	//// Give our vertices to OpenGL.   heh, heh, heh
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+
+
+
+	///////////////////////////////////
+	//THIS IS FOR LAND
+
+
+	InitializeTerrain();
+	//LoadtheTextures();
+
+	// This will identify our vertex buffer
+	GLuint vertexbufferLAND;
 	// Generate 1 buffer, put the resulting identifier in vertexbuffer
-	glGenBuffers(1, &vertexbufferint);
+	glGenBuffers(1, &vertexbufferLAND);
 	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
 	// Give our vertices to OpenGL.   heh, heh, heh
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_land), g_vertex_buffer_data_land, GL_STATIC_DRAW);
 
 
 
 
-	
+	/////////////////////////////////
+
+
+
+
+
+
+
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
-	
-	
-	
-	
 
-	////////////////////////////
 
-	
+
+
+
+	////////////////////////////THIS  IS THE COLOR USAGE FOR CUBE WORKING FINE COMMENTED OUT TO GET LAND WORKING!
+	//10/1/18
+	//
 
 	static const GLfloat g_color_buffer_data[] = {
 		0.583f,  0.771f,  0.014f,
@@ -512,6 +560,15 @@ int main()
 
 
 
+	//glDisableVertexAttribArray(1);
+
+
+////////////////////END OF WAS WORKING COLORS FOR CUBE////
+
+
+
+
+
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
@@ -524,7 +581,8 @@ int main()
 		// RENDER LOOP
 		// -----------
 
-	InitializeTerrain();
+
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -555,9 +613,9 @@ int main()
 
 		//glEnable(GL_CULL_FACE);
 
-		
+
 		//glCullFace(GL_FRONT);
-		
+
 
 
 
@@ -567,48 +625,53 @@ int main()
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
-		
-		
-		
+
+
+
 		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 		//projection = glm::perspective(45.0f, (float)SCREEN_SIZE.x / (float)SCREEN_SIZE.y, 1.0f, 200.0f);
-		
 
 
-		 model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-		glm::vec3 scale = glm::vec3(.1, .1, .1);
+		 ////model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
-				model = glm::scale(model, scale);
+		//glm::vec3 scale = glm::vec3(.1, .1, .1);
+
+		//		model = glm::scale(model, scale);
 
 
-		
-		projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-			
-		view = glm::lookAt(
-			glm::vec3(0, 0, -3), // Camera is at (4,3,3), in World Space
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
+		////projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1900.0f);
+
+
+//		model = glm::lookAt(
+//			glm::vec3(32*20/2, 150, 32*20/2), // Camera is at (4,3,3), in World Space
+//			
+//			
+//			glm::vec3(0, 0, 0), // and looks at the origin
+//			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+//		);
 
 
 
 		// Remember, matrix multiplication is the other way around
-		MVP = projection * view * model;
+		//MVP = projection * view * model;
 
 
 
-		// Get a handle for our "MVP" uniform.
-		// Only at initialisation time.
-		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "MVP");
+		//// Get a handle for our "MVP" uniform.
+		//// Only at initialisation time.
+		//GLuint MatrixID = glGetUniformLocation(ourShader.ID, "MVP");
 
-		// Send our transformation to the currently bound shader,
-		// in the "MVP" uniform
-		// For each model you render, since the MVP will be different (at least the M part)
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		//// Send our transformation to the currently bound shader,
+		//// in the "MVP" uniform
+		//// For each model you render, since the MVP will be different (at least the M part)
+		//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
 
+
+		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
 
 
 
@@ -621,13 +684,13 @@ int main()
 
 
 
-		
-		
 
 
-		
+
+
+
 		//model  = glm::translate(model, glm::vec3(-0.5, -0.5, 0.0f));
-		
+
 		//1:
 		//2: around the y axis
 		//3: aroond the z axis
@@ -639,7 +702,7 @@ int main()
 
 
 
-		
+
 //		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -653,8 +716,8 @@ int main()
 
 
 
-		
-		
+
+
 		//unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
 		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
 
@@ -665,14 +728,36 @@ int main()
 //		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 //		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
 		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-		
+
 //		ourShader.setMat4("projection", projection);
 
 
 
-		// 1st attribute buffer : vertices
+
+
+
+
+
+
+		// 1ST ATTRIBUTE BUFFER : VERTICES
+		//SETTING UP FOR CUBE TO DISPLAY WORKS
+
+		//glEnableVertexAttribArray(0);
+		//glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+		//glVertexAttribPointer(
+		//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		//	3,                  // size
+		//	GL_FLOAT,           // type
+		//	GL_FALSE,           // normalized?
+		//	0,                  // stride
+		//	(void*)0            // array buffer offset
+		//);
+
+
+		//////////SAME AS ABOVE, NOW TRYING TO DISPLAY LAND/////
+
 		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
 		glVertexAttribPointer(
 			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
 			3,                  // size
@@ -684,9 +769,16 @@ int main()
 
 
 
-		
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glDrawArrays(GL_TRIANGLES, 0, 32);
 		glDisableVertexAttribArray(0);
+
+
+
+		//glBegin(GL_TRIANGLE_STRIP);
+
+
+
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -796,18 +888,77 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 
 // InitializeTerrain()
 // desc: initializes the heightfield terrain data
+
+//GLfloat g_vertex_buffer_data_land[32 * 32 * 3];
 void InitializeTerrain()
 {
+	int i = 0;
 	// loop through all of the heightfield points, calculating
 	// the coordinates for each point
 	for (int z = 0; z < MAP_Z; z++)
 	{
-		for (int x = 0; x < MAP_X; x++)
-		{
-			terrain[x][z][0] = float(x)*MAP_SCALE;
-			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
-			terrain[x][z][2] = -float(z)*MAP_SCALE;
-		}
+	//int z = 0;
+	for (int x = 0; x < 32; x++)// MAP_X; x++)
+	{
+
+		g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;;
+		//			terrain[x][z][0] = float(x)*MAP_SCALE;
+		g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
+		//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
+		g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
+		//			terrain[x][z][2] = -float(z)*MAP_SCALE;
+
+		i = i + 3;
+
 	}
+	}
+
+//	-1.0f, -1.0f, 0.0f,
+//		1.0f, -1.0f, 0.0f,
+//		0.0f, 1.0f, 0.0f,
+
+
+//		g_vertex_buffer_data_land[i] = -100;
+//		g_vertex_buffer_data_land[i + 1] = -100;
+//		g_vertex_buffer_data_land[i + 2] = 0;
+//		g_vertex_buffer_data_land[i + 3] = 100;
+//		g_vertex_buffer_data_land[i + 4] = -100;
+//		g_vertex_buffer_data_land[i + 5] = 0;
+//		g_vertex_buffer_data_land[i + 6] = 0;
+//		g_vertex_buffer_data_land[i + 7] = 100;
+//		g_vertex_buffer_data_land[i + 8] = 0;
+
+
+
+	//float xx = g_vertex_buffer_data_land[3071];
+	//float yy = g_vertex_buffer_data_land[3072];
+
 }
 
+bool LoadtheTextures(void)
+{
+
+
+	char dirvar[] = "green.bmp";
+
+	if (dirvar == NULL) {
+		printf("Impossible to open this bitmap file !\n");
+		return(1);
+	}
+
+
+	// load the land texture data
+	landTexture = LoadBitmapFile(dirvar, &landInfo);
+	if (!landTexture)
+		return false;
+	//
+		// generate the land texture as a mipmap
+	glGenTextures(1, &land);
+	glBindTexture(GL_TEXTURE_2D, land);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//link this against glu32.lib 
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, landInfo.biHeight, landInfo.biWidth, GL_RGB, GL_UNSIGNED_BYTE, landTexture);
+
+	return true;
+}
