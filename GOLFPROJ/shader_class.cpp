@@ -770,7 +770,7 @@ int main()
 
 
 
-		glDrawArrays(GL_TRIANGLES, 0, 32*32);
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 32*32);
 		glDisableVertexAttribArray(0);
 
 
