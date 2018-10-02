@@ -12,27 +12,54 @@
 #include <C:/Users/Joshua Eirman/Source/repos/GOLFPROJ/GOLFPROJ/shader_s.h>
 #include <C:/openglusage/glm/glm.hpp>
 #include <iostream>
-
+//#include <open32.h>
 
 #include <string.h>
 #include <iostream>
 #include <windows.h>
 
+//#include <C:/openglusage/
 #include <gl/gl.h>
 #include <gl/glu.h>
 
-#include "glaux.h"
-//#include "vkgllib.h"
-//#include <iostream>
-#include <fstream>
-#include <math.h>
-#include <stdlib.h>
+#define BITMAP_ID 0x4D42		      // the universal bitmap ID
+
+#define MAP_X	32				         // size of map along x-axis
+#define MAP_Z	32				         // size of map along z-axis
+#define MAP_SCALE	.0f		         // the scale of the terrain map
+
+
+//int gwidth;
+//int gheight;
+float* gvertices = 0;
+int* gindices = 0;
+
+
+
 
 
 bool LoadtheTextures(void);
 
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
 void InitializeTerrain();
+
+
+
+int getIndicesCount(int _width, int _height);
+
+int* getIndices(int _width, int _height);
+
+int getIndicesCount(int _width, int _height);
+
+int getVerticesCount(int _width, int _height);
+
+
+
+
+
+
+
+
 
 //test---another test--and one more--
 
@@ -53,11 +80,6 @@ std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
 
-#define BITMAP_ID 0x4D42		      // the universal bitmap ID
-
-#define MAP_X	32				         // size of map along x-axis
-#define MAP_Z	32				         // size of map along z-axis
-#define MAP_SCALE	1.0f		         // the scale of the terrain map
 
 ////// Texture Information
 BITMAPINFOHEADER	bitmapInfoHeader;	// temp bitmap info header
@@ -91,7 +113,12 @@ float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 GLfloat g_vertex_buffer_data_land[(32 * 32 * 3)];
 
 int main()
+
 {
+	
+
+
+
 	std::vector<unsigned int> indices;
 
 
@@ -141,7 +168,7 @@ int main()
 
 
 
-
+	
 
 
 
@@ -456,8 +483,13 @@ int main()
 
 
 
-
+	//see this:  https://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
 	/////////////////////////////////
+
+	//stopped here, need to fill buffer data for render
+
+	//getIndices
+	//getVertices
 
 
 
@@ -576,10 +608,13 @@ int main()
 
 
 
-		////////////////////////////
 
-		// RENDER LOOP
-		// -----------
+		
+		
+		
+///////////////////////////////////////////////
+//		 RENDER LOOP
+///////////////////////////// -----------
 
 
 
@@ -768,9 +803,30 @@ int main()
 		);
 
 
+		//glBegin(GL_);
+		//glEnd();
 
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 32*32);
+
+		//for (i = 0; i < 32 - 1; i++) {
+		//	glBegin(GL_TRIANGLE_STRIP);
+		//	for (j = 0; j < 32; j++) {
+
+
+		//use enable instead
+		//glEnableClientState(GL_VERTEX_ARRAY);
+		
+		
+		//glVertexPointer(3, GL_FLOAT, 0, getVertices(width, height));
+		//glDrawElements(GL_TRIANGLE_STRIP, getIndicesCount(width, height), GL_UNSIGNED_INT, getIndices(width, height));
+		//glDisableClientState(GL_VERTEX_ARRAY);
+
+
+		//glVertexAttribPointer
+
+
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 10 * 10);
 		glDisableVertexAttribArray(0);
 
 
@@ -901,11 +957,23 @@ void InitializeTerrain()
 	for (int x = 0; x < 32; x++)// MAP_X; x++)
 	{
 
-		g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;;
+		
+		
+		g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;
+		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i] = 1;
+
 		//			terrain[x][z][0] = float(x)*MAP_SCALE;
+		
 		g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
+		//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
+
+
 		//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
+		
 		g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
+		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i+2] = 1;
+
+
 		//			terrain[x][z][2] = -float(z)*MAP_SCALE;
 
 		i = i + 3;
@@ -913,22 +981,34 @@ void InitializeTerrain()
 	}
 	}
 
+
+	/*g_vertex_buffer_data_land[0] = 0;
+	g_vertex_buffer_data_land[1] = 2;
+	g_vertex_buffer_data_land[2] = 0;
+	g_vertex_buffer_data_land[3] = 1;
+	g_vertex_buffer_data_land[4] = 2;
+	g_vertex_buffer_data_land[5] = 0;
+	g_vertex_buffer_data_land[6] = 2;
+	g_vertex_buffer_data_land[7] = 2;
+	g_vertex_buffer_data_land[8] = 0;*/
+
+
 //	-1.0f, -1.0f, 0.0f,
 //		1.0f, -1.0f, 0.0f,
 //		0.0f, 1.0f, 0.0f,
 
+	//0,2,0,1,2,0,2,2,0
+	/*g_vertex_buffer_data_land[0] = 0;
+	g_vertex_buffer_data_land[1] = 2;
+		g_vertex_buffer_data_land[2] = 0;
+		g_vertex_buffer_data_land[3] = 1;
+		g_vertex_buffer_data_land[4] = 2;
+		g_vertex_buffer_data_land[5] = 0;
+		g_vertex_buffer_data_land[6] = 2;
+		g_vertex_buffer_data_land[7] = 2;
+		g_vertex_buffer_data_land[8] = 0;
 
-//		g_vertex_buffer_data_land[i] = -100;
-//		g_vertex_buffer_data_land[i + 1] = -100;
-//		g_vertex_buffer_data_land[i + 2] = 0;
-//		g_vertex_buffer_data_land[i + 3] = 100;
-//		g_vertex_buffer_data_land[i + 4] = -100;
-//		g_vertex_buffer_data_land[i + 5] = 0;
-//		g_vertex_buffer_data_land[i + 6] = 0;
-//		g_vertex_buffer_data_land[i + 7] = 100;
-//		g_vertex_buffer_data_land[i + 8] = 0;
-
-
+*/
 
 	//float xx = g_vertex_buffer_data_land[3071];
 	//float yy = g_vertex_buffer_data_land[3072];
@@ -962,3 +1042,72 @@ bool LoadtheTextures(void)
 
 	return true;
 }
+
+
+
+////////////////////////////
+
+
+//internal
+int getVerticesCount(int width, int height) {
+	return width * height * 3;
+}
+
+//internal
+int getIndicesCount(int width, int height) {
+	return (width*height) + (width - 1)*(height - 2);
+}
+
+float* getVertices(int width, int height) {
+	if (gvertices) return gvertices;
+
+	gvertices = new float[getVerticesCount(width, height)];
+	int i = 0;
+
+	for (int row = 0; row < height; row++) {
+		for (int col = 0; col < width; col++) {
+			gvertices[i++] = (float)col;
+			gvertices[i++] = 0.0f;
+			gvertices[i++] = (float)row;
+		}
+	}
+
+	return gvertices;
+}
+
+int* getIndices(int width, int height) {
+	if (gindices) return gindices;
+
+	
+	//https://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
+
+
+	//
+	gindices = new int[getIndicesCount(width, height)];
+
+	int i = 0;
+
+	for (int row = 0; row < height - 1; row++) {
+		if ((row & 1) == 0) { // even rows
+			for (int col = 0; col < width; col++) {
+				gindices[i++] = col + row * width;
+				gindices[i++] = col + (row + 1) * width;
+			}
+		}
+		else { // odd rows
+			for (int col = width - 1; col > 0; col--) {
+				gindices[i++] = col + (row + 1) * width;
+				gindices[i++] = col - 1 + +row * width;
+			}
+		}
+	}
+	//if ((mHeight & 1) && mHeight > 2) {
+	//	mpIndices[i++] = (mHeight - 1) * mWidth;
+	//}
+
+	return gindices;
+}
+
+
+
+////////////////////////////////

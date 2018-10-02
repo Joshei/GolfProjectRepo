@@ -22,7 +22,7 @@ void main()
 	ourColor = aColor;
 
 	//gl_Position =  MVP   *( vec4(aPos, 1.0f))    ;
-    gl_Position =  model * ( vec4(aPos, 1.0f))    ;
+    gl_Position =  ( vec4(aPos, 1.0f))    ;
 
 
   //  TexCoord = vec2(aTexCoord.x, aTexCoord.y);
