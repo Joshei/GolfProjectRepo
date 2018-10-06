@@ -31,7 +31,7 @@
 
 //int gwidth;
 //int gheight;
-float* gvertices = 0;
+//float* gvertices = 0;
 int* gindices = 0;
 
 
@@ -49,13 +49,13 @@ int getIndicesCount(int _width, int _height);
 
 int* getIndices(int _width, int _height);
 
-int getIndicesCount(int _width, int _height);
+//int getIndicesCount(int _width, int _height);
 
-int getVerticesCount(int _width, int _height);
+//int getVerticesCount(int _width, int _height);
 
+float* getVertices(int width, int height);
 
-
-
+int getVerticesCount(int width, int height);
 
 
 
@@ -75,7 +75,7 @@ std::vector< glm::vec2 > uvs;
 std::vector< glm::vec3 > normals; // Won't be used at the moment.
 std::vector< glm::vec3 >vertices;
 
-std::vector < glm::vec3 >  temp_vertices, temp_vertices1;
+std::vector < glm::vec3 >  temp_vertices, temp_vertices1, mathvertices;
 std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
@@ -110,7 +110,18 @@ unsigned char*	      imageData;		   // the map image data
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
-GLfloat g_vertex_buffer_data_land[(32 * 32 * 3)];
+GLfloat g_vertex_buffer_data_land[10  * 10 *  3];
+
+
+//gvertices = new float[getVerticesCount(width, height)];
+
+//10x10x3
+float gvertices[300];// = new float[getVerticesCount(width, height)];
+
+
+//int i = 0;
+int i = 0;
+
 
 int main()
 
@@ -370,36 +381,94 @@ int main()
 
 
 
-	GLfloat g_vertex_buffer_data[36 * 3];
+
+	//vertices
+	//getVertices(10.0f,10.0f);
+
+
+
+
+	/////////////////
+
+	GLfloat g_vertex_buffer_data_land[] = {
+
+		-1.0, -1.0,  1.0,
+	1.0, -1.0,  1.0,
+	-1.0,  1.0,  1.0,
+	1.0,  1.0,  1.0,
+	-1.0, -1.0, -1.0,
+	1.0, -1.0, -1.0,
+	-1.0,  1.0, -1.0,
+	1.0,  1.0, -1.0,
+	};
+
+
+	
 
 	int j = 0;
 
 
 
-	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
-		//has verices loaded in 
-		unsigned int g = vertexIndices[i];
-
-
-
-		//unsigned int g;
-		//check this should be fine
-		glm::vec3 vertex = temp_vertices[g - 1];
+	//	//has verices loaded in 
+	//	//unsigned int g = vertexIndices[i];
 
 
-		//chech this as out?
-		vertices.push_back(vertex);
+
+	//	//unsigned int g;
+	//	//check this should be fine
+	//	//glm::vec3 vertex = vertices[g - 1];
 
 
-		//fills this temporary array for experimentation in a linear fashion
-		g_vertex_buffer_data[j] = vertex.x;
-		j++;
-		g_vertex_buffer_data[j] = vertex.y;
-		j++;
-		g_vertex_buffer_data[j] = vertex.z;
-		j++;
-	}
+	//	//chech this as out?
+	//	//vertices.push_back(vertex);
+
+
+	//	//fills this temporary array for experimentation in a linear fashion
+	//	g_vertex_terrain_data[j] = vertex.x;
+	//	j++;
+	//	g_vertex_terrain_data[j] = vertex.y;
+	//	j++;
+	//	g_vertex_terrain_data[j] = vertex.z;
+	//	j++;
+	//}
+
+
+
+	/////////////////
+
+
+	//GLfloat g_vertex_buffer_data[36 * 3];
+
+	//int j = 0;
+
+
+
+	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+
+	//	//has verices loaded in 
+	//	unsigned int g = vertexIndices[i];
+
+
+
+	//	//unsigned int g;
+	//	//check this should be fine
+	//	glm::vec3 vertex = temp_vertices[g - 1];
+
+
+	//	//chech this as out?
+	//	vertices.push_back(vertex);
+
+
+	//	//fills this temporary array for experimentation in a linear fashion
+	//	g_vertex_buffer_data[j] = vertex.x;
+	//	j++;
+	//	g_vertex_buffer_data[j] = vertex.y;
+	//	j++;
+	//	g_vertex_buffer_data[j] = vertex.z;
+	//	j++;
+	//}
 
 
 	//GLfloat g_vertex_buffer_data[36*3];
@@ -469,8 +538,14 @@ int main()
 	//THIS IS FOR LAND
 
 
-	InitializeTerrain();
+	//InitializeTerrain();
 	//LoadtheTextures();
+
+
+	//sets g_vertex_buffer_data_land
+	getVertices(10, 10);
+
+
 
 	// This will identify our vertex buffer
 	GLuint vertexbufferLAND;
@@ -825,8 +900,19 @@ int main()
 		//glVertexAttribPointer
 
 
+		//100 triangles
+		glDrawArrays(GL_TRIANGLES, 0, 100);
+		
+//		static const GLushort cubeIndices[] = {
+//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
+//		};
 
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 10 * 10);
+		
+
+
+
+
+	//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, cubeIndices);
 		glDisableVertexAttribArray(0);
 
 
@@ -1059,16 +1145,29 @@ int getIndicesCount(int width, int height) {
 }
 
 float* getVertices(int width, int height) {
-	if (gvertices) return gvertices;
+//	if (gvertices) return gvertices;
 
-	gvertices = new float[getVerticesCount(width, height)];
+	//gvertices = new float[getVerticesCount(width, height)];
 	int i = 0;
+
+
+	//std::vector< glm::vec3 > tempmathvertices;
 
 	for (int row = 0; row < height; row++) {
 		for (int col = 0; col < width; col++) {
-			gvertices[i++] = (float)col;
-			gvertices[i++] = 0.0f;
-			gvertices[i++] = (float)row;
+			//gvertices[i++] = (float)col;
+			//gvertices[i++] = 0.0f;
+			//gvertices[i++] = (float)row;
+			//mathvertices
+			//tempmathvertices.
+
+			
+			g_vertex_buffer_data_land[i]= (float)col;
+			g_vertex_buffer_data_land[i++] = 0.0f;
+			g_vertex_buffer_data_land[i++] = (float)row;
+
+
+			i = i + 3;
 		}
 	}
 
