@@ -24,8 +24,10 @@
 
 #define BITMAP_ID 0x4D42		      // the universal bitmap ID
 
-#define MAP_X	32				         // size of map along x-axis
-#define MAP_Z	32				         // size of map along z-axis
+
+//used in intializeterrain
+#define MAP_X	32//32				         // size of map along x-axis
+#define MAP_Z	32//32				         // size of map along z-axis
 #define MAP_SCALE	.0f		         // the scale of the terrain map
 
 
@@ -110,7 +112,7 @@ unsigned char*	      imageData;		   // the map image data
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
-GLfloat g_vertex_buffer_data_land[10  * 10 *  3];
+GLfloat g_vertex_buffer_data_land[24];
 
 
 //gvertices = new float[getVerticesCount(width, height)];
@@ -390,7 +392,7 @@ int main()
 
 	/////////////////
 
-	GLfloat g_vertex_buffer_data_land[] = {
+GLfloat g_vertex_buffer_data_land[] = {
 
 		-1.0, -1.0,  1.0,
 	1.0, -1.0,  1.0,
@@ -543,7 +545,7 @@ int main()
 
 
 	//sets g_vertex_buffer_data_land
-	getVertices(10, 10);
+	//getVertices(10, 10);
 
 
 
@@ -555,6 +557,23 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
 	// Give our vertices to OpenGL.   heh, heh, heh
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_land), g_vertex_buffer_data_land, GL_STATIC_DRAW);
+
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+	);
+
+
+
+
+
 
 
 
@@ -780,8 +799,8 @@ int main()
 
 
 
-		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
+		//GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
+		//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
 
 
 
@@ -866,16 +885,7 @@ int main()
 
 		//////////SAME AS ABOVE, NOW TRYING TO DISPLAY LAND/////
 
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
-		glVertexAttribPointer(
-			0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			3,                  // size
-			GL_FLOAT,           // type
-			GL_FALSE,           // normalized?
-			0,                  // stride
-			(void*)0            // array buffer offset
-		);
+		
 
 
 		//glBegin(GL_);
@@ -901,7 +911,7 @@ int main()
 
 
 		//100 triangles
-		glDrawArrays(GL_TRIANGLES, 0, 100);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
