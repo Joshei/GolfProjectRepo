@@ -11,7 +11,7 @@ out vec3 ourColor;
 
 
 //uniform mat4 MVP;
-uniform mat4 model;
+//uniform mat4 model;
 //uniform mat4 model2;
 //uniform mat4 view;
 //uniform mat4 projection;

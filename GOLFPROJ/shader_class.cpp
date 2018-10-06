@@ -39,7 +39,6 @@ int* gindices = 0;
 
 
 
-
 bool LoadtheTextures(void);
 
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
@@ -68,7 +67,7 @@ int getVerticesCount(int width, int height);
 //#include <GL/glew.h>
 //#include <GL/GL.h>
 //used with initial single page
-unsigned int VAO1, VBO1;
+GLuint VAO1, VBO1;
 
 std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
 //test
@@ -112,7 +111,7 @@ unsigned char*	      imageData;		   // the map image data
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
-GLfloat g_vertex_buffer_data_land[24];
+//GLfloat g_vertex_buffer_data_land[24];
 
 
 //gvertices = new float[getVerticesCount(width, height)];
@@ -124,7 +123,19 @@ float gvertices[300];// = new float[getVerticesCount(width, height)];
 //int i = 0;
 int i = 0;
 
+GLfloat g_vertex_buffer_data_land[] = {
 
+		-1.0, -1.0,  0.0 ,
+//
+	1.0, -1.0,  0.0,
+	0.0,  1.0,  0.0 };
+
+//1.0,  1.0,  1.0,
+//-1.0, -1.0, -1.0,
+//1.0, -1.0, -1.0,
+//-1.0,  1.0, -1.0,
+//1.0,  1.0, -1.0,
+//};
 int main()
 
 {
@@ -385,24 +396,12 @@ int main()
 
 
 	//vertices
-	//getVertices(10.0f,10.0f);
+	getVertices(3,0);
 
 
 
 
 	/////////////////
-
-GLfloat g_vertex_buffer_data_land[] = {
-
-		-1.0, -1.0,  1.0,
-	1.0, -1.0,  1.0,
-	-1.0,  1.0,  1.0,
-	1.0,  1.0,  1.0,
-	-1.0, -1.0, -1.0,
-	1.0, -1.0, -1.0,
-	-1.0,  1.0, -1.0,
-	1.0,  1.0, -1.0,
-	};
 
 
 	
@@ -519,6 +518,13 @@ GLfloat g_vertex_buffer_data_land[] = {
 
 
 
+	
+
+
+
+
+
+
 	//////////////////////////////////////////
 
 	//CREATING FOR OPENGL - CREATING A BUFFER - for cube that is loaded from .obj
@@ -545,7 +551,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 
 
 	//sets g_vertex_buffer_data_land
-	//getVertices(10, 10);
+	getVertices(1, 1);
 
 
 
@@ -710,6 +716,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 //		 RENDER LOOP
 ///////////////////////////// -----------
 
+	ourShader.use();
 
 
 
@@ -722,8 +729,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 		// render
 		// ------
 
-		ourShader.use();
-
+		
 
 		// Enable depth test
 		//glEnable(GL_DEPTH_TEST);
@@ -737,7 +743,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 
 
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
 		//glEnable(GL_CULL_FACE);
@@ -911,7 +917,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 
 
 		//100 triangles
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+glDrawArrays(GL_TRIANGLES, 0, 3);
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -923,7 +929,7 @@ GLfloat g_vertex_buffer_data_land[] = {
 
 
 	//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, cubeIndices);
-		glDisableVertexAttribArray(0);
+		//glDisableVertexAttribArray(0);
 
 
 
@@ -1178,8 +1184,27 @@ float* getVertices(int width, int height) {
 
 
 			i = i + 3;
+
+			
+
+
+
+
 		}
 	}
+
+
+	g_vertex_buffer_data_land[0] = -1.0f;
+	g_vertex_buffer_data_land[1] = -1.0f;
+	g_vertex_buffer_data_land[2] = 0.0f;
+	g_vertex_buffer_data_land[3] = 1.0f;
+	g_vertex_buffer_data_land[4] = -1.0f;
+	g_vertex_buffer_data_land[5] = 0.0f;
+	g_vertex_buffer_data_land[6] = 0.0f;
+	g_vertex_buffer_data_land[7] = 1.0f;
+	g_vertex_buffer_data_land[8] = 0.0f;
+
+
 
 	return gvertices;
 }
