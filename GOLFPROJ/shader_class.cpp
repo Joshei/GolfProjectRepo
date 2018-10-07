@@ -123,7 +123,9 @@ float gvertices[300];// = new float[getVerticesCount(width, height)];
 //int i = 0;
 int i = 0;
 
-GLfloat g_vertex_buffer_data_land[3*3] = {};
+//indices
+//8 x 3
+GLfloat g_vertex_buffer_data_land[24] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -555,7 +557,10 @@ int main()
 
 	//sets g_vertex_buffer_data_land
 	
-	getVertices(1, 1);
+	//width , height : there are two triangles for each width column
+	//two columns : (four triangles)
+	//times two columns : 8 triangles
+	getVertices(2, 2);
 
 
 
@@ -923,8 +928,9 @@ int main()
 		//glVertexAttribPointer
 
 
-		//# of indices
-glDrawArrays(GL_TRIANGLES, 0, 3);
+//# of indices
+//8 triangles
+glDrawArrays(GL_TRIANGLES, 0, (8*3));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1176,12 +1182,15 @@ float* getVertices(int width, int height) {
 
 	//std::vector< glm::vec3 > tempmathvertices;
 
+
+
+	//up and down : a value of one is one row and than exits
 	for (int row = 0; row < height; row++) {
 		
 		
 		
 		
-		//across left to right
+		//across left to right - one column is two triangles
 		for (int col = 0; col < width; col++) {
 			//gvertices[i++] = (float)col;
 			//gvertices[i++] = 0.0f;
@@ -1190,8 +1199,9 @@ float* getVertices(int width, int height) {
 			//tempmathvertices.
 
 			
+			//GLfloat matrix1[3][3] = { col,0,0, col,0,1, (col + 1),0,1 };
 
-			GLfloat matrix1[3][3] = {col,0,0, col,0,1, (col+1),0,1};
+			GLfloat matrix1[3][3] = {col,0,row, col,0,row+1, (col+1),0,row+1};
 			
 			//vertex 1
 			g_vertex_buffer_data_land[0] = matrix1[0][0];
@@ -1206,7 +1216,9 @@ float* getVertices(int width, int height) {
 			g_vertex_buffer_data_land[7] = matrix1[2][1];
 			g_vertex_buffer_data_land[8] = matrix1[2][2];
 
-			/*int matrix2[3][3] = {col,0,2, col+1,0,2, col+1,0,1 };
+			//int matrix2[3][3] = { col,0,2, col + 1,0,2, col + 1,0,1 };
+
+			int matrix2[3][3] = {col,0,row + 2, col+1,0,row + 2, col+1,0,row + 1 };
 			
 			g_vertex_buffer_data_land[9] = matrix2[0][0];
 			g_vertex_buffer_data_land[10] = matrix2[0][1];
@@ -1218,7 +1230,7 @@ float* getVertices(int width, int height) {
 
 			g_vertex_buffer_data_land[15] = matrix2[2][0];
 			g_vertex_buffer_data_land[16] = matrix2[2][1];
-			g_vertex_buffer_data_land[17] = matrix2[2][2];*/
+			g_vertex_buffer_data_land[17] = matrix2[2][2];
 
 
 			//g_vertex_buffer_data_land[i]= (float)col;
@@ -1226,7 +1238,7 @@ float* getVertices(int width, int height) {
 			//g_vertex_buffer_data_land[i++] = (float)row;
 
 
-			i = i + 3;
+		
 
 			
 
