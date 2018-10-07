@@ -125,7 +125,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[36] = {};
+GLfloat g_vertex_buffer_data_land[72] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -947,7 +947,7 @@ int main()
 
 //# of indices
 //8 triangles
-glDrawArrays(GL_TRIANGLES, 0, (36));
+glDrawArrays(GL_TRIANGLES, 0, (72));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1204,15 +1204,15 @@ float* getVertices(int width, int height) {
 	//up and down : a value of one is one row and than exits
 	
 	//so it will be zero on the first loop
-	int counter = -18;
+	int counter = 0;
 	
 	for (int row = 0; row > (-1 * height); row--) {
 		
-		counter = counter + 18;
+		//counter = counter + 18;
 		
 		
 		//across left to right - one column is two triangles
-		for (int col = 0; col < width; col++) {
+		for (int colu = 0; colu < width; colu++) {
 			//gvertices[i++] = (float)col;
 			//gvertices[i++] = 0.0f;
 			//gvertices[i++] = (float)row;
@@ -1222,7 +1222,7 @@ float* getVertices(int width, int height) {
 			
 			//GLfloat matrix1[3][3] = { col,0,0, col,0,1, (col + 1),0,1 };
 
-			GLfloat matrix1[3][3] = {col,0,row, col,0,(row+1), (col+1),0,(row+1)};
+			GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
 			
 			//vertex 1
 			g_vertex_buffer_data_land[0 + counter] = matrix1[0][0]* scaleit;
@@ -1239,7 +1239,7 @@ float* getVertices(int width, int height) {
 
 			//int matrix2[3][3] = { col,0,2, col + 1,0,2, col + 1,0,1 };
 
-			int matrix2[3][3] = {col,0,row + 2, col+1,0,row + 2, col+1,0,row + 1 };
+			int matrix2[3][3] = {colu,0,(row + 2), (colu+1),0,(row + 2), (colu+1),0,(row + 1) };
 			
 			g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
 			g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
@@ -1253,6 +1253,8 @@ float* getVertices(int width, int height) {
 			g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
 			g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
 
+
+			counter = counter + 18;
 
 			//g_vertex_buffer_data_land[i]= (float)col;
 			//g_vertex_buffer_data_land[i++] = 0.0f;
