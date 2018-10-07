@@ -769,7 +769,7 @@ int main()
 
 
 
-		 model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+		 //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		//glm::vec3 scale = glm::vec3(.1, .1, .1);
 
@@ -780,13 +780,16 @@ int main()
 		//projection = glm::perspective(glm::radians(1.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 
-//		model = glm::lookAt(
-//			glm::vec3(32*20/2, 150, 32*20/2), // Camera is at (4,3,3), in World Space
-//			
-//			
-//			glm::vec3(0, 0, 0), // and looks at the origin
-//			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-//		);
+		model = glm::lookAt(
+			
+			//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+
+			glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
+			
+			
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
 
 
 
