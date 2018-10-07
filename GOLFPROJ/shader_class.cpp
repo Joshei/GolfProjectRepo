@@ -125,17 +125,18 @@ int i = 0;
 
 GLfloat g_vertex_buffer_data_land[] = {
 
-		-1.0, -1.0,  0.0 ,
-//
-	1.0, -1.0,  0.0,
-	0.0,  1.0,  0.0 };
+		-1.0f, -1.0f,  0.0f ,
+		//
+			1.0f, -1.0f,  0.0f,
+			0.0f,  1.0f,  0.0f, 
+};
 
-//1.0,  1.0,  1.0,
+//1.0,  1.0,  1.0,/
 //-1.0, -1.0, -1.0,
 //1.0, -1.0, -1.0,
 //-1.0,  1.0, -1.0,
 //1.0,  1.0, -1.0,
-//};
+
 int main()
 
 {
@@ -396,7 +397,7 @@ int main()
 
 
 	//vertices
-	getVertices(3,0);
+	//getVertices(1,0);
 
 
 
@@ -551,7 +552,7 @@ int main()
 
 
 	//sets g_vertex_buffer_data_land
-	getVertices(1, 1);
+	getVertices(1, 0);
 
 
 
@@ -743,7 +744,7 @@ int main()
 
 
 
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//glClear(GL_COLOR_BUFFER_BIT);
 
 		//glEnable(GL_CULL_FACE);
@@ -768,7 +769,7 @@ int main()
 
 
 
-		 ////model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		 model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
 		//glm::vec3 scale = glm::vec3(.1, .1, .1);
 
@@ -776,7 +777,7 @@ int main()
 
 
 
-		////projection = glm::perspective(glm::radians(65.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1900.0f);
+		//projection = glm::perspective(glm::radians(1.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 
 //		model = glm::lookAt(
@@ -805,8 +806,8 @@ int main()
 
 
 
-		//GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
-		//glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
+		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
 
 
 
@@ -838,7 +839,7 @@ int main()
 
 
 
-//		unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
+		//unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
 //		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
@@ -864,7 +865,7 @@ int main()
 //		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
 		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
-//		ourShader.setMat4("projection", projection);
+		//ourShader.setMat4("projection", projection);
 
 
 
@@ -1178,9 +1179,9 @@ float* getVertices(int width, int height) {
 			//tempmathvertices.
 
 			
-			g_vertex_buffer_data_land[i]= (float)col;
-			g_vertex_buffer_data_land[i++] = 0.0f;
-			g_vertex_buffer_data_land[i++] = (float)row;
+			//g_vertex_buffer_data_land[i]= (float)col;
+			//g_vertex_buffer_data_land[i++] = 0.0f;
+			//g_vertex_buffer_data_land[i++] = (float)row;
 
 
 			i = i + 3;
@@ -1194,15 +1195,15 @@ float* getVertices(int width, int height) {
 	}
 
 
-	g_vertex_buffer_data_land[0] = -1.0f;
-	g_vertex_buffer_data_land[1] = -1.0f;
+	g_vertex_buffer_data_land[0] = 0.0f;
+	g_vertex_buffer_data_land[1] = 0;
 	g_vertex_buffer_data_land[2] = 0.0f;
-	g_vertex_buffer_data_land[3] = 1.0f;
-	g_vertex_buffer_data_land[4] = -1.0f;
-	g_vertex_buffer_data_land[5] = 0.0f;
-	g_vertex_buffer_data_land[6] = 0.0f;
-	g_vertex_buffer_data_land[7] = 1.0f;
-	g_vertex_buffer_data_land[8] = 0.0f;
+	g_vertex_buffer_data_land[3] = 0.0f;
+	g_vertex_buffer_data_land[4] = 0.0f;
+	g_vertex_buffer_data_land[5] = 1.0f;
+	g_vertex_buffer_data_land[6] = 1.0f;
+	g_vertex_buffer_data_land[7] = 0.0f;
+	g_vertex_buffer_data_land[8] = 1.0f;
 
 
 
