@@ -125,7 +125,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[24] = {};
+GLfloat g_vertex_buffer_data_land[36] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -621,63 +621,60 @@ int main()
 	//
 
 	static const GLfloat g_color_buffer_data[] = {
+		
+		//0
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
+		//5
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//10
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//15
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//20
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//25
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//30
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		//35
 
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-
-		0.583f,  0.771f,  0.014f
-		//0.583f,  0.771f,  0.014f
-
-
-
-
-
-
-
-
+		//////////////
+		
+		
+		
+	
 	};
 
 
-
+	
 
 
 
@@ -763,11 +760,51 @@ int main()
 
 
 
-
+		glm::mat4 modelMatrix = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+
+
+
+		//glm::vec3 scale = glm::vec3(1, 1, 1);
+
+		//modelMatrix = glm::scale(modelMatrix, scale);
+
+
+		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+
+		view = glm::lookAt(
+
+			//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+
+			glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
+
+
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+
+
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
+
+
+		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
+		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
 
 
 
@@ -779,27 +816,13 @@ int main()
 
 		 //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
-		//glm::vec3 scale = glm::vec3(.1, .1, .1);
-
-		//		model = glm::scale(model, scale);
-
+		
 
 
 		//projection = glm::perspective(glm::radians(1.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 
-		model = glm::lookAt(
-			
-			//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
-
-			glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
-			
-			
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
-
-
+		
 
 		// Remember, matrix multiplication is the other way around
 		//MVP = projection * view * model;
@@ -817,11 +840,7 @@ int main()
 
 
 
-		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "model");
-		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &model[0][0]);
-
-
-
+		
 
 		//yplane third arg    2nd arg y axis
 		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -853,9 +872,7 @@ int main()
 		//unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
-//		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
-		//glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
-
+		
 		//?///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
 		//?///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -930,7 +947,7 @@ int main()
 
 //# of indices
 //8 triangles
-glDrawArrays(GL_TRIANGLES, 0, (8*3));
+glDrawArrays(GL_TRIANGLES, 0, (36));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1182,12 +1199,16 @@ float* getVertices(int width, int height) {
 
 	//std::vector< glm::vec3 > tempmathvertices;
 
-
+	float scaleit = .5;
 
 	//up and down : a value of one is one row and than exits
-	for (int row = 0; row < height; row++) {
+	
+	//so it will be zero on the first loop
+	int counter = -18;
+	
+	for (int row = 0; row > (-1 * height); row--) {
 		
-		
+		counter = counter + 18;
 		
 		
 		//across left to right - one column is two triangles
@@ -1201,36 +1222,36 @@ float* getVertices(int width, int height) {
 			
 			//GLfloat matrix1[3][3] = { col,0,0, col,0,1, (col + 1),0,1 };
 
-			GLfloat matrix1[3][3] = {col,0,row, col,0,row+1, (col+1),0,row+1};
+			GLfloat matrix1[3][3] = {col,0,row, col,0,(row+1), (col+1),0,(row+1)};
 			
 			//vertex 1
-			g_vertex_buffer_data_land[0] = matrix1[0][0];
-			g_vertex_buffer_data_land[1] = matrix1[0][1]; 
-			g_vertex_buffer_data_land[2] = matrix1[0][2];
+			g_vertex_buffer_data_land[0 + counter] = matrix1[0][0]* scaleit;
+			g_vertex_buffer_data_land[1 + counter] = matrix1[0][1]* scaleit;
+			g_vertex_buffer_data_land[2 + counter] = matrix1[0][2]* scaleit;
 			//vertex 2
-			g_vertex_buffer_data_land[3] = matrix1[1][0];
-			g_vertex_buffer_data_land[4] = matrix1[1][1];
-			g_vertex_buffer_data_land[5] = matrix1[1][2];
+			g_vertex_buffer_data_land[3 + counter] = matrix1[1][0] * scaleit;
+			g_vertex_buffer_data_land[4 + counter] = matrix1[1][1] * scaleit;
+			g_vertex_buffer_data_land[5 + counter] = matrix1[1][2] * scaleit;
 			
-			g_vertex_buffer_data_land[6] = matrix1[2][0];
-			g_vertex_buffer_data_land[7] = matrix1[2][1];
-			g_vertex_buffer_data_land[8] = matrix1[2][2];
+			g_vertex_buffer_data_land[6 + counter] = matrix1[2][0] * scaleit;
+			g_vertex_buffer_data_land[7 + counter] = matrix1[2][1] * scaleit;
+			g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
 
 			//int matrix2[3][3] = { col,0,2, col + 1,0,2, col + 1,0,1 };
 
 			int matrix2[3][3] = {col,0,row + 2, col+1,0,row + 2, col+1,0,row + 1 };
 			
-			g_vertex_buffer_data_land[9] = matrix2[0][0];
-			g_vertex_buffer_data_land[10] = matrix2[0][1];
-			g_vertex_buffer_data_land[11] = matrix2[0][2];
+			g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
+			g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
+			g_vertex_buffer_data_land[11 + counter] = matrix2[0][2] * scaleit;
 
-			g_vertex_buffer_data_land[12] = matrix2[1][0];
-			g_vertex_buffer_data_land[13] = matrix2[1][1];
-			g_vertex_buffer_data_land[14] = matrix2[1][2];
+			g_vertex_buffer_data_land[12 + counter] = matrix2[1][0] * scaleit;
+			g_vertex_buffer_data_land[13 + counter] = matrix2[1][1] * scaleit;
+			g_vertex_buffer_data_land[14 + counter] = matrix2[1][2] * scaleit;
 
-			g_vertex_buffer_data_land[15] = matrix2[2][0];
-			g_vertex_buffer_data_land[16] = matrix2[2][1];
-			g_vertex_buffer_data_land[17] = matrix2[2][2];
+			g_vertex_buffer_data_land[15 + counter] = matrix2[2][0] * scaleit;
+			g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
+			g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
 
 
 			//g_vertex_buffer_data_land[i]= (float)col;
