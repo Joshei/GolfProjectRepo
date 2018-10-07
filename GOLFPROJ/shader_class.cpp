@@ -28,7 +28,7 @@
 //used in intializeterrain
 #define MAP_X	32//32				         // size of map along x-axis
 #define MAP_Z	32//32				         // size of map along z-axis
-#define MAP_SCALE	.0f		         // the scale of the terrain map
+#define MAP_SCALE	0.125f		         // the scale of the terrain map
 
 
 //int gwidth;
@@ -58,7 +58,7 @@ float* getVertices(int width, int height);
 
 int getVerticesCount(int width, int height);
 
-
+void InitializeMapVertices();
 
 
 
@@ -76,7 +76,7 @@ std::vector< glm::vec2 > uvs;
 std::vector< glm::vec3 > normals; // Won't be used at the moment.
 std::vector< glm::vec3 >vertices;
 
-std::vector < glm::vec3 >  temp_vertices, temp_vertices1, mathvertices;
+std::vector < glm::vec3 >  temp_vertices, temp_vertices1, mathvertices , mapvertices;
 std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
@@ -125,7 +125,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[36] = {};
+GLfloat g_vertex_buffer_data_land[32 * 32 * 3] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -554,13 +554,18 @@ int main()
 	//InitializeTerrain();
 	//LoadtheTextures();
 
+	void InitializeMapVertices();
+
+
+
+
 
 	//sets g_vertex_buffer_data_land
 	
 	//width , height : there are two triangles for each width column
 	//two columns : (four triangles)
 	//times two columns : 8 triangles
-	getVertices(2, 2);
+	//getVertices(2, 2);
 
 
 
@@ -571,8 +576,12 @@ int main()
 	// The following commands will talk about our 'vertexbuffer' buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
 	// Give our vertices to OpenGL.   heh, heh, heh
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_land), g_vertex_buffer_data_land, GL_STATIC_DRAW);
-
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data_land), g_vertex_buffer_data_land, GL_STATIC_DRAW);
+	
+	
+	//InitializeMapVertices
+	//mapvertices
+	glBufferData(GL_ARRAY_BUFFER, mapvertices.size() * sizeof(glm::vec3), &mapvertices[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbufferLAND);
@@ -794,7 +803,7 @@ int main()
 		//glDepthFunc(GL_LESS);
 
 
-		//glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
+		glClearColor(1.2f, 1.3f, 0.3f, 1.0f);
 
 		//glClear(GL_COLOR_BUFFER_BIT);
 
@@ -824,7 +833,7 @@ int main()
 		//modelMatrix = glm::scale(modelMatrix, scale);
 
 
-		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(.0f, .0f, 1.2f));
 
 
 
@@ -999,7 +1008,7 @@ int main()
 //# of indices
 //8 triangles
 
-glDrawArrays(GL_TRIANGLES, 0, (36));
+glDrawArrays(GL_TRIANGLES, 0, ((32-1)*(32-1)*6));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1137,33 +1146,89 @@ void InitializeTerrain()
 	// the coordinates for each point
 	for (int z = 0; z < MAP_Z; z++)
 	{
-	//int z = 0;
-	for (int x = 0; x < 32; x++)// MAP_X; x++)
+		//int z = 0;
+		for (int x = 0; x < 32; x++)// MAP_X; x++)
+		{
+
+			//scalit = .125;
+
+			g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;
+			//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i] = 1;
+
+			//			terrain[x][z][0] = float(x)*MAP_SCALE;
+
+
+
+			//255
+			g_vertex_buffer_data_land[i + 1] = (1 * .125);// (float)imageData[(z*MAP_Z + x) * 3];
+			//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
+
+
+			//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
+
+			g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
+			//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i+2] = 1;
+
+
+			//			terrain[x][z][2] = -float(z)*MAP_SCALE;
+
+			i = i + 3;
+
+		}
+
+
+	}
+}
+
+
+	/////////////////////////////
+
+	void InitializeMapVertices()
 	{
-
+		int x;
+		int j = 0;
+		float  heightMap[32][32];
+		for (int y = 0; y < 32 - 1; y++) {
+			for (int x = 0; x < 32 - 1; x++) {
+				j++;
+				heightMap[x][y] = (float)imageData[j];
+			}
 		
-		
-		g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;
-		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i] = 1;
-
-		//			terrain[x][z][0] = float(x)*MAP_SCALE;
-		
-		g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
-		//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
+			
+		}
 
 
-		//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
-		
-		g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
-		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i+2] = 1;
+
+		for (int y = 0; y < 32 - 1; y++) {
+			for (int x = 0; x < 32 - 1; x++) {
+				mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[x][y + 1], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
+
+				mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
+				mapvertices.push_back(glm::vec3(y, heightMap[x + 1][y], x + 1));
+			}
 
 
-		//			terrain[x][z][2] = -float(z)*MAP_SCALE;
-
-		i = i + 3;
+		}
 
 	}
-	}
+
+
+
+
+
+
+	/////////////////////////////
+
+
+
+
+
+
+
+
 
 
 	/*g_vertex_buffer_data_land[0] = 0;
@@ -1197,7 +1262,7 @@ void InitializeTerrain()
 	//float xx = g_vertex_buffer_data_land[3071];
 	//float yy = g_vertex_buffer_data_land[3072];
 
-}
+
 
 bool LoadtheTextures(void)
 {
