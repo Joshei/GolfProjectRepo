@@ -133,7 +133,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[32 * 32 * 3] = {};
+GLfloat g_vertex_buffer_data_land[32 * 32 * 6] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -935,9 +935,10 @@ int main()
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
-		
+		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, .0f));
 
-		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, .1f));
+		
+		modelMatrix = glm::rotate(model, 80.0f, glm::vec3(0.2f, 0.0f, .0f));
 
 		glm::vec3 scale = glm::vec3(.01, .01, .01);
 
@@ -954,9 +955,9 @@ int main()
 
 		//view = glm::lookAt(
 
-		////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+		//////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-		//	glm::vec3(0, 0, 0), // Camera is at (4,3,3), in World Space
+		//	glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
 
 
 		//	glm::vec3(0, 0, 0), // and looks at the origin
@@ -1123,7 +1124,7 @@ int main()
 //# of indices
 //8 triangles
 //glEnable(GL_CULL_FACE);
-glDrawArrays(GL_TRIANGLES, 0, ((8*8)*6));
+glDrawArrays(GL_TRIANGLES, 0, ((32*32)*6));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1167,8 +1168,26 @@ glDrawArrays(GL_TRIANGLES, 0, ((8*8)*6));
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+
+	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	//advance
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -1301,12 +1320,12 @@ void InitializeTerrain()
 		//int x;
 		//int y = 0;
 		int j = 0;
-		float  heightMap[8][8];
-		for (int y = 0; y < 8; y++) {
-			for (int x = 0; x < 8; x++) {
+		float  heightMap[32][32];
+		for (int y = 0; y < 32; y++) {
+			for (int x = 0; x < 32; x++) {
 				
 				//32x32 = 
-				heightMap[x][y] = ((float)(imageData[j]) / 15);
+				heightMap[x][y] = ((float)(imageData[j]) / 255);
 				j++;
 			}
 		
@@ -1327,8 +1346,8 @@ void InitializeTerrain()
 	*/
 		int xplusone, yplusone;
 		int xholder, yholder;
-		for (int y = 0; y < 8 ; y++) {
-			for (int x = 0; x < 8; x++) {
+		for (int y = 0; y < 32 ; y++) {
+			for (int x = 0; x < 32; x++) {
 					xholder = x;
 					yholder = y;
 					
