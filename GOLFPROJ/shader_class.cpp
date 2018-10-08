@@ -1,10 +1,12 @@
+//#define STBI_HEADER_FILE_ONLY
+//#include "stb_image.c"
 #include <C:/openglusage/glad/include/glad/glad.h>
 #include <C:/openglusage/GLFW/glfw3.h>
 
 #include <C:/openglusage/glm/glm.hpp>
 #include <C:/openglusage/glm/gtc/matrix_transform.hpp>
 #include <C:/openglusage/glm/gtc/type_ptr.hpp>
-
+//#include <C:/openglusage/stb/stb_image.h>
 
 //#include <C:/openglusage/headershader/common.h>
 //#include <C:/openglusage/headershader/loader.h>
@@ -21,6 +23,12 @@
 //#include <C:/openglusage/
 #include <gl/gl.h>
 #include <gl/glu.h>
+
+//#include <C:/openglusage/stb/stb_image.h>
+
+
+
+
 
 #define BITMAP_ID 0x4D42		      // the universal bitmap ID
 
@@ -106,7 +114,7 @@ const unsigned int SCR_HEIGHT = 600;
 
 unsigned int		   land;			      // the land texture object
 
-unsigned char*	      imageData;		   // the map image data
+unsigned char *imageData;		   // the map image data
 
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
@@ -297,13 +305,21 @@ int main()
 	}
 
 
-	char  filename[] = "terrain2.bmp";
+	char  filenameterrain[] = "Terrain2.bmp";
 
-	imageData = LoadBitmapFile(filename, &bitmapInfoHeader);
+	//int stbwidth = 32;
+	//int stbheight = 32; 
+	//int n;
+	//unsigned char* imageData = stbi_load(filename, &stbwidth, &stbheight, &n, 0);
+
+
+	imageData = LoadBitmapFile(filenameterrain, &bitmapInfoHeader);
 	if (imageData == NULL) {
 		printf("Impossible to open the second file !\n");
 		return(1);
 	}
+
+
 
 
 
@@ -554,7 +570,7 @@ int main()
 	//InitializeTerrain();
 	//LoadtheTextures();
 
-	void InitializeMapVertices();
+	InitializeMapVertices();
 
 
 
@@ -630,108 +646,156 @@ int main()
 	//
 
 	static const GLfloat g_color_buffer_data[] = {
-		
-		//0
+		//0	
 		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
 		//5
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.310f,  0.747f,  0.185f,
+		0.597f,  0.770f,  0.761f,
+		0.559f,  0.436f,  0.730f,
+		0.359f,  0.583f,  0.152f,
+		0.483f,  0.596f,  0.789f,
 		//10
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.559f,  0.861f,  0.639f,
+		0.195f,  0.548f,  0.859f,
+		0.014f,  0.184f,  0.576f,
+		0.771f,  0.328f,  0.970f,
+		0.406f,  0.615f,  0.116f,
 		//15
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.676f,  0.977f,  0.133f,
+		0.971f,  0.572f,  0.833f,
+		0.140f,  0.616f,  0.489f,
+		0.997f,  0.513f,  0.064f,
+		0.945f,  0.719f,  0.592f,
 		//20
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.543f,  0.021f,  0.978f,
+		0.279f,  0.317f,  0.505f,
+		0.167f,  0.620f,  0.077f,
+		0.347f,  0.857f,  0.137f,
+		0.055f,  0.953f,  0.042f,
 		//25
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.714f,  0.505f,  0.345f,
+		0.783f,  0.290f,  0.734f,
+		0.722f,  0.645f,  0.174f,
+		0.302f,  0.455f,  0.848f,
+		0.225f,  0.587f,  0.040f,
 		//30
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.517f,  0.713f,  0.338f,
+		0.053f,  0.959f,  0.120f,
+		0.393f,  0.621f,  0.362f,
+		0.673f,  0.211f,  0.457f,
+		0.820f,  0.883f,  0.371f,
+		0.982f,  0.099f,  0.879f,
 		//35
-
-		//////////////
-		
 		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//5
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//10
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//15
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//20
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//25
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//30
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		//35 - 70
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-	
-		
-		
-	
 	};
+	
+
+
+	//	//0
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//5
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//10
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//15
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//20
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//25
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//30
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//35
+
+	//	//////////////
+	//	
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//5
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//10
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//15
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//20
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//25
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//30
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	//35 - 70
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+
+	//	0.583f,  0.771f,  0.014f,
+	//	0.583f,  0.771f,  0.014f,
+	//
+	//	
+	//	
+	//
+	//};
 
 
 	
@@ -786,6 +850,8 @@ int main()
 
 
 
+
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
@@ -826,29 +892,35 @@ int main()
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
+		
+
+		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+
+		glm::vec3 scale = glm::vec3(.01, .01, .01);
+
+		modelMatrix = glm::scale(modelMatrix, scale);
 
 
-		//glm::vec3 scale = glm::vec3(1, 1, 1);
+		
+		
+		
+		//modelMatrix = glm::rotate(model, (float)90, glm::vec3(1.0f, 0.0f, .0f));
 
-		//modelMatrix = glm::scale(modelMatrix, scale);
-
-
-		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(.0f, .0f, 1.2f));
-
+		//glm::translate(modelMatrix, glm::vec3(100, 100.0, 100.0f));
 
 
 		//view = glm::lookAt(
 
-		//	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+		////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-		//	glm::vec3(1, 1, 2), // Camera is at (4,3,3), in World Space
+		//	glm::vec3(0, 0, 0), // Camera is at (4,3,3), in World Space
 
 
-		//	glm::vec3(1, 0, 0), // and looks at the origin
+		//	glm::vec3(0, 0, 0), // and looks at the origin
 		//	glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 		//);
 
-		glm::translate(modelMatrix, glm::vec3(1.25, 0.0, 1.0f));
+		//glm::translate(modelMatrix, glm::vec3(1.25, 0.0, 1.0f));
 
 
 		
@@ -1008,7 +1080,7 @@ int main()
 //# of indices
 //8 triangles
 
-glDrawArrays(GL_TRIANGLES, 0, ((32-1)*(32-1)*6));
+glDrawArrays(GL_TRIANGLES, 0, ((7*7)*6));
 		
 //		static const GLushort cubeIndices[] = {
 //	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1067,7 +1139,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 
-//
 // LoadBitmapFile
 // desc: Returns a pointer to the bitmap image of the bitmap specified
 //       by filename. Also returns the bitmap header information.
@@ -1134,7 +1205,6 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 	fclose(filePtr);
 	return bitmapImage;
 }
-
 // InitializeTerrain()
 // desc: initializes the heightfield terrain data
 
@@ -1160,7 +1230,7 @@ void InitializeTerrain()
 
 
 			//255
-			g_vertex_buffer_data_land[i + 1] = (1 * .125);// (float)imageData[(z*MAP_Z + x) * 3];
+			g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
 			//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
 
 
@@ -1185,29 +1255,54 @@ void InitializeTerrain()
 
 	void InitializeMapVertices()
 	{
-		int x;
+		//int x;
+		//int y = 0;
 		int j = 0;
-		float  heightMap[32][32];
-		for (int y = 0; y < 32 - 1; y++) {
-			for (int x = 0; x < 32 - 1; x++) {
+		float  heightMap[8][8];
+		for (int y = 0; y < 8; y++) {
+			for (int x = 0; x < 8; x++) {
+				
+				//32x32 = 
+				heightMap[x][y] = 10;// ((float)(imageData[j]));
 				j++;
-				heightMap[x][y] = (float)imageData[j];
 			}
 		
 			
 		}
 
 
+		//int y = 0;
 
-		for (int y = 0; y < 32 - 1; y++) {
-			for (int x = 0; x < 32 - 1; x++) {
-				mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
-				mapvertices.push_back(glm::vec3(y + 1, heightMap[x][y + 1], x));
-				mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
 
-				mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
-				mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
-				mapvertices.push_back(glm::vec3(y, heightMap[x + 1][y], x + 1));
+		/*mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
+		mapvertices.push_back(glm::vec3(y + 1, heightMap[x][y + 1], x));
+		mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
+
+		mapvertices.push_back(glm::vec3(y, heightMap[x][y], x));
+		mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
+		mapvertices.push_back(glm::vec3(y, heightMap[x + 1][y], x + 1));
+	*/
+		int xholder, yholder;
+		for (int y = 0; y < 8 ; y++) {
+			for (int x = 0; x < 8; x++) {
+					xholder = x;
+					yholder = y;
+					x = x * 30;
+					y = y * 30;
+
+				//for (int x = 0; x < 2; x++) {
+				mapvertices.push_back(glm::vec3(y, heightMap[xholder][yholder], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[xholder][yholder + 1], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[xholder + 1][yholder + 1], x + 1));
+
+				mapvertices.push_back(glm::vec3(y, heightMap[xholder][yholder], x));
+				mapvertices.push_back(glm::vec3(y + 1, heightMap[xholder + 1][yholder + 1], x + 1));
+				mapvertices.push_back(glm::vec3(y, heightMap[xholder + 1][yholder], x + 1));
+			
+				x = xholder;
+				y = yholder;
+			
+			
 			}
 
 
