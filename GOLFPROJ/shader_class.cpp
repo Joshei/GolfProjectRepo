@@ -970,7 +970,7 @@ int main()
 		
 		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 		//projection = glm::perspective(45.0f, (float)SCREEN_SIZE.x / (float)SCREEN_SIZE.y, 1.0f, 200.0f);
-		projection = glm::perspective(45.0f, (float)800 / (float)600, 1.0f, 200.0f);
+		projection = glm::perspective(45.0f, (float)800 / (float)600, .10f, 200.0f);
 
 
 
@@ -1406,8 +1406,11 @@ void InitializeTerrain()
 		for (int y = 0; y < 32; y++) {
 			for (int x = 0; x < 32; x++) {
 				
+
+				heightMap[x][y] = (float)imageData[(y*32 + x) * 3];
+
 				//32x32 = 
-				heightMap[x][y] = ((float)(imageData[j]) / 255);
+				//heightMap[x][y] = 0;// ((float)(imageData[j]) / 255);
 				j++;
 			}
 		
@@ -1426,7 +1429,7 @@ void InitializeTerrain()
 		mapvertices.push_back(glm::vec3(y + 1, heightMap[x + 1][y + 1], x + 1));
 		mapvertices.push_back(glm::vec3(y, heightMap[x + 1][y], x + 1));
 	*/
-		int xplusone, yplusone;
+		float xplusone, yplusone;
 		int xholder, yholder;
 		for (int y = 0; y < 32 ; y++) {
 			for (int x = 0; x < 32; x++) {
@@ -1434,11 +1437,11 @@ void InitializeTerrain()
 					yholder = y;
 					
 					//if these are change, than change all four
-					x = x * .2;
-					y = y * .2;
+					x = x * .20;
+					y = y * .20;
 					
-					xplusone = .2 * (x + 1);
-					yplusone = .2 * (y+1);
+					xplusone = .20 * (x + 1);
+					yplusone = .20 * (y+1);
 
 					///////////////////
 

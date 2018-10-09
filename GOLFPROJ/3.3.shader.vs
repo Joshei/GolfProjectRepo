@@ -22,7 +22,7 @@ void main()
 	//gl_Position =  MVP   *( vec4(aPos, 1.0f))    ;
     gl_Position =  projection * view * modelMatrix * translate * ( vec4(aPos, 1.0f))    ;
 
-	ourColor = vec3(0.5, 0.0, 0);
+	ourColor = vec3(0.5, 1.0, 0);
 
   //  TexCoord = vec2(aTexCoord.x, aTexCoord.y);
 	
