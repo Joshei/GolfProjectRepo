@@ -26,8 +26,15 @@
 
 //#include <C:/openglusage/stb/stb_image.h>
 
+float grotatex = .0f;
+float grotatey = .0f;
+float grotatez = .0f;
 
+float gzcoordinate = .0f;
 
+float gxcoordinate = .0f;
+
+float gycoordinate = .0f;
 
 
 #define BITMAP_ID 0x4D42		      // the universal bitmap ID
@@ -937,8 +944,23 @@ int main()
 
 		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, .0f));
 
+		/*float gzcoordinate = 0;
+		float gzcoordinate = 0;
+		float gzcoordinate = 0;
+
+		float grotatex = .2f;
+		float grotatey = 0f;
+		float grotatez = 0f;
+		*/
 		
-		modelMatrix = glm::rotate(model, 80.0f, glm::vec3(0.2f, 0.0f, .0f));
+
+		glm::mat4 translate = glm::translate(glm::mat4(1.f), glm::vec3(gxcoordinate, gycoordinate, gzcoordinate));
+		//glm::vec4 vector(1.f, 1.f, 1.f, 1.f);
+		//glm::vec4 transformedVector = translate * vector;
+
+
+
+		modelMatrix = glm::rotate(model, 5.0f, glm::vec3(grotatex, grotatey, grotatez));
 
 		glm::vec3 scale = glm::vec3(.01, .01, .01);
 
@@ -946,18 +968,27 @@ int main()
 
 
 		
+		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+		//projection = glm::perspective(45.0f, (float)SCREEN_SIZE.x / (float)SCREEN_SIZE.y, 1.0f, 200.0f);
+		projection = glm::perspective(45.0f, (float)800 / (float)600, 1.0f, 200.0f);
+
+
+
+
+
+
+
 		
 		
 		//modelMatrix = glm::rotate(model, (float)90, glm::vec3(1.0f, 0.0f, .0f));
 
-		//glm::translate(modelMatrix, glm::vec3(100, 100.0, 100.0f));
-
+		
 
 		//view = glm::lookAt(
 
-		//////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+		////////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-		//	glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
+		//	glm::vec3(0, 0,1), // Camera is at (4,3,3), in World Space
 
 
 		//	glm::vec3(0, 0, 0), // and looks at the origin
@@ -970,9 +1001,11 @@ int main()
 		
 		
 		
+		//transformedVector
 		
-		
-		
+		GLuint MatrixID2 = glGetUniformLocation(ourShader.ID, "translate");
+		glUniformMatrix4fv(MatrixID2, 1, GL_FALSE, &translate[0][0]);
+
 		
 		
 		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
@@ -985,9 +1018,7 @@ int main()
 
 
 
-		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-		//projection = glm::perspective(45.0f, (float)SCREEN_SIZE.x / (float)SCREEN_SIZE.y, 1.0f, 200.0f);
-
+		
 
 
 		 //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1069,7 +1100,7 @@ int main()
 //		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
 		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
-		//ourShader.setMat4("projection", projection);
+		ourShader.setMat4("projection", projection);
 
 
 
@@ -1168,23 +1199,74 @@ glDrawArrays(GL_TRIANGLES, 0, ((32*32)*6));
 // ---------------------------------------------------------------------------------------------------------
 void processInput(GLFWwindow *window)
 {
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 
 
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 
-	if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	//only rotates up and down working left and right
+	//w,x,a,d
 
 
-	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
 
-	//advance
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		grotatex = grotatex + .01;
+		//otatey = 0;
+	}
+
+	else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+
+
+		grotatex = grotatex - 1.01;
+		//grotatey = 0;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		grotatey = grotatey + .01;
+		grotatex = 0;
+	}
+
+	else if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		grotatey = grotatey - .01;
+		grotatex = 0;
+	}
+
+
+
+
+	//ROTATES UP
+	
+	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		gzcoordinate = gzcoordinate - .1;
+		
+	}
+
+	//move left
+	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+		gxcoordinate = gxcoordinate - .1;
+		gycoordinate = 0;
+		gzcoordinate = 0;
+}
+
+	//moveright
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		gxcoordinate = gxcoordinate + .1;
+		gycoordinate = 0;
+		gzcoordinate = 0;
+	}
+
+
+	//ROTATES DOWN
+	else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+		gzcoordinate = gzcoordinate + .1;
+
+
+
+	//strides in
+	else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+		gycoordinate = gycoordinate + .1;
+	//strides out
+	else if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+		gycoordinate = gycoordinate - .1;
+
+
 
 
 
