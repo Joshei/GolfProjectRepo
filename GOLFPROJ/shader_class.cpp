@@ -126,7 +126,7 @@ int i = 0;
 //indices
 //triangles in depth * col * 9
 //16 * 2 * 9 = 288
-GLfloat g_vertex_buffer_data_land[16 *2*9] = {};
+GLfloat g_vertex_buffer_data_land[288] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -563,7 +563,7 @@ int main()
 	//times two columns : 8 triangles
 
 	//columns, depth
-	getVertices(4*2, 2);
+	getVertices(8, 2);
 
 
 
@@ -1003,7 +1003,7 @@ int main()
 //8 triangles
 
 		//row x xcol * 6
-		glDrawArrays(GL_TRIANGLES, 0, 16 * 2 * 9);
+		glDrawArrays(GL_TRIANGLES, 0, 288);
 
 		//		static const GLushort cubeIndices[] = {
 		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1298,7 +1298,12 @@ float* getVertices(int incol, int depth) {
 		//GLfloat matrix1[3][3] = {tempdepth,0,row, tempdepth,0,(row-1), (tempdepth+1),0,(row-1)};
 
 	//first triangle : odd rows : A
-		GLfloat matrix1[3][3] = { col,0,tempdepth - 1, col + 1,0,(tempdepth), (col),0,(tempdepth) };
+	
+
+
+		//was : GLfloat matrix1[3][3] = { col,0,tempdepth - 1, col + 1,0,(tempdepth), (col),0,(tempdepth) };
+
+		GLfloat matrix1[3][3] = { col,0,tempdepth - 2, col + 1,0,(tempdepth-1), (col),0,(tempdepth-1) };
 
 		//vertex 1
 		g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
@@ -1318,7 +1323,10 @@ float* getVertices(int incol, int depth) {
 		//int matrix2[3][3] = {col,0,(tempdepth - 2 ), (col+1),0,(tempdepth - 2), (col+1),0,(tempdepth - 1 ) };
 
 		//first triangle : even tempdepths : B
-		int matrix2[3][3] = { col + 1,0,(tempdepth - 1), (col + 1),0,(tempdepth), (col),0,(tempdepth - 1) };
+		
+		//was: int matrix2[3][3] = { col + 1,0,(tempdepth - 1), (col + 1),0,(tempdepth), (col),0,(tempdepth - 1) };
+
+		int matrix2[3][3] = { col + 1,0,(tempdepth - 2), (col + 1),0,(tempdepth-1), (col),0,(tempdepth - 2) };
 
 
 		g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
@@ -1342,9 +1350,9 @@ float* getVertices(int incol, int depth) {
 
 
 
-	if (depth > 1)
+	if (depth == 2)
 	{
-		tempdepth++;
+		tempdepth= 1;
 
 
 
@@ -1357,7 +1365,7 @@ float* getVertices(int incol, int depth) {
 
 
 			//first triangle : odd rows : A
-			GLfloat matrix1[3][3] = { col + 1,0,tempdepth - 1, col,0,(tempdepth), (col),0,(tempdepth - 1) };
+			GLfloat matrix1[3][3] = { col + 1 ,0,tempdepth - 3 , col+1,0,(tempdepth-2), (col),0,(tempdepth - 2) };
 
 			//vertex 1
 			g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
@@ -1377,7 +1385,7 @@ float* getVertices(int incol, int depth) {
 			//int matrix2[3][3] = {col,0,(tempdepth - 2 ), (col+1),0,(tempdepth - 2), (col+1),0,(tempdepth - 1 ) };
 
 			//first triangle : even tempdepths : B
-			int matrix2[3][3] = { col + 1,0,(tempdepth - 1), (col + 1),0,(tempdepth), (col),0,(tempdepth) };
+			int matrix2[3][3] = { col + 1,0,(tempdepth - 3), (col + 1),0,(tempdepth-2), (col),0,(tempdepth - 3) };
 
 
 			g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
