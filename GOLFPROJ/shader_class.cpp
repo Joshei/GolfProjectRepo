@@ -54,7 +54,7 @@ int* getIndices(int _width, int _height);
 
 //int getVerticesCount(int _width, int _height);
 
-float* getVertices(int depth, int columns);
+float* getVertices(int _indepth, int _columns);
 
 int getVerticesCount(int width, int height);
 
@@ -562,7 +562,7 @@ int main()
 	//times two columns : 8 triangles
 
 	//depth, row
-	getVertices(2, 1);
+	getVertices(4, 1);
 
 
 
@@ -1245,7 +1245,7 @@ int getIndicesCount(int width, int height) {
 	return (width*height) + (width - 1)*(height - 2);
 }
 
-float* getVertices(int depth, int row) {
+float* getVertices(int indepth, int row) {
 	//	if (gvertices) return gvertices;
 
 		//gvertices = new float[getVerticesCount(width, height)];
@@ -1282,7 +1282,7 @@ float* getVertices(int depth, int row) {
 	//row = 0;
 
 
-	for (int depth = 0; depth < 4; depth++)
+	for (int depth = 0; depth < indepth; depth++)
 	{
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row-1), (colu+1),0,(row-1)};
