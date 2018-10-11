@@ -54,7 +54,7 @@ int* getIndices(int _width, int _height);
 
 //int getVerticesCount(int _width, int _height);
 
-float* getVertices(int rows, int columns);
+float* getVertices(int depth, int columns);
 
 int getVerticesCount(int width, int height);
 
@@ -561,7 +561,7 @@ int main()
 	//two columns : (four triangles)
 	//times two columns : 8 triangles
 
-	//colu, row
+	//depth, row
 	getVertices(2, 1);
 
 
@@ -1245,7 +1245,7 @@ int getIndicesCount(int width, int height) {
 	return (width*height) + (width - 1)*(height - 2);
 }
 
-float* getVertices(int num_colu, int row) {
+float* getVertices(int depth, int row) {
 	//	if (gvertices) return gvertices;
 
 		//gvertices = new float[getVerticesCount(width, height)];
@@ -1261,7 +1261,8 @@ float* getVertices(int num_colu, int row) {
 	//so it will be zero on the first loop
 	int counter = 0;
 
-	//	for (int row = 0; row > (-1 * height); row--) {
+		//
+		//for (int row = 0; row; row++) {
 
 			//counter = counter + 18;
 
@@ -1278,15 +1279,16 @@ float* getVertices(int num_colu, int row) {
 
 
 	//float colu = 0;
-	row = 0;
+	//row = 0;
 
 
-	for (int colu = 0; colu < 4; colu++) {
+	for (int depth = 0; depth < 4; depth++)
+	{
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row-1), (colu+1),0,(row-1)};
 
 	//first triangle : odd rows : A
-		GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
+		GLfloat matrix1[3][3] = { depth,0,row - 1, depth + 1,0,(row), (depth),0,(row) };
 
 		//vertex 1
 		g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
@@ -1302,11 +1304,11 @@ float* getVertices(int num_colu, int row) {
 		g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
 
 
-		//int matrix2[3][3] = {colu,0,(row + 2 ), (colu+1),0,(row + 2), (colu+1),0,(row + 1 ) };
-		//int matrix2[3][3] = {colu,0,(row - 2 ), (colu+1),0,(row - 2), (colu+1),0,(row - 1 ) };
+		//int matrix2[3][3] = {depth,0,(row + 2 ), (depth+1),0,(row + 2), (depth+1),0,(row + 1 ) };
+		//int matrix2[3][3] = {depth,0,(row - 2 ), (depth+1),0,(row - 2), (depth+1),0,(row - 1 ) };
 
 		//first triangle : even rows : B
-		int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
+		int matrix2[3][3] = { depth + 1,0,(row - 1), (depth + 1),0,(row), (depth),0,(row - 1) };
 
 
 		g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
