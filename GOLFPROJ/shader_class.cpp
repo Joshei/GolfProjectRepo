@@ -816,7 +816,7 @@ int main()
 		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
-
+		glm::vec3 ourColor;
 
 
 		//glm::vec3 scale = glm::vec3(1, 1, 1);
@@ -844,6 +844,12 @@ int main()
 
 
 
+
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(ourShader.ID, "ourColor");
+		//glUseProgram(shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 
 
@@ -1281,6 +1287,14 @@ float* getVertices(int width, int height) {
 	//for (int colu = 0; colu < 4; colu++) {
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row-1), (colu+1),0,(row-1)};
+
+
+	//					/
+	//				/
+	//
+	//
+	//
+	//
 	GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
 
 	//vertex 1
