@@ -1,4 +1,4 @@
-#include <C:/openglusage/glad/include/glad/glad.h>
+ï»¿#include <C:/openglusage/glad/include/glad/glad.h>
 #include <C:/openglusage/GLFW/glfw3.h>
 
 #include <C:/openglusage/glm/glm.hpp>
@@ -125,7 +125,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[72] = {};
+GLfloat g_vertex_buffer_data_land[36] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -144,7 +144,7 @@ GLfloat g_vertex_buffer_data_land[72] = {};
 int main()
 
 {
-	
+
 
 
 
@@ -197,7 +197,7 @@ int main()
 
 
 
-	
+
 
 
 
@@ -409,7 +409,7 @@ int main()
 	/////////////////
 
 
-	
+
 
 	int j = 0;
 
@@ -523,7 +523,7 @@ int main()
 
 
 
-	
+
 
 
 
@@ -556,7 +556,7 @@ int main()
 
 
 	//sets g_vertex_buffer_data_land
-	
+
 	//width , height : there are two triangles for each width column
 	//two columns : (four triangles)
 	//times two columns : 8 triangles
@@ -621,19 +621,19 @@ int main()
 	//
 
 	static const GLfloat g_color_buffer_data[] = {
-		
+
 		//0
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.183f,  0.171f,  0.314f,
+		0.783f,  0.471f,  0.514f,
+		0.683f,  0.671f,  0.614f,
+		0.583f,  0.371f,  0.014f,
+		0.383f,  0.371f,  0.314f,
 		//5
+		0.283f,  0.271f,  0.214f,
+		0.183f,  0.371f,  0.814f,
 		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
-		0.583f,  0.771f,  0.014f,
+		0.283f,  0.271f,  0.214f,
+		0.183f,  0.171f,  0.514f,
 		//10
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
@@ -667,7 +667,7 @@ int main()
 		//35
 
 		//////////////
-		
+
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
@@ -718,14 +718,14 @@ int main()
 
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
-	
-		
-		
-	
+
+
+
+
 	};
 
 
-	
+
 
 
 
@@ -766,9 +766,9 @@ int main()
 
 
 
-		
-		
-		
+
+
+
 ///////////////////////////////////////////////
 //		 RENDER LOOP
 ///////////////////////////// -----------
@@ -786,7 +786,7 @@ int main()
 		// render
 		// ------
 
-		
+
 
 		// Enable depth test
 		//glEnable(GL_DEPTH_TEST);
@@ -824,32 +824,32 @@ int main()
 		//modelMatrix = glm::scale(modelMatrix, scale);
 
 
-		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
 
 
 
-		view = glm::lookAt(
+		//view = glm::lookAt(
 
-			//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+		//	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-			glm::vec3(1, 1, 1), // Camera is at (4,3,3), in World Space
-
-
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
+		//	glm::vec3(1, 1, 2), // Camera is at (4,3,3), in World Space
 
 
+		//	glm::vec3(1, 0, 0), // and looks at the origin
+		//	glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		//);
+
+		glm::translate(modelMatrix, glm::vec3(1.25, 0.0, 1.0f));
 
 
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
 		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 
@@ -860,20 +860,20 @@ int main()
 
 
 
-		// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+		// Projection matrix : 45ï¿½ Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 		//projection = glm::perspective(45.0f, (float)SCREEN_SIZE.x / (float)SCREEN_SIZE.y, 1.0f, 200.0f);
 
 
 
 		 //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
-		
+
 
 
 		//projection = glm::perspective(glm::radians(1.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 
-		
+
 
 		// Remember, matrix multiplication is the other way around
 		//MVP = projection * view * model;
@@ -891,7 +891,7 @@ int main()
 
 
 
-		
+
 
 		//yplane third arg    2nd arg y axis
 		//model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -923,7 +923,7 @@ int main()
 		//unsigned int transformLoc1 = glGetUniformLocation(ourShader.ID, "model");
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
-		
+
 		//?///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
 		//?///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -971,7 +971,7 @@ int main()
 
 		//////////SAME AS ABOVE, NOW TRYING TO DISPLAY LAND/////
 
-		
+
 
 
 		//glBegin(GL_);
@@ -986,8 +986,8 @@ int main()
 
 		//use enable instead
 		//glEnableClientState(GL_VERTEX_ARRAY);
-		
-		
+
+
 		//glVertexPointer(3, GL_FLOAT, 0, getVertices(width, height));
 		//glDrawElements(GL_TRIANGLE_STRIP, getIndicesCount(width, height), GL_UNSIGNED_INT, getIndices(width, height));
 		//glDisableClientState(GL_VERTEX_ARRAY);
@@ -998,29 +998,30 @@ int main()
 
 //# of indices
 //8 triangles
-glDrawArrays(GL_TRIANGLES, 0, (72));
-		
-//		static const GLushort cubeIndices[] = {
-//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
-//		};
 
-		
+		glDrawArrays(GL_TRIANGLES, 0, (36));
 
-
-
-
-	//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, cubeIndices);
-		//glDisableVertexAttribArray(0);
-
-
-
-		//glBegin(GL_TRIANGLE_STRIP);
+		//		static const GLushort cubeIndices[] = {
+		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
+		//		};
 
 
 
 
-		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
+
+
+			//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, cubeIndices);
+				//glDisableVertexAttribArray(0);
+
+
+
+				//glBegin(GL_TRIANGLE_STRIP);
+
+
+
+
+				// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+				// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
@@ -1136,32 +1137,32 @@ void InitializeTerrain()
 	// the coordinates for each point
 	for (int z = 0; z < MAP_Z; z++)
 	{
-	//int z = 0;
-	for (int x = 0; x < 32; x++)// MAP_X; x++)
-	{
-
-		
-		
-		g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;
-		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i] = 1;
-
-		//			terrain[x][z][0] = float(x)*MAP_SCALE;
-		
-		g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
-		//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
+		//int z = 0;
+		for (int x = 0; x < 32; x++)// MAP_X; x++)
+		{
 
 
-		//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
-		
-		g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
-		//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i+2] = 1;
+
+			g_vertex_buffer_data_land[i] = float(x)*MAP_SCALE;
+			//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i] = 1;
+
+			//			terrain[x][z][0] = float(x)*MAP_SCALE;
+
+			g_vertex_buffer_data_land[i + 1] = (float)imageData[(z*MAP_Z + x) * 3];
+			//if (g_vertex_buffer_data_land[i+1] > 1)g_vertex_buffer_data_land[i+1] = 1;
 
 
-		//			terrain[x][z][2] = -float(z)*MAP_SCALE;
+			//			terrain[x][z][1] = (float)imageData[(z*MAP_Z + x) * 3];
 
-		i = i + 3;
+			g_vertex_buffer_data_land[i + 2] = -float(z)*MAP_SCALE;
+			//if (g_vertex_buffer_data_land[i] > 1)g_vertex_buffer_data_land[i+2] = 1;
 
-	}
+
+			//			terrain[x][z][2] = -float(z)*MAP_SCALE;
+
+			i = i + 3;
+
+		}
 	}
 
 
@@ -1176,22 +1177,22 @@ void InitializeTerrain()
 	g_vertex_buffer_data_land[8] = 0;*/
 
 
-//	-1.0f, -1.0f, 0.0f,
-//		1.0f, -1.0f, 0.0f,
-//		0.0f, 1.0f, 0.0f,
+	//	-1.0f, -1.0f, 0.0f,
+	//		1.0f, -1.0f, 0.0f,
+	//		0.0f, 1.0f, 0.0f,
 
-	//0,2,0,1,2,0,2,2,0
-	/*g_vertex_buffer_data_land[0] = 0;
-	g_vertex_buffer_data_land[1] = 2;
-		g_vertex_buffer_data_land[2] = 0;
-		g_vertex_buffer_data_land[3] = 1;
-		g_vertex_buffer_data_land[4] = 2;
-		g_vertex_buffer_data_land[5] = 0;
-		g_vertex_buffer_data_land[6] = 2;
-		g_vertex_buffer_data_land[7] = 2;
-		g_vertex_buffer_data_land[8] = 0;
+		//0,2,0,1,2,0,2,2,0
+		/*g_vertex_buffer_data_land[0] = 0;
+		g_vertex_buffer_data_land[1] = 2;
+			g_vertex_buffer_data_land[2] = 0;
+			g_vertex_buffer_data_land[3] = 1;
+			g_vertex_buffer_data_land[4] = 2;
+			g_vertex_buffer_data_land[5] = 0;
+			g_vertex_buffer_data_land[6] = 2;
+			g_vertex_buffer_data_land[7] = 2;
+			g_vertex_buffer_data_land[8] = 0;
 
-*/
+	*/
 
 	//float xx = g_vertex_buffer_data_land[3071];
 	//float yy = g_vertex_buffer_data_land[3072];
@@ -1242,85 +1243,148 @@ int getIndicesCount(int width, int height) {
 }
 
 float* getVertices(int width, int height) {
-//	if (gvertices) return gvertices;
+	//	if (gvertices) return gvertices;
 
-	//gvertices = new float[getVerticesCount(width, height)];
+		//gvertices = new float[getVerticesCount(width, height)];
 	int i = 0;
 
 
 	//std::vector< glm::vec3 > tempmathvertices;
 
-	float scaleit = .5;
+	float scaleit = .125;
 
 	//up and down : a value of one is one row and than exits
-	
+
 	//so it will be zero on the first loop
 	int counter = 0;
-	
-	for (int row = 0; row > (-1 * height); row--) {
-		
-		//counter = counter + 18;
-		
-		
-		//across left to right - one column is two triangles
-		for (int colu = 0; colu < width; colu++) {
-			//gvertices[i++] = (float)col;
-			//gvertices[i++] = 0.0f;
-			//gvertices[i++] = (float)row;
-			//mathvertices
-			//tempmathvertices.
 
-			
-			//GLfloat matrix1[3][3] = { col,0,0, col,0,1, (col + 1),0,1 };
+	//	for (int row = 0; row > (-1 * height); row--) {
 
-			GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
-			
-			//vertex 1
-			g_vertex_buffer_data_land[0 + counter] = matrix1[0][0]* scaleit;
-			g_vertex_buffer_data_land[1 + counter] = matrix1[0][1]* scaleit;
-			g_vertex_buffer_data_land[2 + counter] = matrix1[0][2]* scaleit;
-			//vertex 2
-			g_vertex_buffer_data_land[3 + counter] = matrix1[1][0] * scaleit;
-			g_vertex_buffer_data_land[4 + counter] = matrix1[1][1] * scaleit;
-			g_vertex_buffer_data_land[5 + counter] = matrix1[1][2] * scaleit;
-			
-			g_vertex_buffer_data_land[6 + counter] = matrix1[2][0] * scaleit;
-			g_vertex_buffer_data_land[7 + counter] = matrix1[2][1] * scaleit;
-			g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
-
-			//int matrix2[3][3] = { col,0,2, col + 1,0,2, col + 1,0,1 };
-
-			int matrix2[3][3] = {colu,0,(row + 2 ), (colu+1),0,(row + 2), (colu+1),0,(row + 1 ) };
-			
-			g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
-			g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
-			g_vertex_buffer_data_land[11 + counter] = matrix2[0][2] * scaleit;
-
-			g_vertex_buffer_data_land[12 + counter] = matrix2[1][0] * scaleit;
-			g_vertex_buffer_data_land[13 + counter] = matrix2[1][1] * scaleit;
-			g_vertex_buffer_data_land[14 + counter] = matrix2[1][2] * scaleit;
-
-			g_vertex_buffer_data_land[15 + counter] = matrix2[2][0] * scaleit;
-			g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
-			g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
+			//counter = counter + 18;
 
 
-			counter = counter + 18;
+			//across left to right - one column is two triangles
+			//for (int colu = 0; colu < 5; colu++) {
+				//gvertices[i++] = (float)col;
+				//gvertices[i++] = 0.0f;
+				//gvertices[i++] = (float)row;
+				//mathvertices
+				//tempmathvertices.
+
+
+
+
+	float colu = 0;
+	float row = 0;
+
+
+	//for (int colu = 0; colu < 4; colu++) {
+		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
+		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row-1), (colu+1),0,(row-1)};
+	GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
+
+	//vertex 1
+	g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
+	g_vertex_buffer_data_land[1 + counter] = matrix1[0][1] * scaleit;
+	g_vertex_buffer_data_land[2 + counter] = matrix1[0][2] * scaleit;
+	//vertex 2
+	g_vertex_buffer_data_land[3 + counter] = matrix1[1][0] * scaleit;
+	g_vertex_buffer_data_land[4 + counter] = matrix1[1][1] * scaleit;
+	g_vertex_buffer_data_land[5 + counter] = matrix1[1][2] * scaleit;
+
+	g_vertex_buffer_data_land[6 + counter] = matrix1[2][0] * scaleit;
+	g_vertex_buffer_data_land[7 + counter] = matrix1[2][1] * scaleit;
+	g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
+
+
+	//int matrix2[3][3] = {colu,0,(row + 2 ), (colu+1),0,(row + 2), (colu+1),0,(row + 1 ) };
+	//int matrix2[3][3] = {colu,0,(row - 2 ), (colu+1),0,(row - 2), (colu+1),0,(row - 1 ) };
+	int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
+
+
+	g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
+	g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
+	g_vertex_buffer_data_land[11 + counter] = matrix2[0][2] * scaleit;
+
+	g_vertex_buffer_data_land[12 + counter] = matrix2[1][0] * scaleit;
+	g_vertex_buffer_data_land[13 + counter] = matrix2[1][1] * scaleit;
+	g_vertex_buffer_data_land[14 + counter] = matrix2[1][2] * scaleit;
+
+	g_vertex_buffer_data_land[15 + counter] = matrix2[2][0] * scaleit;
+	g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
+	g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
+
+
+
+
+
+
+
+
+
+
+
+
+	//row++;
+	//GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
+
+	GLfloat matrixa[3][3] = { (colu + 1),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row) };
+	//vertex 1
+	g_vertex_buffer_data_land[18 + counter] = matrixa[0][0] * scaleit;
+	g_vertex_buffer_data_land[19 + counter] = matrixa[0][1] * scaleit;
+	g_vertex_buffer_data_land[20 + counter] = matrixa[0][2] * scaleit;
+	//vertex 2
+	g_vertex_buffer_data_land[21 + counter] = matrixa[1][0] * scaleit;
+	g_vertex_buffer_data_land[22 + counter] = matrixa[1][1] * scaleit;
+	g_vertex_buffer_data_land[23 + counter] = matrixa[1][2] * scaleit;
+
+	g_vertex_buffer_data_land[24 + counter] = matrixa[2][0] * scaleit;
+	g_vertex_buffer_data_land[25 + counter] = matrixa[2][1] * scaleit;
+	g_vertex_buffer_data_land[26 + counter] = matrixa[2][2] * scaleit;
+
+
+
+	//colum is changing not row
+	//row++;
+
+	//int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
+	int matrixb[3][3] = { (colu + 2),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row - 1) };
+
+	////vertex 1
+	g_vertex_buffer_data_land[27 + counter] = matrixb[0][0] * scaleit;
+	g_vertex_buffer_data_land[28 + counter] = matrixb[0][1] * scaleit;
+	g_vertex_buffer_data_land[29 + counter] = matrixb[0][2] * scaleit;
+	////vertex 2
+	g_vertex_buffer_data_land[30 + counter] = matrixb[1][0] * scaleit;
+	g_vertex_buffer_data_land[31 + counter] = matrixb[1][1] * scaleit;
+	g_vertex_buffer_data_land[32 + counter] = matrixb[1][2] * scaleit;
+
+	g_vertex_buffer_data_land[33 + counter] = matrixb[2][0] * scaleit;
+	g_vertex_buffer_data_land[34 + counter] = matrixb[2][1] * scaleit;
+	g_vertex_buffer_data_land[35 + counter] = matrixb[2][2] * scaleit;
+
+
+
+
+
+	counter = counter + 18;
+
+	//}
 
 			//g_vertex_buffer_data_land[i]= (float)col;
 			//g_vertex_buffer_data_land[i++] = 0.0f;
 			//g_vertex_buffer_data_land[i++] = (float)row;
 
 
-		
-
-			
 
 
 
 
-		}
-	}
+
+
+
+		//}
+//	}
 
 
 	/*g_vertex_buffer_data_land[0] = 0.0f;
@@ -1353,7 +1417,7 @@ float* getVertices(int width, int height) {
 int* getIndices(int width, int height) {
 	if (gindices) return gindices;
 
-	
+
 	//https://stackoverflow.com/questions/5915753/generate-a-plane-with-triangle-strips
 
 
