@@ -54,7 +54,7 @@ int* getIndices(int _width, int _height);
 
 //int getVerticesCount(int _width, int _height);
 
-float* getVertices(int width, int height);
+float* getVertices(int rows, int columns);
 
 int getVerticesCount(int width, int height);
 
@@ -125,7 +125,7 @@ int i = 0;
 
 //indices
 //8 x 3
-GLfloat g_vertex_buffer_data_land[36] = {};
+GLfloat g_vertex_buffer_data_land[36*2] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -560,7 +560,9 @@ int main()
 	//width , height : there are two triangles for each width column
 	//two columns : (four triangles)
 	//times two columns : 8 triangles
-	getVertices(2, 2);
+
+	//colu, row
+	getVertices(2, 1);
 
 
 
@@ -999,7 +1001,8 @@ int main()
 //# of indices
 //8 triangles
 
-		glDrawArrays(GL_TRIANGLES, 0, (36));
+		//row x xcol * 6
+		glDrawArrays(GL_TRIANGLES, 0, 1 * 4 * 9);
 
 		//		static const GLushort cubeIndices[] = {
 		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1242,7 +1245,7 @@ int getIndicesCount(int width, int height) {
 	return (width*height) + (width - 1)*(height - 2);
 }
 
-float* getVertices(int width, int height) {
+float* getVertices(int num_colu, int row) {
 	//	if (gvertices) return gvertices;
 
 		//gvertices = new float[getVerticesCount(width, height)];
@@ -1274,100 +1277,107 @@ float* getVertices(int width, int height) {
 
 
 
-	float colu = 0;
-	float row = 0;
+	//float colu = 0;
+	row = 0;
 
 
-	//for (int colu = 0; colu < 4; colu++) {
+	for (int colu = 0; colu < 4; colu++) {
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row+1), (colu+1),0,(row+1)};
 		//GLfloat matrix1[3][3] = {colu,0,row, colu,0,(row-1), (colu+1),0,(row-1)};
-	GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
 
-	//vertex 1
-	g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
-	g_vertex_buffer_data_land[1 + counter] = matrix1[0][1] * scaleit;
-	g_vertex_buffer_data_land[2 + counter] = matrix1[0][2] * scaleit;
-	//vertex 2
-	g_vertex_buffer_data_land[3 + counter] = matrix1[1][0] * scaleit;
-	g_vertex_buffer_data_land[4 + counter] = matrix1[1][1] * scaleit;
-	g_vertex_buffer_data_land[5 + counter] = matrix1[1][2] * scaleit;
+	//first triangle : odd rows : A
+		GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
 
-	g_vertex_buffer_data_land[6 + counter] = matrix1[2][0] * scaleit;
-	g_vertex_buffer_data_land[7 + counter] = matrix1[2][1] * scaleit;
-	g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
+		//vertex 1
+		g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
+		g_vertex_buffer_data_land[1 + counter] = matrix1[0][1] * scaleit;
+		g_vertex_buffer_data_land[2 + counter] = matrix1[0][2] * scaleit;
+		//vertex 2
+		g_vertex_buffer_data_land[3 + counter] = matrix1[1][0] * scaleit;
+		g_vertex_buffer_data_land[4 + counter] = matrix1[1][1] * scaleit;
+		g_vertex_buffer_data_land[5 + counter] = matrix1[1][2] * scaleit;
 
-
-	//int matrix2[3][3] = {colu,0,(row + 2 ), (colu+1),0,(row + 2), (colu+1),0,(row + 1 ) };
-	//int matrix2[3][3] = {colu,0,(row - 2 ), (colu+1),0,(row - 2), (colu+1),0,(row - 1 ) };
-	int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
+		g_vertex_buffer_data_land[6 + counter] = matrix1[2][0] * scaleit;
+		g_vertex_buffer_data_land[7 + counter] = matrix1[2][1] * scaleit;
+		g_vertex_buffer_data_land[8 + counter] = matrix1[2][2] * scaleit;
 
 
-	g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
-	g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
-	g_vertex_buffer_data_land[11 + counter] = matrix2[0][2] * scaleit;
+		//int matrix2[3][3] = {colu,0,(row + 2 ), (colu+1),0,(row + 2), (colu+1),0,(row + 1 ) };
+		//int matrix2[3][3] = {colu,0,(row - 2 ), (colu+1),0,(row - 2), (colu+1),0,(row - 1 ) };
 
-	g_vertex_buffer_data_land[12 + counter] = matrix2[1][0] * scaleit;
-	g_vertex_buffer_data_land[13 + counter] = matrix2[1][1] * scaleit;
-	g_vertex_buffer_data_land[14 + counter] = matrix2[1][2] * scaleit;
-
-	g_vertex_buffer_data_land[15 + counter] = matrix2[2][0] * scaleit;
-	g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
-	g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
+		//first triangle : even rows : B
+		int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
 
 
+		g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
+		g_vertex_buffer_data_land[10 + counter] = matrix2[0][1] * scaleit;
+		g_vertex_buffer_data_land[11 + counter] = matrix2[0][2] * scaleit;
+
+		g_vertex_buffer_data_land[12 + counter] = matrix2[1][0] * scaleit;
+		g_vertex_buffer_data_land[13 + counter] = matrix2[1][1] * scaleit;
+		g_vertex_buffer_data_land[14 + counter] = matrix2[1][2] * scaleit;
+
+		g_vertex_buffer_data_land[15 + counter] = matrix2[2][0] * scaleit;
+		g_vertex_buffer_data_land[16 + counter] = matrix2[2][1] * scaleit;
+		g_vertex_buffer_data_land[17 + counter] = matrix2[2][2] * scaleit;
 
 
+		counter = counter + 18;
 
-
-
-
-
-
-
-
-	//row++;
-	//GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
-
-	GLfloat matrixa[3][3] = { (colu + 1),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row) };
-	//vertex 1
-	g_vertex_buffer_data_land[18 + counter] = matrixa[0][0] * scaleit;
-	g_vertex_buffer_data_land[19 + counter] = matrixa[0][1] * scaleit;
-	g_vertex_buffer_data_land[20 + counter] = matrixa[0][2] * scaleit;
-	//vertex 2
-	g_vertex_buffer_data_land[21 + counter] = matrixa[1][0] * scaleit;
-	g_vertex_buffer_data_land[22 + counter] = matrixa[1][1] * scaleit;
-	g_vertex_buffer_data_land[23 + counter] = matrixa[1][2] * scaleit;
-
-	g_vertex_buffer_data_land[24 + counter] = matrixa[2][0] * scaleit;
-	g_vertex_buffer_data_land[25 + counter] = matrixa[2][1] * scaleit;
-	g_vertex_buffer_data_land[26 + counter] = matrixa[2][2] * scaleit;
+	}
 
 
 
-	//colum is changing not row
-	//row++;
 
-	//int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
-	int matrixb[3][3] = { (colu + 2),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row - 1) };
 
+
+
+	////row++;
+	////GLfloat matrix1[3][3] = { colu,0,row - 1, colu + 1,0,(row), (colu),0,(row) };
+
+	////first triangle again : A
+	//GLfloat matrixa[3][3] = { (colu + 1),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row) };
 	////vertex 1
-	g_vertex_buffer_data_land[27 + counter] = matrixb[0][0] * scaleit;
-	g_vertex_buffer_data_land[28 + counter] = matrixb[0][1] * scaleit;
-	g_vertex_buffer_data_land[29 + counter] = matrixb[0][2] * scaleit;
+	//g_vertex_buffer_data_land[18 + counter] = matrixa[0][0] * scaleit;
+	//g_vertex_buffer_data_land[19 + counter] = matrixa[0][1] * scaleit;
+	//g_vertex_buffer_data_land[20 + counter] = matrixa[0][2] * scaleit;
 	////vertex 2
-	g_vertex_buffer_data_land[30 + counter] = matrixb[1][0] * scaleit;
-	g_vertex_buffer_data_land[31 + counter] = matrixb[1][1] * scaleit;
-	g_vertex_buffer_data_land[32 + counter] = matrixb[1][2] * scaleit;
+	//g_vertex_buffer_data_land[21 + counter] = matrixa[1][0] * scaleit;
+	//g_vertex_buffer_data_land[22 + counter] = matrixa[1][1] * scaleit;
+	//g_vertex_buffer_data_land[23 + counter] = matrixa[1][2] * scaleit;
 
-	g_vertex_buffer_data_land[33 + counter] = matrixb[2][0] * scaleit;
-	g_vertex_buffer_data_land[34 + counter] = matrixb[2][1] * scaleit;
-	g_vertex_buffer_data_land[35 + counter] = matrixb[2][2] * scaleit;
-
-
+	//g_vertex_buffer_data_land[24 + counter] = matrixa[2][0] * scaleit;
+	//g_vertex_buffer_data_land[25 + counter] = matrixa[2][1] * scaleit;
+	//g_vertex_buffer_data_land[26 + counter] = matrixa[2][2] * scaleit;
 
 
 
-	counter = counter + 18;
+	////colum is changing not row
+	////row++;
+
+	////int matrix2[3][3] = { colu + 1,0,(row - 1), (colu + 1),0,(row), (colu),0,(row - 1) };
+
+	////second triangle again :  B 
+	//int matrixb[3][3] = { (colu + 2),0,(row - 1), (colu + 2),0,(row), (colu + 1),0,(row - 1) };
+
+	//////vertex 1
+	//g_vertex_buffer_data_land[27 + counter] = matrixb[0][0] * scaleit;
+	//g_vertex_buffer_data_land[28 + counter] = matrixb[0][1] * scaleit;
+	//g_vertex_buffer_data_land[29 + counter] = matrixb[0][2] * scaleit;
+	//////vertex 2
+	//g_vertex_buffer_data_land[30 + counter] = matrixb[1][0] * scaleit;
+	//g_vertex_buffer_data_land[31 + counter] = matrixb[1][1] * scaleit;
+	//g_vertex_buffer_data_land[32 + counter] = matrixb[1][2] * scaleit;
+
+	//g_vertex_buffer_data_land[33 + counter] = matrixb[2][0] * scaleit;
+	//g_vertex_buffer_data_land[34 + counter] = matrixb[2][1] * scaleit;
+	//g_vertex_buffer_data_land[35 + counter] = matrixb[2][2] * scaleit;
+
+
+
+
+
+	//counter = counter + 18;
 
 	//}
 
