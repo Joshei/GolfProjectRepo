@@ -719,11 +719,38 @@ int main()
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
 
+		//75 next...
 		0.583f,  0.771f,  0.014f,
 		0.583f,  0.771f,  0.014f,
+		0.583f,  0.771f,  0.014f,
+		0.183f, 0.171f, 0.314f,
+		0.783f, 0.471f, 0.514f,
+		//80
+		0.683f, 0.671f, 0.614f,
+		0.583f, 0.371f, 0.014f,
+		0.383f, 0.371f, 0.314f,
+		0.283f, 0.271f, 0.214f,
+		0.183f, 0.371f, 0.814f,
+		//85
+		0.583f, 0.771f, 0.014f,
+		0.283f, 0.271f, 0.214f,
+		0.683f, 0.671f, 0.614f,
+		0.583f, 0.371f, 0.014f,
+		0.383f, 0.371f, 0.314f,
 
+			0.583f, 0.771f, 0.014f,
+			0.283f, 0.271f, 0.214f,
+			0.683f, 0.671f, 0.614f,
+			0.583f, 0.371f, 0.014f,
+			0.383f, 0.371f, 0.314f,
 
+			0.583f, 0.771f, 0.014f,
+			0.283f, 0.271f, 0.214f,
+			0.683f, 0.671f, 0.614f,
+			0.583f, 0.371f, 0.014f,
+			0.383f, 0.371f, 0.314f,
 
+			0.383f, 0.371f, 0.314f,
 
 	};
 
@@ -1003,7 +1030,7 @@ int main()
 //8 triangles
 
 		//row x xcol * 6
-		glDrawArrays(GL_TRIANGLES, 0, 288);
+		glDrawArrays(GL_TRIANGLES, 0, 288+9);
 
 		//		static const GLushort cubeIndices[] = {
 		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1260,7 +1287,9 @@ float* getVertices(int incol, int depth) {
 	int i = 0;
 	
 	
-	int tempdepth = 1;
+	//a value of 0 is the first index
+	//depth minus one is the final index
+	int tempdepth = 0;
 
 	//std::vector< glm::vec3 > tempmathvertices;
 
@@ -1303,7 +1332,7 @@ float* getVertices(int incol, int depth) {
 
 		//was : GLfloat matrix1[3][3] = { col,0,tempdepth - 1, col + 1,0,(tempdepth), (col),0,(tempdepth) };
 
-		GLfloat matrix1[3][3] = { col,0,tempdepth - 2, col + 1,0,(tempdepth-1), (col),0,(tempdepth-1) };
+		GLfloat matrix1[3][3] = { col,0,tempdepth - 1, col + 1,0,(tempdepth), (col),0,(tempdepth) };
 
 		//vertex 1
 		g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
@@ -1326,7 +1355,7 @@ float* getVertices(int incol, int depth) {
 		
 		//was: int matrix2[3][3] = { col + 1,0,(tempdepth - 1), (col + 1),0,(tempdepth), (col),0,(tempdepth - 1) };
 
-		int matrix2[3][3] = { col + 1,0,(tempdepth - 2), (col + 1),0,(tempdepth-1), (col),0,(tempdepth - 2) };
+		int matrix2[3][3] = { col + 1,0,(tempdepth - 1), (col + 1),0,(tempdepth), (col),0,(tempdepth - 1) };
 
 
 		g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
@@ -1350,9 +1379,9 @@ float* getVertices(int incol, int depth) {
 
 
 
-	if (depth == 2)
+	if (depth == 2 )
 	{
-		tempdepth= 1;
+		tempdepth= 0;
 
 
 
@@ -1365,7 +1394,7 @@ float* getVertices(int incol, int depth) {
 
 
 			//first triangle : odd rows : A
-			GLfloat matrix1[3][3] = { col + 1 ,0,tempdepth - 3 , col+1,0,(tempdepth-2), (col),0,(tempdepth - 2) };
+			GLfloat matrix1[3][3] = { col + 1 ,0,tempdepth - 2 , col+1,0,(tempdepth-1), (col),0,(tempdepth - 1) };
 
 			//vertex 1
 			g_vertex_buffer_data_land[0 + counter] = matrix1[0][0] * scaleit;
@@ -1385,7 +1414,7 @@ float* getVertices(int incol, int depth) {
 			//int matrix2[3][3] = {col,0,(tempdepth - 2 ), (col+1),0,(tempdepth - 2), (col+1),0,(tempdepth - 1 ) };
 
 			//first triangle : even tempdepths : B
-			int matrix2[3][3] = { col + 1,0,(tempdepth - 3), (col + 1),0,(tempdepth-2), (col),0,(tempdepth - 3) };
+			int matrix2[3][3] = { col + 1,0,(tempdepth - 2), (col ),0,(tempdepth-1), (col),0,(tempdepth - 2) };
 
 
 			g_vertex_buffer_data_land[9 + counter] = matrix2[0][0] * scaleit;
