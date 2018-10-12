@@ -1,4 +1,10 @@
-﻿#include <C:/openglusage/glad/include/glad/glad.h>
+﻿//for world (getveritces)
+#define _colus   8
+#define _depth   2
+
+
+
+#include <C:/openglusage/glad/include/glad/glad.h>
 #include <C:/openglusage/GLFW/glfw3.h>
 
 #include <C:/openglusage/glm/glm.hpp>
@@ -54,7 +60,9 @@ int* getIndices(int _width, int _height);
 
 //int getVerticesCount(int _width, int _height);
 
-float* getVertices(int _columns, int _indepth);
+//float* getVertices(int _columns, int _indepth);
+//uses defines now
+float* getVertices(void);
 
 int getVerticesCount(int width, int height);
 
@@ -126,7 +134,9 @@ int i = 0;
 //indices
 //triangles in depth * col * 9
 //16 * 2 * 9 = 288
-GLfloat g_vertex_buffer_data_land[288] = {};
+
+//288
+GLfloat g_vertex_buffer_data_land[( _colus * 18 * _depth) ] = {};
 
 //		-1.0f, -1.0f,  0.0f ,
 //		//
@@ -563,7 +573,7 @@ int main()
 	//times two columns : 8 triangles
 
 	//columns, depth
-	getVertices(8, 2);
+	getVertices();
 
 
 
@@ -1030,7 +1040,7 @@ int main()
 //8 triangles
 
 		//row x xcol * 6
-		glDrawArrays(GL_TRIANGLES, 0, 288+9);
+		glDrawArrays(GL_TRIANGLES, 0, 288);
 
 		//		static const GLushort cubeIndices[] = {
 		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1
@@ -1279,8 +1289,13 @@ int getIndicesCount(int width, int height) {
 //each triangle 9 indexces
 //so 16*16*9 = 
 
-//16 *2*9
-float* getVertices(int incol, int depth) {
+//
+float* getVertices(void) {
+
+	//using defines
+	int incol = _colus;
+	int depth = _depth;
+
 	//	if (gvertices) return gvertices;
 
 		//gvertices = new float[getVerticesCount(width, height)];
