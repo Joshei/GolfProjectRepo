@@ -1,6 +1,6 @@
 ﻿//for world (getveritces)
 #define _colus   8
-#define _depth   2
+#define _depth   8
 
 
 
@@ -916,22 +916,27 @@ int main()
 		//modelMatrix = glm::scale(modelMatrix, scale);
 
 
-		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+
+		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+
+		//revolve around axis
+		modelMatrix = glm::rotate(model, (float)(55+180+.5+.1), glm::vec3(0.0f, 1.0f,0.00f));
+		modelMatrix = glm::rotate(model, (float)(1), glm::vec3(1.0f, 0.0f, 0.00f));
 
 
 
-		//view = glm::lookAt(
+		view = glm::lookAt(
 
 		//	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-		//	glm::vec3(1, 1, 2), // Camera is at (4,3,3), in World Space
+			glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
 
 
-		//	glm::vec3(1, 0, 0), // and looks at the origin
-		//	glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		//);
-
-		glm::translate(modelMatrix, glm::vec3(1.25, 0.0, 1.0f));
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+		//second (y) up and down
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(-.35, -0.2, 0.0f));
 
 
 
@@ -962,7 +967,7 @@ int main()
 
 
 
-		//projection = glm::perspective(glm::radians(1.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
 
 
