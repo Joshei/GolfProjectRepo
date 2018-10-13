@@ -1,32 +1,41 @@
-﻿//for world (getveritces)
+﻿//#include <glew.h>
+#include <glad/include/glad/glad.h>
+//#define GLFW_INCLUDE_NONE
+
+#include <GLFW/glfw3.h>
+
+#include "shader_s.h"
+
+//#include <glad/include/glad/glad.h>
+//#include<gl/freeglut.h>
+#include <gl/gl.h>
+#include <gl/glu.h>
+//#include <C:/extractedglut37/glut-3.7/include/GL/glut.h>
+#include <gl/glut.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+//#include <C:/openglusage/headershader/common.h>
+//#include <C:/openglusage/headershader/loader.h>
+#include <vector>
+
+#include <iostream>
+#include <string.h>
+#include <windows.h>
+
+//void output(int x, int y, float r, float g, float b, char *string);
+void output();
+
+
+
+//#include <C:/openglusage/
+ 
+
+//for world (getveritces)
 #define _colus   8
 #define _depth   8
 
 
-
-#include <C:/openglusage/glad/include/glad/glad.h>
-#include <C:/openglusage/GLFW/glfw3.h>
-
-#include <C:/openglusage/glm/glm.hpp>
-#include <C:/openglusage/glm/gtc/matrix_transform.hpp>
-#include <C:/openglusage/glm/gtc/type_ptr.hpp>
-
-
-//#include <C:/openglusage/headershader/common.h>
-//#include <C:/openglusage/headershader/loader.h>
-#include <vector>
-#include <C:/Users/Joshua Eirman/Source/repos/GOLFPROJ/GOLFPROJ/shader_s.h>
-#include <C:/openglusage/glm/glm.hpp>
-#include <iostream>
-//#include <open32.h>
-
-#include <string.h>
-#include <iostream>
-#include <windows.h>
-
-//#include <C:/openglusage/
-#include <gl/gl.h>
-#include <gl/glu.h>
 
 #define BITMAP_ID 0x4D42		      // the universal bitmap ID
 
@@ -155,10 +164,7 @@ GLfloat g_vertex_buffer_data_land[( _colus * 18 * _depth) ] = {};
 int main()
 
 {
-
-
-
-
+	
 	std::vector<unsigned int> indices;
 
 
@@ -301,6 +307,9 @@ int main()
 	//testimagegiven.obj
 	//cubeimag.obj
 	//file = fopen("C:/images for opengl/marble.obj", "r");
+	
+	
+	
 	file = fopen("C:/images for opengl/cube100.obj", "r");
 	if (file == NULL) {
 		printf("Impossible to open the file !\n");
@@ -909,7 +918,7 @@ int main()
 		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
-
+		
 
 		//glm::vec3 scale = glm::vec3(1, 1, 1);
 
@@ -917,27 +926,35 @@ int main()
 
 
 
-		//modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0.0f));
+
+		float currentime = (float)glfwGetTime();
+		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+
+
+
+
 
 		//revolve around axis
-		modelMatrix = glm::rotate(model, (float)(55+180+.5+.1), glm::vec3(0.0f, 1.0f,0.00f));
-		modelMatrix = glm::rotate(model, (float)(1), glm::vec3(1.0f, 0.0f, 0.00f));
+		//modelMatrix = glm::rotate(model, (float)(55+180+.5+.1), glm::vec3(0.0f, 1.0f,0.00f));
+		//modelMatrix = glm::rotate(model, (float)(5), glm::vec3(1.0f, 0.0f, 0.00f));
 
-
-
-		view = glm::lookAt(
-
-		//	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
-
-			glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
-
-
-			glm::vec3(0, 0, 0), // and looks at the origin
-			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
 		//second (y) up and down
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(-.35, -0.2, 0.0f));
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(-.35, -0.2, 0.0f));
 
+
+
+		//view = glm::lookAt(
+
+		////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+
+		//	glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
+
+
+		//	glm::vec3(0, 0, 0), // and looks at the origin
+		//	glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		//);
+		//
 
 
 
@@ -962,7 +979,7 @@ int main()
 
 
 
-		 //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+		// model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
 
 
 
@@ -1598,6 +1615,32 @@ int* getIndices(int width, int height) {
 	return gindices;
 }
 
+//glColor3f()
+////////////////////////
 
+//void output(int x, int y, float r, float g, float b, char *string)
+ void output()
+{
+
+	//RenderString(0.0f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24, "Hello", RGB(1.0f, 0.0f, 0.0f));
+
+	//glColor3f(1.0f, 0.0f, 0.0f,1.0f);
+
+	
+	char  string[] = "test";
+	
+	//glColor3f(0, 1, 0.);
+	//glRasterPos2i(10,10);
+	
+	
+	int len, i;
+	len = (int)strlen(string);
+	for (i = 0; i < len; i++) {
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
+
+
+		//glutBitmapCharacter(GLUT_BITMAP_8_BY_13, "hello");
+	}
+}
 
 ////////////////////////////////

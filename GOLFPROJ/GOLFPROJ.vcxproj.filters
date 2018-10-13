@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="glad.cpp">
+    <ClCompile Include="shader_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="shader_class.cpp">
+    <ClCompile Include="glad1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
