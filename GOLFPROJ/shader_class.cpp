@@ -3,7 +3,9 @@
 /////////
 //#include "shader_s.h"
 #include <glew.h>
-#include <glad/include/glad/glad.h>
+//#include <glad/include/glad/glad.h>
+#include "glad.h"
+
 #include <GLFW/glfw3.h>
 
 //#include <gl/gl.h>
