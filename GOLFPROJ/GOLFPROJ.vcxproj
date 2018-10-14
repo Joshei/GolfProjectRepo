@@ -103,8 +103,9 @@
       <ConformanceMode>true</ConformanceMode>
       <UndefinePreprocessorDefinitions>%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\openglusage;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Include\gl;C:\freeglutuntarred\freeglut-3.0.0\freeglut-3.0.0\include;C:\GLUT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\openglusage;C:\freeglutuntarred\freeglut-3.0.0\freeglut-3.0.0\include;C:\GLUT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\openglusage;C:\libs</AdditionalLibraryDirectories>

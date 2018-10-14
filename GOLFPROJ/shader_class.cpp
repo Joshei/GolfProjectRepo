@@ -1,5 +1,7 @@
-﻿//#include <glew.h>
-#include <glad/include/glad/glad.h>
+﻿#include <glew.h>
+
+
+//#include <glad/include/glad/glad.h>
 //#define GLFW_INCLUDE_NONE
 
 #include <GLFW/glfw3.h>
@@ -8,8 +10,15 @@
 
 //#include <glad/include/glad/glad.h>
 //#include<gl/freeglut.h>
-#include <gl/gl.h>
-#include <gl/glu.h>
+
+
+//#include <gl/gl.h>
+//#include <gl/glu.h>
+//#include <c:/openglusage/GLU.h>
+
+
+
+
 //#include <C:/extractedglut37/glut-3.7/include/GL/glut.h>
 #include <gl/glut.h>
 #include <glm/glm.hpp>
@@ -1629,7 +1638,7 @@ int* getIndices(int width, int height) {
 	
 	char  string[] = "test";
 	
-	//glColor3f(0, 1, 0.);
+	glColor3f(0, 1, 0.);
 	//glRasterPos2i(10,10);
 	
 	
