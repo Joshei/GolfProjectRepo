@@ -1,30 +1,16 @@
 ﻿#define GLFW_INCLUDE_NONE 
 
+/////////
 //#include "shader_s.h"
 #include <glew.h>
-#include <GLFW/glfw3.h>
-//#include <glew.h>
-
-
 #include <glad/include/glad/glad.h>
-//#define GLFW_INCLUDE_NONE
-
-
-
-
-
-//#include <glad/include/glad/glad.h>
-//#include<gl/freeglut.h>
-
+#include <GLFW/glfw3.h>
 
 //#include <gl/gl.h>
 //#include <gl/glu.h>
 //#include <c:/openglusage/GLU.h>
 
 
-
-
-//#include <C:/extractedglut37/glut-3.7/include/GL/glut.h>
 #include <gl/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -32,24 +18,207 @@
 //#include <C:/openglusage/headershader/common.h>
 //#include <C:/openglusage/headershader/loader.h>
 #include <vector>
-
-#include <iostream>
-#include <string.h>
 #include <windows.h>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+//////////////////
+
+class Shader
+{
+public:
+	unsigned int ID;
+	// constructor generates the shader on the fly
+	// ------------------------------------------------------------------------
+	Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr)
+	{
+		// 1. retrieve the vertex/fragment source code from filePath
+		std::string vertexCode;
+		std::string fragmentCode;
+		std::string geometryCode;
+		std::ifstream vShaderFile;
+		std::ifstream fShaderFile;
+		std::ifstream gShaderFile;
+		// ensure ifstream objects can throw exceptions:
+		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+		try
+		{
+			// open files
+			vShaderFile.open(vertexPath);
+			fShaderFile.open(fragmentPath);
+			std::stringstream vShaderStream, fShaderStream;
+			// read file's buffer contents into streams
+			vShaderStream << vShaderFile.rdbuf();
+			fShaderStream << fShaderFile.rdbuf();
+			// close file handlers
+			vShaderFile.close();
+			fShaderFile.close();
+			// convert stream into string
+			vertexCode = vShaderStream.str();
+			fragmentCode = fShaderStream.str();
+			// if geometry shader path is present, also load a geometry shader
+			if (geometryPath != nullptr)
+			{
+				gShaderFile.open(geometryPath);
+				std::stringstream gShaderStream;
+				gShaderStream << gShaderFile.rdbuf();
+				gShaderFile.close();
+				geometryCode = gShaderStream.str();
+			}
+		}
+		catch (std::ifstream::failure e)
+		{
+			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+		}
+		const char* vShaderCode = vertexCode.c_str();
+		const char * fShaderCode = fragmentCode.c_str();
+		// 2. compile shaders
+		unsigned int vertex, fragment;
+		// vertex shader
+		vertex = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vertex, 1, &vShaderCode, NULL);
+		glCompileShader(vertex);
+		checkCompileErrors(vertex, "VERTEX");
+		// fragment Shader
+		fragment = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fragment, 1, &fShaderCode, NULL);
+		glCompileShader(fragment);
+		checkCompileErrors(fragment, "FRAGMENT");
+		// if geometry shader is given, compile geometry shader
+		unsigned int geometry;
+		if (geometryPath != nullptr)
+		{
+			const char * gShaderCode = geometryCode.c_str();
+			geometry = glCreateShader(GL_GEOMETRY_SHADER);
+			glShaderSource(geometry, 1, &gShaderCode, NULL);
+			glCompileShader(geometry);
+			checkCompileErrors(geometry, "GEOMETRY");
+		}
+		// shader Program
+		ID = glCreateProgram();
+		glAttachShader(ID, vertex);
+		glAttachShader(ID, fragment);
+		if (geometryPath != nullptr)
+			glAttachShader(ID, geometry);
+		glLinkProgram(ID);
+		checkCompileErrors(ID, "PROGRAM");
+		// delete the shaders as they're linked into our program now and no longer necessery
+		glDeleteShader(vertex);
+		glDeleteShader(fragment);
+		if (geometryPath != nullptr)
+			glDeleteShader(geometry);
+
+	}
+	// activate the shader
+	// ------------------------------------------------------------------------
+	void use()
+	{
+		glUseProgram(ID);
+	}
+	// utility uniform functions
+	// ------------------------------------------------------------------------
+	void setBool(const std::string &name, bool value) const
+	{
+		glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+	}
+	// ------------------------------------------------------------------------
+	void setInt(const std::string &name, int value) const
+	{
+		glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+	}
+	// ------------------------------------------------------------------------
+	void setFloat(const std::string &name, float value) const
+	{
+		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+	}
+	// ------------------------------------------------------------------------
+	void setVec2(const std::string &name, const glm::vec2 &value) const
+	{
+		glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+	}
+	void setVec2(const std::string &name, float x, float y) const
+	{
+		glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
+	}
+	// ------------------------------------------------------------------------
+	void setVec3(const std::string &name, const glm::vec3 &value) const
+	{
+		glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+	}
+	void setVec3(const std::string &name, float x, float y, float z) const
+	{
+		glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+	}
+	// ------------------------------------------------------------------------
+	void setVec4(const std::string &name, const glm::vec4 &value) const
+	{
+		glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, &value[0]);
+	}
+	void setVec4(const std::string &name, float x, float y, float z, float w)
+	{
+		glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+	}
+	// ------------------------------------------------------------------------
+	void setMat2(const std::string &name, const glm::mat2 &mat) const
+	{
+		glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	}
+	// ------------------------------------------------------------------------
+	void setMat3(const std::string &name, const glm::mat3 &mat) const
+	{
+		glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	}
+	// ------------------------------------------------------------------------
+	void setMat4(const std::string &name, const glm::mat4 &mat) const
+	{
+		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+	}
+
+private:
+	// utility function for checking shader compilation/linking errors.
+	// ------------------------------------------------------------------------
+	void checkCompileErrors(GLuint shader, std::string type)
+	{
+		GLint success;
+		GLchar infoLog[1024];
+		if (type != "PROGRAM")
+		{
+			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+			if (!success)
+			{
+				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+				std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+			}
+		}
+		else
+		{
+			glGetProgramiv(shader, GL_LINK_STATUS, &success);
+			if (!success)
+			{
+				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+				std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
+			}
+		}
+	}
+};
+
+
+
+
+
+/////////////////////
+
 
 //void output(int x, int y, float r, float g, float b, char *string);
 void output();
 
-
-
-//#include <C:/openglusage/
- 
-
 //for world (getveritces)
 #define _colus   8
 #define _depth   8
-
-
 
 #define BITMAP_ID 0x4D42		      // the universal bitmap ID
 
@@ -60,44 +229,24 @@ void output();
 #define MAP_SCALE	.0f		         // the scale of the terrain map
 
 
-//int gwidth;
-//int gheight;
-//float* gvertices = 0;
 int* gindices = 0;
-
-
-
 
 bool LoadtheTextures(void);
 
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader);
 void InitializeTerrain();
 
-
-
 int getIndicesCount(int _width, int _height);
 
 int* getIndices(int _width, int _height);
 
-//int getIndicesCount(int _width, int _height);
 
-//int getVerticesCount(int _width, int _height);
-
-//float* getVertices(int _columns, int _indepth);
 //uses defines now
 float* getVertices(void);
 
 int getVerticesCount(int width, int height);
 
 
-
-
-
-//test---another test--and one more--
-
-//#include <GL/glew.h>
-//#include <GL/GL.h>
-//used with initial single page
 GLuint VAO1, VBO1;
 
 std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
@@ -111,8 +260,6 @@ std::vector < glm::vec3 >  temp_vertices, temp_vertices1, mathvertices;
 std::vector < glm::vec2 >  temp_uvs;
 std::vector < glm::vec3 >  temp_normals;
 
-
-
 ////// Texture Information
 BITMAPINFOHEADER	bitmapInfoHeader;	// temp bitmap info header
 BITMAPINFOHEADER	landInfo;
@@ -120,20 +267,11 @@ BITMAPINFOHEADER	landInfo;
 unsigned char * landTexture;
 FILE * file;
 
-
-
-//unsigned int VBO1, VAO1;
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
-// settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
-//std::vector< glm::vec3 >vertices2;
-
-
 
 unsigned int		   land;			      // the land texture object
 
@@ -142,38 +280,16 @@ unsigned char*	      imageData;		   // the map image data
 ////// Terrain Data
 float terrain[MAP_X][MAP_Z][3];		// heightfield terrain data (0-255); 256x256
 
-//GLfloat g_vertex_buffer_data_land[24];
 
-
-//gvertices = new float[getVerticesCount(width, height)];
-
-//10x10x3
 float gvertices[300];// = new float[getVerticesCount(width, height)];
 
-
-//int i = 0;
 int i = 0;
 
-//indices
-//triangles in depth * col * 9
-//16 * 2 * 9 = 288
 
 //288 (vertices)
 GLfloat g_vertex_buffer_data_land[( _colus * 18 * _depth) ] = {};
 
-//		-1.0f, -1.0f,  0.0f ,
-//		//
-//			1.0f, -1.0f,  0.0f,
-//			0.0f,  1.0f,  0.0f,
-//
-//
-//1.0,  1.0,  1.0,
-//-1.0, -1.0, -1.0,
-//1.0, -1.0, -1.0, };
 
-
-//-1.0,  1.0, -1.0,
-//1.0,  1.0, -1.0,
 
 int main()
 
@@ -182,9 +298,6 @@ int main()
 	std::vector<unsigned int> indices;
 
 
-	//	//GLuint elementbuffer;
-	//	glGenBuffers(1, &elementbuffer);
-	//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
 	//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
 
@@ -222,29 +335,13 @@ int main()
 	}
 
 
-	////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-	//////////////////////////
+	
 
 	// build and compile our shader program
 	// ------------------------------------
 	//Shader ourShader("3.3.shader.vs", "3.3.shader.fs"); // you can name your shader files however you like
 	Shader ourShader("C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.vs",
 		"C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.fs"); // you can name your shader files however you like
-
-
-
-
 
 	//this is original load from.obj and use face and vertices to draw a model
 	//the new code is send through:
@@ -300,27 +397,10 @@ int main()
 
 
 
-//second set to display
-
-//	float vertices2[] = {
-//		// positions         // colors
-//		0.2f, -0.2f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-//		-0.2f, -0.2f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-//		0.0f,  0.2f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
-//	};
 
 
 
-
-	//////////////////////////////
-
-
-	//loads the image file (.obj)
-	//int a = functionLoadA();
-
-	//testimagegiven.obj
-	//cubeimag.obj
-	//file = fopen("C:/images for opengl/marble.obj", "r");
+	
 	
 	
 	
@@ -341,31 +421,7 @@ int main()
 
 
 
-	//////////
-	//////////////////////////////
-
-	//builds the array for rendering and uses the old code there to set
-	//up the bufferdata
-	//int b = loadobjmodelandrender();
-
-
-	//this will be a class taken from : loading.cpp to : //endofcodesection
-
-
-	////externed in common.h
-	//glGenVertexArrays(1, &VAO1);
-	//glGenBuffers(1, &VBO1);
-	//// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	//glBindVertexArray(VAO1);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-
-
-	////glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-	//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-
+	
 
 
 	while (1) {
@@ -428,124 +484,18 @@ int main()
 
 	}//uncertain
 
-	// //PROCESSING DATA
-	// // For each vertex of each triangle
-
-
-
-
-	//vertices
-	//getVertices(1,0);
-
-
-
-
-	/////////////////
-
-
+	
 
 
 	int j = 0;
 
 
 
-	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-
-	//	//has verices loaded in 
-	//	//unsigned int g = vertexIndices[i];
+	
 
 
 
-	//	//unsigned int g;
-	//	//check this should be fine
-	//	//glm::vec3 vertex = vertices[g - 1];
-
-
-	//	//chech this as out?
-	//	//vertices.push_back(vertex);
-
-
-	//	//fills this temporary array for experimentation in a linear fashion
-	//	g_vertex_terrain_data[j] = vertex.x;
-	//	j++;
-	//	g_vertex_terrain_data[j] = vertex.y;
-	//	j++;
-	//	g_vertex_terrain_data[j] = vertex.z;
-	//	j++;
-	//}
-
-
-
-	/////////////////
-
-
-	//GLfloat g_vertex_buffer_data[36 * 3];
-
-	//int j = 0;
-
-
-
-	//for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-
-	//	//has verices loaded in 
-	//	unsigned int g = vertexIndices[i];
-
-
-
-	//	//unsigned int g;
-	//	//check this should be fine
-	//	glm::vec3 vertex = temp_vertices[g - 1];
-
-
-	//	//chech this as out?
-	//	vertices.push_back(vertex);
-
-
-	//	//fills this temporary array for experimentation in a linear fashion
-	//	g_vertex_buffer_data[j] = vertex.x;
-	//	j++;
-	//	g_vertex_buffer_data[j] = vertex.y;
-	//	j++;
-	//	g_vertex_buffer_data[j] = vertex.z;
-	//	j++;
-	//}
-
-
-	//GLfloat g_vertex_buffer_data[36*3];
-
-	////three times the amount for x y and z in linear fasion
-	////to check the .obj file as a structure because it was malformed 
-	////with loading code
-	//for (int i = 0; i < 36 * 3;)
-	//{
-	//	glm::vec3 tempvector = temp_vertices1.pop_back();
-
-	//	int x = tempvector.x;
-
-	//	g_vertex_buffer_data[i] = x;
-	//	i++;
-
-	//	int y = tempvector.y;
-	//	g_vertex_buffer_data[i] = y;
-	//	i++;
-
-	//	int z = tempvector.z;
-	//	g_vertex_buffer_data[i] = z;
-	//	i++;
-	//}
-
-
-
-	//right here put into a structure : 
-
-	//// An array of 3 vectors which represents 3 vertices
-	//static const GLfloat g_vertex_buffer_data[] = {
-	//   -1.0f, -1.0f, 0.0f,
-	//   1.0f, -1.0f, 0.0f,
-	//   0.0f,  1.0f, 0.0f,
-	//};
-
-
+	
 
 	//SETTING UP A VERTEX ARRAY OBJECT
 
@@ -589,12 +539,7 @@ int main()
 	//LoadtheTextures();
 
 
-	//sets g_vertex_buffer_data_land
-
-	//width , height : there are two triangles for each width column
-	//two columns : (four triangles)
-	//times two columns : 8 triangles
-
+	
 	//columns, depth
 	getVertices();
 
@@ -646,20 +591,6 @@ int main()
 		//glBufferData(GL_ARRAY_BUFFER, sizeof(temp_vertices),temp_vertices, GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-
-
-
-
-
-	////////////////////////////THIS  IS THE COLOR USAGE FOR CUBE WORKING FINE COMMENTED OUT TO GET LAND WORKING!
-	//10/1/18
-	//
-
-
-	//colorArray[i][0] = rand() % 255;
-
-
 
 
 	//count is number of indices
@@ -864,21 +795,7 @@ int main()
 
 
 
-	//glDisableVertexAttribArray(1);
-
-
-////////////////////END OF WAS WORKING COLORS FOR CUBE////
-
-
-
-
-
-		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-		//glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-
-
+	
 
 
 
@@ -903,27 +820,11 @@ int main()
 
 
 
-		// Enable depth test
-		//glEnable(GL_DEPTH_TEST);
-		// Accept fragment if it closer to the camera than the former one
-		//glDepthFunc(GL_LESS);
-
-
-		//glClearColor(0.2f, 1.3f, 0.3f, 1.0f);
-
-		//glClear(GL_COLOR_BUFFER_BIT);
-
+		
 
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glClear(GL_COLOR_BUFFER_BIT);
-
-		//glEnable(GL_CULL_FACE);
-
-
-		//glCullFace(GL_FRONT);
-
-
+		
 
 
 		glm::mat4 modelMatrix = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
@@ -951,8 +852,7 @@ int main()
 
 		//revolve around axis
 		//modelMatrix = glm::rotate(model, (float)(55+180+.5+.1), glm::vec3(0.0f, 1.0f,0.00f));
-		//modelMatrix = glm::rotate(model, (float)(5), glm::vec3(1.0f, 0.0f, 0.00f));
-
+		
 		//second (y) up and down
 		//modelMatrix = glm::translate(modelMatrix, glm::vec3(-.35, -0.2, 0.0f));
 
@@ -971,21 +871,12 @@ int main()
 		//
 
 
-
-
-
-
-
-
-
 		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 
 
 		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
 		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
-
-
 
 
 		// Projection matrix : 45� Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -1036,13 +927,7 @@ int main()
 
 		//model  = glm::translate(model, glm::vec3(-0.5, -0.5, 0.0f));
 
-		//1:
-		//2: around the y axis
-		//3: aroond the z axis
-
-
-
-
+		
 
 
 
@@ -1052,20 +937,7 @@ int main()
 		//glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
 
 
-		//?///unsigned int transformLoc3 = glGetUniformLocation(ourShader.ID, "projection");
-		//?///glUniformMatrix4fv(transformLoc3, 1, GL_FALSE, glm::value_ptr(model));
-
-
-
-
-
-
-
-		//unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-		//unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-
-
-
+		
 
 		//////// pass them to the shaders (3 different ways)
 //		glUniformMatrix4fv(transformLoc1, 1, GL_FALSE, glm::value_ptr(model));
@@ -1082,50 +954,9 @@ int main()
 
 
 
-		// 1ST ATTRIBUTE BUFFER : VERTICES
-		//SETTING UP FOR CUBE TO DISPLAY WORKS
+		
 
-		//glEnableVertexAttribArray(0);
-		//glBindBuffer(GL_ARRAY_BUFFER, vertexbufferint);
-		//glVertexAttribPointer(
-		//	0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		//	3,                  // size
-		//	GL_FLOAT,           // type
-		//	GL_FALSE,           // normalized?
-		//	0,                  // stride
-		//	(void*)0            // array buffer offset
-		//);
-
-
-		//////////SAME AS ABOVE, NOW TRYING TO DISPLAY LAND/////
-
-
-
-
-		//glBegin(GL_);
-		//glEnd();
-
-
-
-		//for (i = 0; i < 32 - 1; i++) {
-		//	glBegin(GL_TRIANGLE_STRIP);
-		//	for (j = 0; j < 32; j++) {
-
-
-		//use enable instead
-		//glEnableClientState(GL_VERTEX_ARRAY);
-
-
-		//glVertexPointer(3, GL_FLOAT, 0, getVertices(width, height));
-		//glDrawElements(GL_TRIANGLE_STRIP, getIndicesCount(width, height), GL_UNSIGNED_INT, getIndices(width, height));
-		//glDisableClientState(GL_VERTEX_ARRAY);
-
-
-		//glVertexAttribPointer
-
-
-//# of indices
-//8 triangles
+		
 
 
 
@@ -1142,15 +973,7 @@ int main()
 
 
 
-			//	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, cubeIndices);
-				//glDisableVertexAttribArray(0);
-
-
-
-				//glBegin(GL_TRIANGLE_STRIP);
-
-
-
+			
 
 				// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 				// -------------------------------------------------------------------------------
@@ -1298,37 +1121,7 @@ void InitializeTerrain()
 	}
 
 
-	/*g_vertex_buffer_data_land[0] = 0;
-	g_vertex_buffer_data_land[1] = 2;
-	g_vertex_buffer_data_land[2] = 0;
-	g_vertex_buffer_data_land[3] = 1;
-	g_vertex_buffer_data_land[4] = 2;
-	g_vertex_buffer_data_land[5] = 0;
-	g_vertex_buffer_data_land[6] = 2;
-	g_vertex_buffer_data_land[7] = 2;
-	g_vertex_buffer_data_land[8] = 0;*/
-
-
-	//	-1.0f, -1.0f, 0.0f,
-	//		1.0f, -1.0f, 0.0f,
-	//		0.0f, 1.0f, 0.0f,
-
-		//0,2,0,1,2,0,2,2,0
-		/*g_vertex_buffer_data_land[0] = 0;
-		g_vertex_buffer_data_land[1] = 2;
-			g_vertex_buffer_data_land[2] = 0;
-			g_vertex_buffer_data_land[3] = 1;
-			g_vertex_buffer_data_land[4] = 2;
-			g_vertex_buffer_data_land[5] = 0;
-			g_vertex_buffer_data_land[6] = 2;
-			g_vertex_buffer_data_land[7] = 2;
-			g_vertex_buffer_data_land[8] = 0;
-
-	*/
-
-	//float xx = g_vertex_buffer_data_land[3071];
-	//float yy = g_vertex_buffer_data_land[3072];
-
+	
 }
 
 bool LoadtheTextures(void)
@@ -1387,20 +1180,11 @@ float* getVertices(void) {
 	int incol = _colus;
 	int depth = _depth;
 
-	//	if (gvertices) return gvertices;
-
-		//gvertices = new float[getVerticesCount(width, height)];
+	
 	int i = 0;
 	
 	
-	//a value of 0 is the first index
-	//depth minus one is the final index
-
-
-	//TEMPDEPTH IS ONE LESS THAN DEPTH (IS AN INDEX!)
-	//int tempdepth = 0;
-
-	//std::vector< glm::vec3 > tempmathvertices;
+	
 
 	float scaleit = .125;
 
@@ -1409,26 +1193,7 @@ float* getVertices(void) {
 	//so it will be zero on the first loop
 	int counter = 0;
 
-		//
-		//for (int row = 0; row; row++) {
-
-			//counter = counter + 18;
-
-
-			//across left to right - one column is two triangles
-			//for (int colu = 0; colu < 5; colu++) {
-				//gvertices[i++] = (float)col;
-				//gvertices[i++] = 0.0f;
-				//gvertices[i++] = (float)row;
-				//mathvertices
-				//tempmathvertices.
-
-
-
-
-	//float colu = 0;
-	//row = 0;
-
+		
 
 	int tempdepth = 0;
 	int tempdepth2 = 1;
@@ -1569,28 +1334,6 @@ float* getVertices(void) {
 
 
 
-	/*g_vertex_buffer_data_land[0] = 0.0f;
-	g_vertex_buffer_data_land[1] = 0;
-	g_vertex_buffer_data_land[2] = 0.0f;
-	g_vertex_buffer_data_land[3] = 0.0f;
-	g_vertex_buffer_data_land[4] = 0.0f;
-	g_vertex_buffer_data_land[5] = 1.0f;
-	g_vertex_buffer_data_land[6] = 1.0f;
-	g_vertex_buffer_data_land[7] = 0.0f;
-	g_vertex_buffer_data_land[8] = 1.0f;
-
-	g_vertex_buffer_data_land[0] = 0.0f;
-	g_vertex_buffer_data_land[1] = 0;
-	g_vertex_buffer_data_land[2] = 2.0f;
-	g_vertex_buffer_data_land[3] = 1.0f;
-	g_vertex_buffer_data_land[4] = 0.0f;
-	g_vertex_buffer_data_land[5] = 2.0f;
-	g_vertex_buffer_data_land[6] = 1.0f;
-	g_vertex_buffer_data_land[7] = 0.0f;
-	g_vertex_buffer_data_land[8] = 1.0f;
-
-*/
-
 
 
 	return gvertices;
@@ -1629,16 +1372,11 @@ int* getIndices(int width, int height) {
 	return gindices;
 }
 
-//glColor3f()
-////////////////////////
+
 
 //void output(int x, int y, float r, float g, float b, char *string)
  void output()
 {
-
-	//RenderString(0.0f, 0.0f, GLUT_BITMAP_TIMES_ROMAN_24, "Hello", RGB(1.0f, 0.0f, 0.0f));
-
-	//glColor3f(1.0f, 0.0f, 0.0f,1.0f);
 
 	
 	char  string[] = "test";
@@ -1657,4 +1395,12 @@ int* getIndices(int width, int height) {
 	}
 }
 
-////////////////////////////////
+
+ 
+ ////////////////////////////////
+
+
+ 
+
+
+

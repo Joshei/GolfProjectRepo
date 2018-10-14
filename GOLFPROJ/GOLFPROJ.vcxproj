@@ -25,9 +25,6 @@
     <None Include="3.3.shader.fs" />
     <None Include="3.3.shader.vs" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="shader_s.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{C607BD96-A6F7-418A-A55D-BD7D0EB7D04C}</ProjectGuid>
