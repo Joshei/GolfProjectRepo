@@ -17,7 +17,7 @@
 	Online:
 		http://glad.dav1d.de/#profile=core&language=c&specification=gl&api=gl%3D4.6
 */
-
+#define GLFW_INCLUDE_NONE 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

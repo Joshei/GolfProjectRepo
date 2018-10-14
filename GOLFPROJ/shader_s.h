@@ -1,3 +1,4 @@
+#define GLFW_INCLUDE_NONE 
 #ifndef SHADER_H
 #define SHADER_H
 

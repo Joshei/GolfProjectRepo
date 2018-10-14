@@ -1,12 +1,17 @@
-﻿#include <glew.h>
+﻿#define GLFW_INCLUDE_NONE 
+
+//#include "shader_s.h"
+#include <glew.h>
+#include <GLFW/glfw3.h>
+//#include <glew.h>
 
 
-//#include <glad/include/glad/glad.h>
+#include <glad/include/glad/glad.h>
 //#define GLFW_INCLUDE_NONE
 
-#include <GLFW/glfw3.h>
 
-#include "shader_s.h"
+
+
 
 //#include <glad/include/glad/glad.h>
 //#include<gl/freeglut.h>
