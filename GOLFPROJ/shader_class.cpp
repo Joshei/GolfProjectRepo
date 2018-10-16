@@ -2,7 +2,9 @@
 
 /////////
 //#include "shader_s.h"
-#include <glew.h>
+//#include <glew.h>
+
+
 //#include <glad/include/glad/glad.h>
 #include "glad.h"
 
