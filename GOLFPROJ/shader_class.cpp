@@ -30,12 +30,24 @@
 #include <fstream>
 //////////////////
 
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
 
 
 float gcurrentime = 0;
 
 FILE * glog;
+
+FILE * glogadjuster;
+
 int gtextsavingison = 0;
+
+
+float grotateadjuster = 0;
+
+
+
+
 
 class Shader
 {
@@ -279,7 +291,7 @@ unsigned char * landTexture;
 FILE * file;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow *window);
+//void processInput(GLFWwindow *window);
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -305,6 +317,10 @@ GLfloat g_vertex_buffer_data_land[( _colus * 18 * _depth) ] = {};
 int main()
 
 {
+
+	
+
+
 	//float answer = (2.93 + 2.66 + 2.73) / 3;
 
 	glog = fopen("log.txt.txt", "w");
@@ -829,13 +845,14 @@ int main()
 
 	ourShader.use();
 
+	glfwSetKeyCallback(window, key_callback);
 
 
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
 		// -----
-		processInput(window);
+		//processInput(window);
 		//
 		// render
 		// ------
@@ -902,8 +919,10 @@ int main()
 
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(2, 0, 0.10f));
 
+		
+		grotateadjuster = 0.139;
 		//x    y    z
-		modelMatrix = glm::rotate(modelMatrix, 3.0f, glm::vec3(0.0f, 1.5f, 0.2f));
+		modelMatrix = glm::rotate(modelMatrix, 3.0f + grotateadjuster, glm::vec3(0.0f, 1.5f, 0.2f));
 
 		if (gtextsavingison == 1)
 		{
@@ -975,7 +994,7 @@ int main()
 		//projection = glm::ortho(0.0f, 800.0f, 800.0f, 0.0f);
 
 		//I call it : height angle
-		projection = glm::perspective(glm::radians(40.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 400.0f);
+		projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 600.0f);
 
 
 
@@ -1082,13 +1101,44 @@ int main()
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 // ---------------------------------------------------------------------------------------------------------
-void processInput(GLFWwindow *window)
+
+
+
+
+
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+
+	}
+
+	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		//readyforpressing = 1;
+		grotateadjuster = grotateadjuster + .001;
+
+	}
+
+	//saves adjuster
+	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+	{
+		//readyforpressing = 1;
+		//grotateadjuster = grotateadjuster + .001;
+		glogadjuster= fopen("logadjuster.txt", "w");
+
+		fprintf(glogadjuster, "\ntotal adjustment is: %f", grotateadjuster);
+
+		fclose(glogadjuster);
 
 
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS && gtextsavingison == 0)
+	}
+
+
+
+
+	else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS && gtextsavingison == 0)
 	{
 
 		//turned off
@@ -1103,6 +1153,19 @@ void processInput(GLFWwindow *window)
 
 		}
 	}
+
+
+
+}
+
+
+
+
+//void processInput(GLFWwindow *window)
+
+	
+
+
 
 //	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && gtextsavingison == 0)
 //	{
@@ -1140,7 +1203,7 @@ void processInput(GLFWwindow *window)
 	//}
 
 
-}
+//}
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
