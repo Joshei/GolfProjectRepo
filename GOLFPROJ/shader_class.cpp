@@ -945,7 +945,7 @@ int main()
 		//////////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
 			//glm::vec3(-1.8, .5, 1.2),
-			glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
+			glm::vec3(0, 0, 2), // Camera is at (4,3,3), in World Space
 
 
 			glm::vec3(0, 0, 0), // and looks at the origin
@@ -974,7 +974,8 @@ int main()
 
 		//projection = glm::ortho(0.0f, 800.0f, 800.0f, 0.0f);
 
-		projection = glm::perspective(glm::radians(30.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
+		//I call it : height angle
+		projection = glm::perspective(glm::radians(40.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 400.0f);
 
 
 
@@ -1325,7 +1326,7 @@ float* getVertices(void) {
 	
 	
 
-	float scaleit = .5;
+	float scaleit = 1;
 
 	//up and down : a value of one is one row and than exits
 
