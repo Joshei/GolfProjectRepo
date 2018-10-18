@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="glad1.cpp" />
     <ClCompile Include="shader_class.cpp" />
   </ItemGroup>
   <ItemGroup>

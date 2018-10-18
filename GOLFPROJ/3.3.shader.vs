@@ -46,7 +46,7 @@ void main()
 
 	//gl_Position =  MVP   *( vec4(aPos, 1.0f))    ;
 
-    gl_Position =  view * modelMatrix * ( vec4(aPos, 1.0f))    ;
+    gl_Position =  projection * view * modelMatrix * ( vec4(aPos, 1.0f))    ;
 
 
 

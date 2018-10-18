@@ -2,20 +2,20 @@
 
 /////////
 //#include "shader_s.h"
-#include <glew.h>
+//#include <glew.h>
 
 
 #include <glad/include/glad/glad.h>
-#include "glad.h"
+//#include "glad.h"
 
 #include <GLFW/glfw3.h>
 
-//#include <gl/gl.h>
+//#include <gl/gl.h>  
 //#include <gl/glu.h>
 //#include <c:/openglusage/GLU.h>
 
 
-#include <gl/glut.h>
+//#include <gl/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,11 +24,18 @@
 #include <vector>
 #include <windows.h>
 #include <string>
-#include <fstream>
+//#include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include <fstream>
 //////////////////
+
+
+
+float gcurrentime = 0;
+
+FILE * glog;
+int gtextsavingison = 0;
 
 class Shader
 {
@@ -298,6 +305,17 @@ GLfloat g_vertex_buffer_data_land[( _colus * 18 * _depth) ] = {};
 int main()
 
 {
+	//float answer = (2.93 + 2.66 + 2.73) / 3;
+
+	glog = fopen("log.txt.txt", "w");
+
+
+	//glog = fopen("log.txt.txt", "w");
+
+	
+	//glog = fopen("log.txt", "w");
+	//glog << "Writing this to a file!.\n";
+	//glog.close();
 	
 	std::vector<unsigned int> indices;
 
@@ -847,9 +865,69 @@ int main()
 
 		//modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0.0f));
 
-		float currentime = (float)glfwGetTime();
-		modelMatrix = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.2f));
+		
+		
+		
+		gcurrentime = (float)glfwGetTime();
 
+		//////////////////////
+
+		if (gtextsavingison == 1)
+		{
+			//glog = fopen("log.txt.txt", "w");
+
+			//fprintf(glog, "\n a %f\n", gcurrentime);
+
+
+			//fprintf(glog, "before rotate", "w");
+
+			//fclose(glog);
+			//gtextsavingison = 0;
+			//fclose(glog);
+			//gtextsavingison = 0;
+			//gtextsavingison = 2;
+
+		}
+
+		///////////////////////
+
+		if (gtextsavingison == 1)
+		{
+			fprintf(glog, "\nbefore rotate: %f \n", gcurrentime);
+
+		}
+
+		//////////////////////
+
+
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(2, 0, 0.10f));
+
+		//x    y    z
+		modelMatrix = glm::rotate(modelMatrix, 3.0f, glm::vec3(0.0f, 1.5f, 0.2f));
+
+		if (gtextsavingison == 1)
+		{
+			//glog = fopen("log.txt.txt", "w");
+
+			//fprintf(glog, "\n a %f\n", gcurrentime);
+			//glog = fopen("log.txt.txt", "w");
+
+
+			//glog = fopen("log.txt.txt", "w");
+
+
+			fprintf(glog, "after rotate %f\n", gcurrentime);
+
+			//fprintf(glog, "average: \n", );
+
+
+			fclose(glog);
+			//gtextsavingison = 0;
+			//fclose(glog);
+			//gtextsavingison = 0;
+			gtextsavingison = 2;
+
+		}
 
 
 
@@ -862,17 +940,19 @@ int main()
 
 
 
-		//view = glm::lookAt(
+		view = glm::lookAt(
 
-		////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
+		//////////	//glm::vec3(32 * 20 / 2, 150, 32 * 20 / 2), // Camera is at (4,3,3), in World Space
 
-		//	glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
+			//glm::vec3(-1.8, .5, 1.2),
+			glm::vec3(0, 0, 1), // Camera is at (4,3,3), in World Space
 
 
-		//	glm::vec3(0, 0, 0), // and looks at the origin
-		//	glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		//);
-		//
+			glm::vec3(0, 0, 0), // and looks at the origin
+			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+
+		////////
 
 
 		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
@@ -892,8 +972,9 @@ int main()
 
 
 
+		//projection = glm::ortho(0.0f, 800.0f, 800.0f, 0.0f);
 
-		//projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(30.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
 
 
 
@@ -948,7 +1029,7 @@ int main()
 //		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, &view[0][0]);
 		//////// note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
 
-		//ourShader.setMat4("projection", projection);
+		ourShader.setMat4("projection", projection);
 
 
 
@@ -1004,6 +1085,60 @@ void processInput(GLFWwindow *window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+
+	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS && gtextsavingison == 0)
+	{
+
+		//turned off
+		//if (gtextsavingison == 1)
+		{
+			//glog = fopen("log.txt.txt", "w");
+
+			//fprintf(glog, "\npressed space (off):  %f\n", gcurrentime);
+			gtextsavingison = 1;
+			//fclose(glog);
+
+
+		}
+	}
+
+//	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS && gtextsavingison == 0)
+//	{
+//
+//		//turned off
+//		//if (gtextsavingison == 0)
+//		{
+//			//glog = fopen("log.txt.txt", "w");
+//
+//			//fprintf(glog, "\npressed space (off):  %f\n", gcurrentime);
+//			gtextsavingison = 1;
+//			//fclose(glog);
+//
+//
+//		}
+//	}
+
+
+
+		//turned on
+		//else
+		//{
+
+		//	//gcurrentime
+
+		//	//std::time_t t = std::time(0);   // get time now
+		//	//glog = fopen("log.txt.txt", "w");
+		//	//fprintf(glog, "\npressed space(on):  %f\n", gcurrentime );
+		//	//printf();
+		//	//char output[] = ""
+		//	//log << "key turned on\n";
+		//	gtextsavingison = 1;
+		//	//fclose(glog);
+		//}
+	//}
+
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -1151,7 +1286,7 @@ bool LoadtheTextures(void)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//link this against glu32.lib 
-	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, landInfo.biHeight, landInfo.biWidth, GL_RGB, GL_UNSIGNED_BYTE, landTexture);
+//	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, landInfo.biHeight, landInfo.biWidth, GL_RGB, GL_UNSIGNED_BYTE, landTexture);
 
 	return true;
 }
@@ -1190,7 +1325,7 @@ float* getVertices(void) {
 	
 	
 
-	float scaleit = .125;
+	float scaleit = .5;
 
 	//up and down : a value of one is one row and than exits
 
@@ -1385,14 +1520,14 @@ int* getIndices(int width, int height) {
 	
 	char  string[] = "test";
 	
-	glColor3f(0, 1, 0.);
+	//glColor3f(0, 1, 0.);
 	//glRasterPos2i(10,10);
 	
 	
 	int len, i;
 	len = (int)strlen(string);
 	for (i = 0; i < len; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
+		//glutBitmapCharacter(GLUT_BITMAP_8_BY_13, string[i]);
 
 
 		//glutBitmapCharacter(GLUT_BITMAP_8_BY_13, "hello");

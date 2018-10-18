@@ -18,6 +18,9 @@
     <ClCompile Include="shader_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glad1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="3.3.shader.fs">
