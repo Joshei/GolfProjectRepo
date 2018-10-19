@@ -19,6 +19,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+//#include <glm/>
 //#include <C:/openglusage/headershader/common.h>
 //#include <C:/openglusage/headershader/loader.h>
 #include <vector>
@@ -882,6 +883,9 @@ int main()
 
 		//modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0.0f));
 
+
+		//glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 305.0f);
+
 		
 		
 		
@@ -993,8 +997,16 @@ int main()
 
 		//projection = glm::ortho(0.0f, 800.0f, 800.0f, 0.0f);
 
+
+
+
+
+
 		//I call it : height angle
-		projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 600.0f);
+		projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+		
+
 
 
 
