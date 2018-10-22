@@ -2,7 +2,7 @@
 
 //for world (getveritces)
 #define _colus   8
-#define _depth   1
+#define _depth   3
 
 /////////
 //#include "shader_s.h"
@@ -1463,8 +1463,10 @@ void drawWorld(void) {
 	//using defines
 	int incol = _colus;
 	int depth = _depth;
-	float scaleit = .5;
+	float scaleit = .25;
 	float tempdepth = 0;
+	float tempdepth2 = 0;
+
 	int startindexat = 0;
 	int counter = 0;
 	int secondcounter = 0;
@@ -1476,7 +1478,7 @@ void drawWorld(void) {
 
 
 	incol = 8;
-	depth = 1;
+	depth = 3;
 	int isoddflag = 0;
 	int breakflag = 0;
 
@@ -1489,18 +1491,17 @@ void drawWorld(void) {
 
 	// one works
 
-	//if (depth == 1)depth = 2;
-	for (int i = 0; i< (depth) ; i = i + 2)
+	if (depth % 2 != 0)
 	{
-		/////////////
-		//if odd mod break
-		if (((i + 1) == depth) && (depth % 2 != 0))
-		{
-			isoddflag = 1;
-			
-		}
-		
+		isoddflag = 1;
+	}
+	
 
+	//2x2 = 4?
+
+	//this means run this loop depth times 
+	for (int i = 0; i < (1); i = i + 1)
+	{
 
 		//////////////
 
@@ -1536,60 +1537,109 @@ void drawWorld(void) {
 			g_vertex_buffer_data_land[counter++] = matrix2[2][0] * scaleit;
 			g_vertex_buffer_data_land[counter++] = matrix2[2][1] * scaleit;
 			g_vertex_buffer_data_land[counter++] = matrix2[2][2] * scaleit;
-			
 
-
-			
-			
-
-			if (isoddflag  && (col == (incol-1)))
-			{
-				breakflag = 1;
-				break;
-			}
-			
-			
-
-
-
-
-
-			//tempdepth++;
-			//first triangle : even rows
-			GLfloat matrix3[3][3] = { {(col + 1) ,0,(tempdepth + 2)} , {(col + 1),0,(tempdepth + 1)}, {(col),0,(tempdepth + 1)} };
-
-			g_vertex_buffer_data_land[counter++] = matrix3[0][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[0][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[0][2] * scaleit;
-
-			g_vertex_buffer_data_land[counter++] = matrix3[1][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[1][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[1][2] * scaleit;
-
-			g_vertex_buffer_data_land[counter++] = matrix3[2][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[2][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix3[2][2] * scaleit;
-			//even rows, second triangle
-			int matrix4[3][3] = { {(col + 1),0,(tempdepth + 2)},{ (col),0,(tempdepth + 1)}, {(col),0,(tempdepth + 2) } };
-
-			g_vertex_buffer_data_land[counter++] = matrix4[0][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[0][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[0][2] * scaleit;
-
-			g_vertex_buffer_data_land[counter++] = matrix4[1][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[1][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[1][2] * scaleit;
-
-			g_vertex_buffer_data_land[counter++] = matrix4[2][0] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[2][1] * scaleit;
-			g_vertex_buffer_data_land[counter++] = matrix4[2][2] * scaleit;
 
 		}
-			if (breakflag == 1)
-			break;
+		//tempdepth++;
+	//}
 
-		tempdepth = tempdepth - 2;
-}
+			////break if at end, is odd amount of rows, and all this column work done
+			//if((i == depth) && (isoddflag))
+			//{
+			//	breakflag = 1;
+			//	break;
+			//}
+
+	//tempdepth = 0;
+
+
+	
+
+
+			//for (int i = 0; i < (1); i = i + 1)
+			//for (int i = 0; i <= (depth); i = i + 1) 
+			//{
+
+				//if ((i == 2 ) && (isoddflag == 1))
+				//{
+				//	breakflag = 1;
+				//	break;
+				//}
+
+		
+
+				for (int col = 0; (col + 1) <= (incol); col++)
+				{
+					
+
+					
+
+						// = tempdepth - 2;
+
+					//tempdepth++;
+					//first triangle : even rows
+					GLfloat matrix3[3][3] = { {(col + 1) ,0,(tempdepth + 2)} , {(col + 1),0,(tempdepth + 1)}, {(col),0,(tempdepth + 1)} };
+
+					g_vertex_buffer_data_land[counter++] = matrix3[0][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[0][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[0][2] * scaleit;
+
+					g_vertex_buffer_data_land[counter++] = matrix3[1][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[1][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[1][2] * scaleit;
+
+					g_vertex_buffer_data_land[counter++] = matrix3[2][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[2][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix3[2][2] * scaleit;
+					//even rows, second triangle
+					int matrix4[3][3] = { {(col + 1),0,(tempdepth + 2)},{ (col),0,(tempdepth + 1)}, {(col),0,(tempdepth + 2) } };
+
+					g_vertex_buffer_data_land[counter++] = matrix4[0][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[0][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[0][2] * scaleit;
+
+					g_vertex_buffer_data_land[counter++] = matrix4[1][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[1][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[1][2] * scaleit;
+
+					g_vertex_buffer_data_land[counter++] = matrix4[2][0] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[2][1] * scaleit;
+					g_vertex_buffer_data_land[counter++] = matrix4[2][2] * scaleit;
+				}
+
+				//if (i == 1)
+				//{
+				//	break;
+				//}
+				tempdepth = tempdepth - 2;
+			
+			
+				//if (breakflag == 1)
+				//break;
+			
+			}
+
+		
+			
+	}
+	
+
+
+
+	///////////////////////////
+
+
+
+
+
+
+	////////////////////////////
+
+			//if (breakflag == 1)
+			//break;
+
+		//tempdepth = tempdepth - 2;
+
 
 //////////////////////
 		/////////////////////////
@@ -1690,7 +1740,7 @@ void drawWorld(void) {
 		//}
 		//startindexat =  17 + secondcounter + 1 - 18;
 //		tempdepth = tempdepth - 1;
-	}
+//	}
 	
 
 
