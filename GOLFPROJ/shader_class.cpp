@@ -2,7 +2,7 @@
 
 //for world (getveritces)
 #define _colus   8
-#define _depth   3
+#define _depth   1
 
 /////////
 //#include "shader_s.h"
@@ -1430,7 +1430,7 @@ bool LoadtheTextures(void)
 	//link this against glu32.lib 
 //	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, landInfo.biHeight, landInfo.biWidth, GL_RGB, GL_UNSIGNED_BYTE, landTexture);
 
-	return true;
+return true;
 }
 
 
@@ -1461,25 +1461,50 @@ int getIndicesCount(int width, int height) {
 
 void drawWorld(void) {
 	//using defines
-   	int incol = _colus;
+	int incol = _colus;
 	int depth = _depth;
 	float scaleit = .5;
-	float tempdepth = 2;
+	float tempdepth = 0;
 	int startindexat = 0;
 	int counter = 0;
 	int secondcounter = 0;
 
 	//int col2;
-    //for (; (tempdepth+1) <= (depth);)
+	//for (; (tempdepth+1) <= (depth);)
 	//don't forget to change this back!
 	//this is the depth to draw the next two rows of triangles across the screen
-	
+
+
+	incol = 8;
+	depth = 1;
+	int isoddflag = 0;
+	int breakflag = 0;
+
+
 	//////////////////////////////
 	//WHAT Is LEFT IS THIS STATEMENT AND DISPLAYING ONLY ONE ROW OF TRIANGLES BECAUSE DEPTH IS AN ODD NUMBER  
 	//////////////////////////////
-	for (;  tempdepth+3 >=  depth - 1 ;)
+	//for (; tempdepth+3 >= depth;)
+	
+
+	// one works
+
+	//if (depth == 1)depth = 2;
+	for (int i = 0; i< (depth) ; i = i + 2)
 	{
-		tempdepth = tempdepth - 2;
+		/////////////
+		//if odd mod break
+		if (((i + 1) == depth) && (depth % 2 != 0))
+		{
+			isoddflag = 1;
+			
+		}
+		
+
+
+		//////////////
+
+		//tempdepth = tempdepth - 2;
 		//odd rows.  Draws a row of double triangles across the screen
 		for (int col = 0; (col + 1) <= (incol); col++)
 		{
@@ -1511,29 +1536,18 @@ void drawWorld(void) {
 			g_vertex_buffer_data_land[counter++] = matrix2[2][0] * scaleit;
 			g_vertex_buffer_data_land[counter++] = matrix2[2][1] * scaleit;
 			g_vertex_buffer_data_land[counter++] = matrix2[2][2] * scaleit;
-			//counter = counter + 18;
-		//}
-		//startindexat =  17 + counter+ 1 - 18;
-		//for (int col2 = 0; (col2+1) <= (incol); col2++)
-		//{
-
-
-
-
-			
-			//for (; tempdepth + 3 >= depth - 1;)
-			//tempdepth = tempdepth - 2;
-
-			//valid for the rest to run
-			//for(; tempdepth + 1 >= depth -1;)
-
-			for (; (!(tempdepth + 1 >= depth)); )
-				continue;
 			
 
 
+			
+			
 
-
+			if (isoddflag  && (col == (incol-1)))
+			{
+				breakflag = 1;
+				break;
+			}
+			
 			
 
 
@@ -1571,7 +1585,11 @@ void drawWorld(void) {
 			g_vertex_buffer_data_land[counter++] = matrix4[2][2] * scaleit;
 
 		}
-	}
+			if (breakflag == 1)
+			break;
+
+		tempdepth = tempdepth - 2;
+}
 
 //////////////////////
 		/////////////////////////
