@@ -2,7 +2,7 @@
 
 //for world (getveritces)
 #define _colus   8
-#define _depth   8
+#define _depth   3
 
 /////////
 //#include "shader_s.h"
@@ -1477,7 +1477,7 @@ void drawWorld(void) {
 	//////////////////////////////
 	//WHAT Is LEFT IS THIS STATEMENT AND DISPLAYING ONLY ONE ROW OF TRIANGLES BECAUSE DEPTH IS AN ODD NUMBER  
 	//////////////////////////////
-	for (;  tempdepth-1 >=  depth ;)
+	for (;  tempdepth+3 >=  depth - 1 ;)
 	{
 		tempdepth = tempdepth - 2;
 		//odd rows.  Draws a row of double triangles across the screen
@@ -1516,6 +1516,28 @@ void drawWorld(void) {
 		//startindexat =  17 + counter+ 1 - 18;
 		//for (int col2 = 0; (col2+1) <= (incol); col2++)
 		//{
+
+
+
+
+			
+			//for (; tempdepth + 3 >= depth - 1;)
+			//tempdepth = tempdepth - 2;
+
+			//valid for the rest to run
+			//for(; tempdepth + 1 >= depth -1;)
+
+			for (; (!(tempdepth + 1 >= depth)); )
+				continue;
+			
+
+
+
+
+			
+
+
+
 
 
 			//tempdepth++;
