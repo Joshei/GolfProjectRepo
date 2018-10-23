@@ -1500,7 +1500,22 @@ void drawWorld(void) {
 	//2x2 = 4?
 
 	//this means run this loop depth times 
-	for (int i = 0; i < (1); i = i + 1)
+
+
+
+	//because i have some understanding that the order of drawn objects is important I have decided 
+	//to consider this function complete.  It effectivly draws the world with the stipulation that there must 
+	//always be a multiple of 2 differing rows. (because there is one forloop.)  This is what i wanted anyway.  Other thoughts on 
+	//the matter are that the last row of the matrix could be removed.  This is about the only unworked use that 
+	//could be applied because otherwise there would be rows of triangles (boxes) with spaces.  Possible ways are
+	//transfering over to a new array and eliminating the extra data.  But, since it does what I want it isn't worthwhile.
+	//I don't think there are vectors as a type for drawing.  Life isn't perfect, the rest is on my whislist : why couldn't
+	//I draw one row instead of two.  That is not the last row? 
+
+
+	//MUST BE A MULTIPLE OF TWO ROWS AS THERE IS ONE FOR LOOP (SEE ABOVE!)
+	//THAT IS THE DEPTH IF SET TO 4 WILL 8 TOTAL ROWS WITH EACH BEING REVERSED TRIANGLES. 
+	for (int i = 0; i < (depth); i = i + 1)
 	{
 
 		//////////////
@@ -1567,6 +1582,7 @@ void drawWorld(void) {
 				//}
 
 		
+		//if (i == 1) { break; }
 
 				for (int col = 0; (col + 1) <= (incol); col++)
 				{
@@ -1614,11 +1630,13 @@ void drawWorld(void) {
 				tempdepth = tempdepth - 2;
 			
 			
-				//if (breakflag == 1)
-				//break;
+				if (breakflag == 1)
+				break;
 			
 			}
 
+	//		for (int i = 0; i<= ; i++)
+	//		g_vertex_buffer_data_land[(576-126)] = 
 		
 			
 	}
