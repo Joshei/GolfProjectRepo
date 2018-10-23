@@ -971,8 +971,9 @@ int main()
 
 		//////////////////////
 
-
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(2, 0, 0.10f));
+		//at center looking
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(2, 0, 0.10f));
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(1, 0, 0.10f));
 
 		
 		grotateadjuster = 0.139;
