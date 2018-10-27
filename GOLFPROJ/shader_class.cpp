@@ -1573,7 +1573,7 @@ int getIndicesCount(int width, int height) {
 
 void drawWorld(void) {
 	//using defines
-	
+	//
 	int incol = _colus;
 	
 	int maxsquare = incol;
