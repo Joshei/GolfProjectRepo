@@ -1573,7 +1573,23 @@ int getIndicesCount(int width, int height) {
 
 void drawWorld(void) {
 	//using defines
+	
 	int incol = _colus;
+	
+	int maxsquare = incol;
+
+	
+	
+	int subtractionamt = 0;
+	for (int j = maxsquare - 1; j >= 0; j--)
+	{
+		subtractionamt = subtractionamt - 1;
+		
+	}
+
+	//for centering the model so it can be used in the world well.
+	int startsquarenumber = (maxsquare / 2) + subtractionamt;
+	//
 	int depth = _depth;
 	float scaleit = 1;
 	float tempdepth = -1;
@@ -1627,6 +1643,7 @@ void drawWorld(void) {
 
 
 
+
 	////MUST BE A MULTIPLE OF TWO ROWS AS THERE IS ONE FOR LOOP (SEE ABOVE!)
 	////THAT IS THE DEPTH IF SET TO 4 WILL 8 TOTAL ROWS WITH EACH BEING REVERSED TRIANGLES. 
 	//for (int i = 0; i < (depth); i = i + 1)
@@ -1662,12 +1679,10 @@ void drawWorld(void) {
 		/////////////////////
 
 
+		//  NEXT: fix incol in these below:	
 
 
-
-
-		//	
-		for (float col = -1; (col ) <= (incol-1); col++)
+		for (int col = startsquarenumber; (col ) <= (incol-1); col++)
 		{
 
 
@@ -1703,7 +1718,7 @@ void drawWorld(void) {
 		}
 
 
-		for (int col = -1; (col ) <= (incol-1); col++)
+		for (int col = startsquarenumber; (col ) <= (incol-1); col++)
 		{
 			
 
@@ -1746,33 +1761,7 @@ void drawWorld(void) {
 		tempdepth = tempdepth + 2;
 
 
-		//if (breakflag == 1)
-		//break;
-
-	//}
-	//int indexnumelements = counter;
-	//float halfamount = 0;
-	//
-	////x
-	//g_vertex_buffer_data_land[0] = ((.5)*(g_vertex_buffer_data_land[0]));
-	//for (int l = 3; l < indexnumelements; l=l+3)
-	//{
-	//	//x
-	//	//set box number
-	//	g_vertex_buffer_data_land[l] = (g_vertex_buffer_data_land[l-3]-1);
-	//	
-	//}
-
-	////z
-	//g_vertex_buffer_data_land[2] = ((.5)*(g_vertex_buffer_data_land[2]));
-	//for (int l = 5; l < indexnumelements; l = l + 3)
-	//{
-	//	//x
-	//	//set box number
-	//	g_vertex_buffer_data_land[l] = (g_vertex_buffer_data_land[l - 3] - 1);
-
-	//}
-
+		
 
 
 	}
