@@ -1,8 +1,16 @@
 ﻿#define GLFW_INCLUDE_NONE 
 
 //for world (getveritces)
-#define _colus   8
-#define _depth   3
+#define _colus   4
+#define _depth   4
+
+
+
+
+//fails:
+//#define _colus   4
+//#define _depth   3
+
 
 /////////
 //#include "shader_s.h"
@@ -990,7 +998,7 @@ int main()
 		//////////////////////
 
 		//at center looking
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(.3, 0, 0.0f));
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(.3, 0, 0.0f));
 		
 		//modelMatrix = glm::rotate(modelMatrix, 3.0f+ 0.139f, glm::vec3(0.0f, 0.0f, 0.2f));
 
@@ -1090,7 +1098,7 @@ int main()
 
 
 				//glm::vec3(gxviewadjust, gyviewadjust, 2 + gzviewadjust), // Camera is at (4,3,3), in World Space
-				glm::vec3(0+ gxviewadjust, 0+ gyviewadjust, 2+ gzviewadjust), // Camera is at (4,3,3), in World Space
+				glm::vec3(0+ gxviewadjust, 0+ gyviewadjust, 1+ gzviewadjust), // Camera is at (4,3,3), in World Space
 
 
 				//glm::vec3(gxlooksatadjust, gylooksatadjust, gzlooksatadjust), // and looks at the origin
@@ -1573,13 +1581,24 @@ int getIndicesCount(int width, int height) {
 
 void drawWorld(void) {
 	//using defines
-	//
-	int incol = _colus;
 	
-	int maxsquare = incol;
+	
+	//INDEPTH MUST BE AN EVEN AMOUNT OF DEPTH ROWS...OTHERWISE, FINE!
+	//COLUMNS AS ODD WORKS!
+	
+	////SET AS 8 COLUMNS AND 3 DEPTH
 
+
+	int incol = _colus;
+	int indepth = _depth;
+	
+
+	int maxsquare = incol;
+	int maxsquaredepth = indepth;
 	
 	
+
+	//for rows 
 	int subtractionamt = 0;
 	for (int j = maxsquare - 1; j >= 0; j--)
 	{
@@ -1587,12 +1606,23 @@ void drawWorld(void) {
 		
 	}
 
+	//for centering depth
+	int subtractionamt2 = 0;
+	for (int j = maxsquaredepth - 1; j >= 0; j--)
+	{
+		subtractionamt2 = subtractionamt2 - 1;
+
+	}
+
 	//for centering the model so it can be used in the world well.
 	int startsquarenumber = (maxsquare / 2) + subtractionamt;
+	float startsquarenumberdepth = ((float)maxsquaredepth / 2.0f) + (float)subtractionamt2;
+	
 	//
-	int depth = _depth;
-	float scaleit = 1;
-	float tempdepth = -1;
+	
+	//depth = 2;
+	float scaleit = .125;
+	//float tempdepth = -1;
 	float tempdepth2 = 0;
 
 	int startindexat = 0;
@@ -1605,8 +1635,7 @@ void drawWorld(void) {
 	//this is the depth to draw the next two rows of triangles across the screen
 
 
-	incol = 8;
-	depth = 3;
+	
 	int isoddflag = 0;
 	int breakflag = 0;
 
@@ -1619,38 +1648,45 @@ void drawWorld(void) {
 
 	// one works
 
-	if (depth % 2 != 0)
-	{
-		isoddflag = 1;
-	}
+	
 
-
-	//2x2 = 4?
+	
 
 	//this means run this loop depth times 
 
 
 
-	//because i have some understanding that the order of drawn objects is important I have decided 
-	//to consider this function complete.  It effectivly draws the world with the stipulation that there must 
-	//always be a multiple of 2 differing rows. (because there is one forloop.)  This is what i wanted anyway.  Other thoughts on 
-	//the matter are that the last row of the matrix could be removed.  This is about the only unworked use that 
-	//could be applied because otherwise there would be rows of triangles (boxes) with spaces.  Possible ways are
-	//transfering over to a new array and eliminating the extra data.  But, since it does what I want it isn't worthwhile.
-	//I don't think there are vectors as a type for drawing.  Life isn't perfect, the rest is on my whislist : why couldn't
-	//I draw one row instead of two.  That is not the last row? 
+	
 
 
+	int index1 = 0;
+	
+
+	
+
+	//if depth of 3 than 6 rows because each loop (2) draws its own rows of colums
+	//1
+	//2  : works draws 4 ro2s of deepness (define 2, tempdepth = - 2)
+	//3  : works draws 6 rows of deepness (define  3, tempdepth = -3 )
+	//4  :
+	//5
+	//6
 
 
+	
 
-	////MUST BE A MULTIPLE OF TWO ROWS AS THERE IS ONE FOR LOOP (SEE ABOVE!)
-	////THAT IS THE DEPTH IF SET TO 4 WILL 8 TOTAL ROWS WITH EACH BEING REVERSED TRIANGLES. 
-	//for (int i = 0; i < (depth); i = i + 1)
+	//float tempdepth = -6;//-1 works
+	//indepth = 3;
+
+	for (float tempdepth = startsquarenumberdepth; (index1) <= (indepth - 1); tempdepth = tempdepth + 2, index1++)
+	
+	//for (; (index1) <= (indepth - 1);  index1++)
 	{
-
+	
+		
+		//tempdepth = -1.5;
 		//	//////////////
-		incol = 1;
+		//incol = 1;
 
 
 		//	-1.0f, -1.0f, 0.0f,
@@ -1682,7 +1718,7 @@ void drawWorld(void) {
 		//  NEXT: fix incol in these below:	
 
 
-		for (int col = startsquarenumber; (col ) <= (incol-1); col++)
+		for (float col = startsquarenumber, index = 0; (index ) <= (incol-1); col++,index++)
 		{
 
 
@@ -1718,8 +1754,10 @@ void drawWorld(void) {
 		}
 
 
-		for (int col = startsquarenumber; (col ) <= (incol-1); col++)
+		//for (int col = startsquarenumber; (col ) <= (incol-1); col++)
+		for (float col = startsquarenumber, index = 0; (index) <= (incol - 1); col++, index++)
 		{
+		
 			
 
 			
@@ -1758,7 +1796,7 @@ void drawWorld(void) {
 		}
 
 
-		tempdepth = tempdepth + 2;
+		//tempdepth = tempdepth + 2;
 
 
 		
