@@ -2,7 +2,7 @@
 
 //for world (getveritces)
 #define _colus   4
-#define _depth   2// at least for now _depth must be an even number.  Also, the depth * 2 for the amount of depth rows
+#define _depth   8// at least for now _depth must be an even number.  Also, the depth * 2 for the amount of depth rows
 
 
 //4X
@@ -49,6 +49,26 @@
 #include <iostream>
 #include <fstream>
 //////////////////
+
+
+//camera
+glm::vec3 cameraPos = glm::vec3(0.0f,0.0f,1.0f);
+
+//lookat
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+
+glm::vec3 forwardvector = glm::vec3(0.0, 0.0, -1.0);
+
+
+
+glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+float deltaTime = 0.0f;	// time between current frame and last frame
+float lastFrame = 0.0f;
+
+float g_zvar = 0;
+
+
 
 //z
 float  gzviewadjust = 0;
@@ -354,6 +374,9 @@ int gindexland = landindex;
 int main()
 
 {
+	glm::vec3 forwardvector = cameraFront - cameraPos;
+
+	forwardvector =  normalize(forwardvector);
 
 	
 
@@ -942,6 +965,9 @@ int main()
 		// render
 		// ------
 
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
 
 
 		
@@ -965,7 +991,7 @@ int main()
 
 
 
-		//modelMatrix = glm::translate(modelMatrix, glm::vec3(0, 0, 0.0f));
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-1, -g_zvar));
 
 
 		//glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 305.0f);
@@ -1005,14 +1031,14 @@ int main()
 		//////////////////////
 
 		//at center looking
-		//modelMatrix = glm::translate(modelMatrix, glm::vec3(.3, 0, 0.0f));
+		//modelMatrix = glm::translate(modelMatrix, glm::vec3(.0, 0, g_zvar));
 		
 		//modelMatrix = glm::rotate(modelMatrix, 3.0f+ 0.139f, glm::vec3(0.0f, 0.0f, 0.2f));
 
 		//x    y    z
 		modelMatrix = glm::rotate(modelMatrix, 3.0f + grotateadjuster, glm::vec3(0.0f, 1.0f, 0.1f));
-		
-		
+		//glm::vec3 cam = {100.0f,100.0f,100.0f};
+		//glm::scale(modelMatrix, cam );
 
 		//modelMatrix = glm::rotate(modelMatrix, grotateadjuster, glm::vec3(0.0f, 0.0f, 1.0f));
 		
@@ -1066,56 +1092,29 @@ int main()
 
 		int tempvalue = gvalue[g_k];
 		g_k = 1;
-			//view = glm::rotate(view, glm::radians(10.0f), glm::vec3(0, 1, 0)); // where x, y, z is axis of rotation (e.g. 0 1 0)
-
-		//if (g_k == 2) {
-		//	view = glm::lookAt(
-
-
-
-		//		//glm::vec3(gxviewadjust, gyviewadjust, 2 + gzviewadjust), // Camera is at (4,3,3), in World Space
-		//		glm::vec3(0, 0, 3), // Camera is at (4,3,3), in World Space
-
-
-		//		//glm::vec3(gxlooksatadjust, gylooksatadjust, gzlooksatadjust), // and looks at the origin
-		//		glm::vec3(0, 0, (0)), // and looks at the origin
-
-		//		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		//	);
-		//}
-		//
-		// if (g_k == 0 ) {
-		//	view = glm::lookAt(
-
-
-
-		//		//glm::vec3(gxviewadjust, gyviewadjust, 2 + gzviewadjust), // Camera is at (4,3,3), in World Space
-		//		glm::vec3(1, 0, 3), // Camera is at (4,3,3), in World Space
-
-
-		//		//glm::vec3(gxlooksatadjust, gylooksatadjust, gzlooksatadjust), // and looks at the origin
-		//		glm::vec3(-1, 0, 0), // and looks at the origin
-
-		//		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		//	);
-		//}
-		if (g_k == 1 ) {
-			view = glm::lookAt(
-
-
-
-				//glm::vec3(gxviewadjust, gyviewadjust, 2 + gzviewadjust), // Camera is at (4,3,3), in World Space
-				glm::vec3(0+ gxviewadjust, 0+ gyviewadjust, 1+ gzviewadjust), // Camera is at (4,3,3), in World Space
-
-
-				//glm::vec3(gxlooksatadjust, gylooksatadjust, gzlooksatadjust), // and looks at the origin
-				glm::vec3(0- gxlooksatadjust, 0- gylooksatadjust, 0- gzlooksatadjust), // and looks at the origin
-
-				glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-			);
-		}
-
+			
 		
+
+		view = glm::lookAt(cameraPos, cameraFront, cameraUp);
+
+
+		////if (g_k == 1 ) {
+		//	view = glm::lookAt(
+
+
+
+		//		//glm::vec3(gxviewadjust, gyviewadjust, 2 + gzviewadjust), // Camera is at (4,3,3), in World Space
+		//		glm::vec3(0+ gxviewadjust, + gyviewadjust,  1 + gzviewadjust - g_zvar), // Camera is at (4,3,3), in World Space
+
+
+		//		//glm::vec3(gxlooksatadjust, gylooksatadjust, gzlooksatadjust), // and looks at the origin
+		//		glm::vec3(0- gxlooksatadjust, 0- gylooksatadjust, 0 + -2+gzlooksatadjust - g_zvar), // and looks at the origin
+
+		//		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		//	);
+		////}
+
+		//
 
 		//else if ( g_k == 3) {
 		
@@ -1154,7 +1153,7 @@ int main()
 
 
 		//I call it : height angle
-		projection = glm::perspective(glm::radians(30.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 300.0f);
 
 		
 
@@ -1274,18 +1273,32 @@ int main()
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+
+	//float cameraspeed = 0.05f;
+
+	/*float cameraSpeed = 2.5 * deltaTime;
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+	else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+
+*/
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 
 	}
 
-	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		//readyforpressing = 1;
-		grotateadjuster = grotateadjuster + .3;
-
-	}
+//	else if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+//	{
+//		//readyforpressing = 1;
+//		grotateadjuster = grotateadjuster + .3;
+//
+//	}
 
 	//saves adjuster
 	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
@@ -1294,7 +1307,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 		//grotateadjuster = grotateadjuster + .001;
 		glogadjuster= fopen("logadjuster.txt", "w");
 
-		fprintf(glogadjuster, "\ntotal adjustment is: %f", grotateadjuster);
+		fprintf(glogadjuster, "\ntotal adjustment is: %f", g_zvar);
 
 		fclose(glogadjuster);
 
@@ -1322,13 +1335,30 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	else if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
 	{
 
-		gzviewadjust = gzviewadjust + .01;
+		//forwardvector = cameraFront - cameraPos;
+//
+//		forwardvector = normalize(forwardvector);
+
+
+		
+		//glm::vec3 forwardvector = cameraFront - cameraPos;
+		//forwardvector = cameraFront - cameraPos;
+
+		//cameraPos.x -= .01; //forwardvector.x;// *.2;
+		//cameraPos.y -= .01; //forwardvector.y;// *.2;
+		//cameraPos.z -= .1; //forwardvector.z;// *.2;
+		//cameraFront.x -= .01; //forwardvector.x;// *.2;
+		//cameraFront.z -= .1; //forwardvector.y;// *.2;
+		//cameraFront.z -= .01; //forwardvector.z;// *.2;
+		g_zvar = g_zvar + .11;
+
+		//gzviewadjust = gzviewadjust - .01;
 	}
 
 	else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
 	{
-
-		gxviewadjust = gxviewadjust + .1;
+		g_zvar = g_zvar - .11;
+		//gxviewadjust = gxviewadjust + .1;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
 	{
@@ -1641,7 +1671,7 @@ void drawWorld(void) {
 	//
 	
 	//depth = 2;
-	float scaleit = .25;
+	float scaleit = 1;
 	//float tempdepth = -1;
 	float tempdepth2 = 0;
 
