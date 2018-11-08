@@ -97,7 +97,7 @@ FILE * glogadjuster;
 int gtextsavingison = 0;
 
 
-float grotateadjuster = 0;
+float gyrotateadjuster = 0;
 
 float x3, x1, x2 = 0;
 float a1, a2, a3 = 0;
@@ -954,7 +954,7 @@ int main()
 
 	glfwSetKeyCallback(window, key_callback);
 
-	grotateadjuster = 0.139;
+	gyrotateadjuster = 0.139;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -991,8 +991,9 @@ int main()
 
 
 
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-1, -g_zvar));
-
+		modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-1, +g_zvar-2));
+		//modelMatrix = glm::rotate(modelMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.1f));
+		//modelMatrix = glm::rotate(modelMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 305.0f);
 
@@ -1036,7 +1037,11 @@ int main()
 		//modelMatrix = glm::rotate(modelMatrix, 3.0f+ 0.139f, glm::vec3(0.0f, 0.0f, 0.2f));
 
 		//x    y    z
-		modelMatrix = glm::rotate(modelMatrix, 3.0f + grotateadjuster, glm::vec3(0.0f, 1.0f, 0.1f));
+		//modelMatrix = glm::rotate(modelMatrix, 3.0f + gyrotateadjuster, glm::vec3(0.0f, 1.0f, 0.1f));
+
+		//modelMatrix = glm::rotate(modelMatrix, 3.0f + gyrotateadjuster, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
 		//glm::vec3 cam = {100.0f,100.0f,100.0f};
 		//glm::scale(modelMatrix, cam );
 
@@ -1095,7 +1100,7 @@ int main()
 			
 		
 
-		view = glm::lookAt(cameraPos, cameraFront, cameraUp);
+		//view = glm::lookAt(cameraPos, cameraFront, cameraUp);
 
 
 		////if (g_k == 1 ) {
@@ -1370,23 +1375,29 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 
 
-
-	else if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+	//rotate on y axis
+	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-
-		gxlooksatadjust = gxlooksatadjust + .5;
+		gyrotateadjuster = gyrotateadjuster + .01;
+		//gxlooksatadjust = gxlooksatadjust + .5;
 	}
-
-	else if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+	//rotate on y axis
+	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-
-		gylooksatadjust = gylooksatadjust + .01;
+		gyrotateadjuster = gyrotateadjuster - .01;
+		//gylooksatadjust = gylooksatadjust + .01;
 	}
 
 	else if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
 	{
 
 		gzlooksatadjust = gzlooksatadjust + .01;
+	}
+
+	//z forward
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		g_zvar = g_zvar + .11;
 	}
 	
 }
