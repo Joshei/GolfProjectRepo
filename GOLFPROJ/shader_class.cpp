@@ -993,7 +993,7 @@ int main()
 
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(0,-1, +g_zvar-2));
 		//modelMatrix = glm::rotate(modelMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.1f));
-		//modelMatrix = glm::rotate(modelMatrix, glm::radians(30.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		modelMatrix = glm::rotate(modelMatrix, glm::radians(gyrotateadjuster), glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//glm::ortho(0.0f, 800.0f, 0.0f, 600.0f, 0.1f, 305.0f);
 
@@ -1378,13 +1378,13 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 	//rotate on y axis
 	else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		gyrotateadjuster = gyrotateadjuster + .01;
+		gyrotateadjuster = gyrotateadjuster + 5;
 		//gxlooksatadjust = gxlooksatadjust + .5;
 	}
 	//rotate on y axis
 	else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		gyrotateadjuster = gyrotateadjuster - .01;
+		gyrotateadjuster = gyrotateadjuster - 5;
 		//gylooksatadjust = gylooksatadjust + .01;
 	}
 
