@@ -5,6 +5,7 @@
 #define _depth   8// at least for now _depth must be an even number.  Also, the depth * 2 for the amount of depth rows
 
 
+
 //4X
 
 //2 - yse:4!
@@ -51,6 +52,12 @@
 //////////////////
 
 
+
+
+//consider more local
+std::vector < glm::vec3 >  out_vertices;
+
+ 
 //camera
 glm::vec3 cameraPos = glm::vec3(0.0f,0.0f,1.0f);
 
@@ -326,6 +333,10 @@ void drawWorld2(void);
 int getVerticesCount(int width, int height);
 
 
+//loaded data
+
+
+
 GLuint VAO1, VBO1;
 
 std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
@@ -375,6 +386,8 @@ int gindexland = landindex;
 int main()
 
 {
+	
+
 	glm::vec3 forwardvector = cameraFront - cameraPos;
 
 	forwardvector =  normalize(forwardvector);
@@ -438,13 +451,26 @@ int main()
 	}
 
 
-	
+	//readying for ball draw
+	GLuint VertexArrayID;
+	glGenVertexArrays(1, &VertexArrayID);
+	glBindVertexArray(VertexArrayID);
+
+
 
 	// build and compile our shader program
 	// ------------------------------------
 	//Shader ourShader("3.3.shader.vs", "3.3.shader.fs"); // you can name your shader files however you like
 	Shader ourShader("C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.vs",
 		"C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/3.3.shader.fs"); // you can name your shader files however you like
+
+	Shader ourShader2("C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/shader2.vs",
+		"C:/Users/Joshua Eirman/Source/Repos/GOLFPROJ/GOLFPROJ/shader2.fs"); // you can name your shader files however you like
+
+
+	GLuint MatrixID = glGetUniformLocation(ourShader2.ID, "MVP");
+
+
 
 	//this is original load from.obj and use face and vertices to draw a model
 	//the new code is send through:
@@ -527,7 +553,7 @@ int main()
 	
 
 
-	while (0) {
+	while (1) {
 
 		char lineHeader[128];
 		// read the first word of the line
@@ -585,7 +611,7 @@ int main()
 
 
 
-	}//uncertain
+	}//end while to load in data
 
 	
 
@@ -593,12 +619,39 @@ int main()
 	int j = 0;
 
 
+	for (unsigned int i = 0; i < vertexIndices.size(); i++) {
 
+		unsigned int vertexIndex = vertexIndices[i];
+
+		glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+
+		out_vertices.push_back(vertex);
+
+	}
+
+
+	//this is for ball image again?
+
+	//load ball into vbo
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, out_vertices.size() * sizeof(glm::vec3), &out_vertices[0], GL_STATIC_DRAW);
+
+	//first is (above):
+	//readying for ball draw
+	//GLuint VertexArrayID;
+	//glGenVertexArrays(1, &VertexArrayID);
+	//glBindVertexArray(VertexArrayID);
 	
 
 
 
-	
+
+
+
+
+
 
 	//SETTING UP A VERTEX ARRAY OBJECT
 
@@ -705,12 +758,7 @@ int main()
 
 	GLfloat tempcolor1, tempcolor2, tempcolor3;
 	
-	//(count of vertices is nubmer of triangles times 3)
-	//9 vertices per triangle (x,y,z) and two triangles per grid square (column)
 	
-	//depth 8. colums 8 : 8 x 8 * 36
-	//GLfloat g_color_buffer_data[(_colus * 18 * _depth) ];
-
 	GLfloat g_color_buffer_data[864];
 	//count = 863;
 	
@@ -951,7 +999,11 @@ int main()
 //		 RENDER LOOP
 ///////////////////////////// -----------
 	
-	ourShader.use();
+	//ourShader.use();
+	//before uniform
+	
+	//ball shader
+	ourShader2.use();
 
 	glfwSetKeyCallback(window, key_callback);
 
@@ -978,17 +1030,48 @@ int main()
 		
 
 
-		glm::mat4 modelMatrix = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
-		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
-		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
-		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		
+		//for ball shaders
 		glm::mat4 MVP = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
 
+
 		
+		//this goes after all manipulation of MVP is for ball
+		GLuint MatrixID2 = glGetUniformLocation(ourShader2.ID, "MVP");
+		glUniformMatrix4fv(MatrixID2, 1, GL_FALSE, &MVP[0][0]);
+		
+
+
+		
+		// 1rst attribute buffer : vertices - ball image
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			0,                  // attribute
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
 
 		//glm::vec3 scale = glm::vec3(1, 1, 1);
 
 		//modelMatrix = glm::scale(modelMatrix, scale);
+
+
+		//draw ball
+		glDrawArrays(GL_TRIANGLES, 0, out_vertices.size());
+
+		//world shader now being used
+		//https://www.opengl.org/discussion_boards/showthread.php/177775-Using-multiple-shader-programs-per-step
+		ourShader.use();
+
+		glm::mat4 modelMatrix = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		glm::mat4 model = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		glm::mat4 view = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+		glm::mat4 projection = { {1,0,0,0}, {0,1,0,0}, {0,0,1,0}, {0,0,0,1} };
+
 
 
 
@@ -1125,11 +1208,11 @@ int main()
 		//else if ( g_k == 3) {
 		
 
-
+		//all chabges of modelMatrix have happened
 		GLuint MatrixID = glGetUniformLocation(ourShader.ID, "modelMatrix");
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &modelMatrix[0][0]);
 
-
+		//all changes to view matrix have already happened
 		unsigned int transformLoc2 = glGetUniformLocation(ourShader.ID, "view");
 		glUniformMatrix4fv(transformLoc2, 1, GL_FALSE, glm::value_ptr(view));
 
@@ -1239,6 +1322,8 @@ int main()
 		
 		//idea is to change this in grawWorld
 		glDrawArrays(GL_TRIANGLES, 0, gindexland);
+
+		//glDrawArrays(GL_TRIANGLES, 0, out_vertices.size());
 
 		//		static const GLushort cubeIndices[] = {
 		//	0, 1, 2, 3, 7, 1, 5, 4, 7, 6, 2, 4, 0, 1

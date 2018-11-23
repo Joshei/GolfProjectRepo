@@ -25,6 +25,8 @@
   <ItemGroup>
     <None Include="3.3.shader.fs" />
     <None Include="3.3.shader.vs" />
+    <None Include="shader2.fs" />
+    <None Include="shader2.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h" />

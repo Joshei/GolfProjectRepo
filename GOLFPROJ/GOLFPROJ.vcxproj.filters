@@ -29,6 +29,12 @@
     <None Include="3.3.shader.vs">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="shader2.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="shader2.vs">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glad.h">
